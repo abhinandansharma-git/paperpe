@@ -1,16 +1,11 @@
-﻿'use client';
+'use client';
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { ArrowLeft, Calculator, TrendingUp, TrendingDown, Info, ChevronDown } from 'lucide-react';
 
-// Normal distribution CDF approximation
 function normalCDF(x: number): number {
-  const a1 = 0.254829592;
-  const a2 = -0.284496736;
-  const a3 = 1.421413741;
-  const a4 = -1.453152027;
-  const a5 = 1.061405429;
-  const p = 0.3275911;
+  const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
   const sign = x < 0 ? -1 : 1;
   x = Math.abs(x) / Math.sqrt(2);
   const t = 1.0 / (1.0 + p * x);
@@ -18,28 +13,16 @@ function normalCDF(x: number): number {
   return 0.5 * (1.0 + sign * y);
 }
 
-// Normal distribution PDF
 function normalPDF(x: number): number {
   return Math.exp(-0.5 * x * x) / Math.sqrt(2 * Math.PI);
 }
 
-// Black-Scholes calculations
-function blackScholes(
-  S: number,  // Spot price
-  K: number,  // Strike price
-  T: number,  // Time to expiry in years
-  r: number,  // Risk-free rate
-  sigma: number, // Volatility
-  optionType: 'CE' | 'PE'
-) {
+function blackScholes(S: number, K: number, T: number, r: number, sigma: number, type: 'CE' | 'PE') {
   if (T <= 0) T = 0.0001;
-  
   const d1 = (Math.log(S / K) + (r + 0.5 * sigma * sigma) * T) / (sigma * Math.sqrt(T));
   const d2 = d1 - sigma * Math.sqrt(T);
-  
-  let price, delta, gamma, theta, vega;
-  
-  if (optionType === 'CE') {
+  let price: number, delta: number, theta: number;
+  if (type === 'CE') {
     price = S * normalCDF(d1) - K * Math.exp(-r * T) * normalCDF(d2);
     delta = normalCDF(d1);
     theta = (-(S * normalPDF(d1) * sigma) / (2 * Math.sqrt(T)) - r * K * Math.exp(-r * T) * normalCDF(d2)) / 365;
@@ -48,248 +31,322 @@ function blackScholes(
     delta = normalCDF(d1) - 1;
     theta = (-(S * normalPDF(d1) * sigma) / (2 * Math.sqrt(T)) + r * K * Math.exp(-r * T) * normalCDF(-d2)) / 365;
   }
-  
-  gamma = normalPDF(d1) / (S * sigma * Math.sqrt(T));
-  vega = S * normalPDF(d1) * Math.sqrt(T) / 100;
-  
-  return { price, delta, gamma, theta, vega, d1, d2 };
+  const gamma = normalPDF(d1) / (S * sigma * Math.sqrt(T));
+  const vega = S * normalPDF(d1) * Math.sqrt(T) / 100;
+  return { price, delta, gamma, theta, vega };
+}
+
+const PRESETS = [
+  { name: 'NIFTY', spot: 24000, strike: 24000, lot: 50 },
+  { name: 'BANKNIFTY', spot: 52000, strike: 52000, lot: 15 },
+  { name: 'FINNIFTY', spot: 23000, strike: 23000, lot: 40 },
+  { name: 'MIDCPNIFTY', spot: 12000, strike: 12000, lot: 75 },
+];
+
+const GREEKS_INFO: Record<string, string> = {
+  Delta: 'Change in option price per ₹1 move in underlying. CE delta: 0 to 1. PE delta: -1 to 0.',
+  Gamma: 'Rate of change of Delta. High gamma = Delta changes quickly. Watch out near expiry.',
+  Theta: 'Daily time decay. Negative for buyers — options lose this much value per day.',
+  Vega: 'Change in option price per 1% change in IV. High vega = sensitive to volatility changes.',
+};
+
+function Tooltip({ text }: { text: string }) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative inline-block">
+      <button onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-gray-400 hover:text-blue-500 transition-colors ml-1">
+        <Info className="w-3.5 h-3.5" />
+      </button>
+      {show && (
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-gray-900 text-white text-xs p-3 rounded-lg shadow-xl z-10 leading-relaxed">
+          {text}
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InputField({ label, value, onChange, step = 1, tooltip }: { label: string; value: number; onChange: (v: number) => void; step?: number; tooltip?: string }) {
+  return (
+    <div>
+      <label className="flex items-center text-sm font-medium text-gray-700 mb-1.5">
+        {label} {tooltip && <Tooltip text={tooltip} />}
+      </label>
+      <input
+        type="number"
+        value={value}
+        step={step}
+        onChange={e => onChange(Number(e.target.value))}
+        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all text-sm"
+      />
+    </div>
+  );
 }
 
 export default function CalculatorPage() {
-  // Input states
-  const [spotPrice, setSpotPrice] = useState(22000);
-  const [strikePrice, setStrikePrice] = useState(22000);
-  const [daysToExpiry, setDaysToExpiry] = useState(7);
-  const [volatility, setVolatility] = useState(15);
-  const [riskFreeRate, setRiskFreeRate] = useState(6.5);
-  const [optionType, setOptionType] = useState<'CE' | 'PE'>('CE');
+  const [spot, setSpot] = useState(24000);
+  const [strike, setStrike] = useState(24000);
+  const [dte, setDte] = useState(7);
+  const [iv, setIv] = useState(15);
+  const [rfr, setRfr] = useState(6.5);
+  const [type, setType] = useState<'CE' | 'PE'>('CE');
   const [lotSize, setLotSize] = useState(50);
-  const [premiumPaid, setPremiumPaid] = useState(150);
-  const [quantity, setQuantity] = useState(1);
-  
-  // Calculate Greeks
-  const results = useMemo(() => {
-    const T = daysToExpiry / 365;
-    const r = riskFreeRate / 100;
-    const sigma = volatility / 100;
-    return blackScholes(spotPrice, strikePrice, T, r, sigma, optionType);
-  }, [spotPrice, strikePrice, daysToExpiry, volatility, riskFreeRate, optionType]);
-  
-  // Calculate P&L scenarios
-  const pnlScenarios = useMemo(() => {
-    const scenarios = [];
-    const moves = [-5, -3, -2, -1, 0, 1, 2, 3, 5];
-    
-    for (const pct of moves) {
-      const newSpot = spotPrice * (1 + pct / 100);
-      const T = Math.max(daysToExpiry - 1, 1) / 365;
-      const r = riskFreeRate / 100;
-      const sigma = volatility / 100;
-      const newResults = blackScholes(newSpot, strikePrice, T, r, sigma, optionType);
-      const pnl = (newResults.price - premiumPaid) * lotSize * quantity;
-      scenarios.push({ move: pct, newSpot: newSpot.toFixed(0), premium: newResults.price.toFixed(2), pnl });
-    }
-    return scenarios;
-  }, [spotPrice, strikePrice, daysToExpiry, volatility, riskFreeRate, optionType, premiumPaid, lotSize, quantity]);
-  
-  // Calculate breakeven
-  const breakeven = optionType === 'CE' 
-    ? strikePrice + premiumPaid 
-    : strikePrice - premiumPaid;
-  
-  const maxLoss = premiumPaid * lotSize * quantity;
-  
-  return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      <header className="border-b border-white/10 bg-[#0a0e17]/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">P</span>
-            </div>
-            <span className="text-white font-semibold text-xl">PaperPe</span>
-          </Link>
-          <Link href="/dashboard" className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg font-medium">
-            Start Trading
-          </Link>
-        </div>
-      </header>
+  const [premium, setPremium] = useState(150);
+  const [qty, setQty] = useState(1);
+  const [activePreset, setActivePreset] = useState('NIFTY');
+  const [showGreeks, setShowGreeks] = useState(true);
 
-      <section className="py-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Free Option Calculator</h1>
-            <p className="text-slate-400">Calculate option premium, Greeks, P&L scenarios for NIFTY & BANKNIFTY</p>
-          </div>
-          
-          <div className="grid lg:grid-cols-3 gap-6">
-            {/* Input Panel */}
-            <div className="bg-[#131722] border border-white/10 rounded-xl p-6">
-              <h2 className="text-lg font-bold text-white mb-4">Input Parameters</h2>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Option Type</label>
-                  <div className="flex gap-2">
-                    <button onClick={() => setOptionType('CE')} className={`flex-1 py-2 rounded-lg font-medium transition-colors ${optionType === 'CE' ? 'bg-green-500 text-white' : 'bg-white/10 text-slate-400'}`}>Call (CE)</button>
-                    <button onClick={() => setOptionType('PE')} className={`flex-1 py-2 rounded-lg font-medium transition-colors ${optionType === 'PE' ? 'bg-red-500 text-white' : 'bg-white/10 text-slate-400'}`}>Put (PE)</button>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Spot Price</label>
-                  <input type="number" value={spotPrice} onChange={(e) => setSpotPrice(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Strike Price</label>
-                  <input type="number" value={strikePrice} onChange={(e) => setStrikePrice(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Days to Expiry</label>
-                  <input type="number" value={daysToExpiry} onChange={(e) => setDaysToExpiry(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Volatility (IV %)</label>
-                  <input type="number" value={volatility} onChange={(e) => setVolatility(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Risk-Free Rate (%)</label>
-                  <input type="number" value={riskFreeRate} onChange={(e) => setRiskFreeRate(Number(e.target.value))} step="0.1" className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <hr className="border-white/10" />
-                
-                <div>
-                  <label className="text-sm text-slate-400 block mb-1">Premium Paid (for P&L)</label>
-                  <input type="number" value={premiumPaid} onChange={(e) => setPremiumPaid(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                </div>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="text-sm text-slate-400 block mb-1">Lot Size</label>
-                    <input type="number" value={lotSize} onChange={(e) => setLotSize(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                  </div>
-                  <div>
-                    <label className="text-sm text-slate-400 block mb-1">Quantity</label>
-                    <input type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="w-full p-3 rounded-lg bg-[#0a0e17] border border-white/10 text-white" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Results Panel */}
-            <div className="space-y-6">
-              {/* Premium & Greeks */}
-              <div className="bg-[#131722] border border-white/10 rounded-xl p-6">
-                <h2 className="text-lg font-bold text-white mb-4">Option Premium & Greeks</h2>
-                
-                <div className="text-center mb-6">
-                  <div className="text-sm text-slate-400">Theoretical Premium</div>
-                  <div className="text-4xl font-bold text-orange-500">{String.fromCharCode(8377)}{results.price.toFixed(2)}</div>
-                </div>
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-[#0a0e17] rounded-lg p-4 text-center">
-                    <div className="text-sm text-slate-400">Delta</div>
-                    <div className={`text-2xl font-bold ${results.delta >= 0 ? 'text-green-500' : 'text-red-500'}`}>{results.delta.toFixed(4)}</div>
-                  </div>
-                  <div className="bg-[#0a0e17] rounded-lg p-4 text-center">
-                    <div className="text-sm text-slate-400">Gamma</div>
-                    <div className="text-2xl font-bold text-blue-500">{results.gamma.toFixed(6)}</div>
-                  </div>
-                  <div className="bg-[#0a0e17] rounded-lg p-4 text-center">
-                    <div className="text-sm text-slate-400">Theta</div>
-                    <div className="text-2xl font-bold text-red-500">{results.theta.toFixed(4)}</div>
-                  </div>
-                  <div className="bg-[#0a0e17] rounded-lg p-4 text-center">
-                    <div className="text-sm text-slate-400">Vega</div>
-                    <div className="text-2xl font-bold text-purple-500">{results.vega.toFixed(4)}</div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Breakeven */}
-              <div className="bg-[#131722] border border-white/10 rounded-xl p-6">
-                <h2 className="text-lg font-bold text-white mb-4">Breakeven Analysis</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-sm text-slate-400">Breakeven</div>
-                    <div className="text-2xl font-bold text-white">{breakeven.toFixed(0)}</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm text-slate-400">Max Loss</div>
-                    <div className="text-2xl font-bold text-red-500">{String.fromCharCode(8377)}{maxLoss.toLocaleString()}</div>
-                  </div>
-                </div>
-                <div className="mt-4 text-sm text-slate-400">
-                  {optionType === 'CE' 
-                    ? `NIFTY needs to be above ${breakeven.toFixed(0)} at expiry to profit.`
-                    : `NIFTY needs to be below ${breakeven.toFixed(0)} at expiry to profit.`}
-                </div>
-              </div>
-            </div>
-            
-            {/* P&L Scenarios */}
-            <div className="bg-[#131722] border border-white/10 rounded-xl p-6">
-              <h2 className="text-lg font-bold text-white mb-4">P&L Scenarios (Next Day)</h2>
-              <div className="space-y-2">
-                {pnlScenarios.map((s, i) => (
-                  <div key={i} className={`flex justify-between items-center p-3 rounded-lg ${s.pnl >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'}`}>
-                    <div>
-                      <span className={`font-medium ${s.move >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {s.move >= 0 ? '+' : ''}{s.move}%
-                      </span>
-                      <span className="text-slate-400 ml-2">({s.newSpot})</span>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm text-slate-400">{String.fromCharCode(8377)}{s.premium}</div>
-                      <div className={`font-bold ${s.pnl >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                        {s.pnl >= 0 ? '+' : ''}{String.fromCharCode(8377)}{s.pnl.toFixed(0)}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+  const applyPreset = (p: typeof PRESETS[0]) => {
+    setSpot(p.spot); setStrike(p.strike); setLotSize(p.lot); setActivePreset(p.name);
+  };
+
+  const results = useMemo(() => blackScholes(spot, strike, dte / 365, rfr / 100, iv / 100, type), [spot, strike, dte, iv, rfr, type]);
+
+  const breakeven = type === 'CE' ? strike + premium : strike - premium;
+  const maxLoss = premium * lotSize * qty;
+  const intrinsic = type === 'CE' ? Math.max(0, spot - strike) : Math.max(0, strike - spot);
+  const timeValue = Math.max(0, results.price - intrinsic);
+  const moneyness = spot === strike ? 'ATM' : (type === 'CE' ? (spot > strike ? 'ITM' : 'OTM') : (spot < strike ? 'ITM' : 'OTM'));
+  const moneynessColor = moneyness === 'ITM' ? 'text-green-600 bg-green-50 border-green-200' : moneyness === 'OTM' ? 'text-red-600 bg-red-50 border-red-200' : 'text-blue-600 bg-blue-50 border-blue-200';
+
+  const scenarios = useMemo(() => {
+    return [-5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5].map(pct => {
+      const newSpot = spot * (1 + pct / 100);
+      const r = blackScholes(newSpot, strike, Math.max(dte - 1, 1) / 365, rfr / 100, iv / 100, type);
+      const pnl = (r.price - premium) * lotSize * qty;
+      return { pct, newSpot: Math.round(newSpot), premium: r.price, pnl };
+    });
+  }, [spot, strike, dte, iv, rfr, type, premium, lotSize, qty]);
+
+  const maxPnl = Math.max(...scenarios.map(s => Math.abs(s.pnl)));
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Nav */}
+      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white shadow-md shadow-blue-500/20">P</div>
+              <span className="font-semibold text-lg text-gray-900 hidden sm:block">PaperPe</span>
+            </Link>
+            <span className="text-gray-300">|</span>
+            <div className="flex items-center gap-1.5 text-gray-600 text-sm font-medium">
+              <Calculator className="w-4 h-4 text-blue-500" />
+              Option Calculator
             </div>
           </div>
-          
-          {/* CTA */}
-          <div className="mt-8 text-center">
-            <p className="text-slate-400 mb-4">Want to practice options trading without risk?</p>
-            <Link href="/dashboard" className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-              Start Paper Trading Free
+          <div className="flex items-center gap-2">
+            <Link href="/tools" className="text-gray-500 hover:text-gray-700 text-sm hidden sm:flex items-center gap-1">
+              <ArrowLeft className="w-4 h-4" /> All Tools
+            </Link>
+            <Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+              Start Trading Free
             </Link>
           </div>
         </div>
-      </section>
-      
-      {/* SEO Content */}
-      <section className="py-12 px-4 border-t border-white/10">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-white mb-4">How to Use This Option Calculator</h2>
-          <div className="text-slate-400 space-y-4">
-            <p>This free option calculator uses the Black-Scholes model to calculate theoretical option premiums and Greeks for NIFTY and BANKNIFTY options.</p>
-            <h3 className="text-white font-semibold">Understanding the Greeks:</h3>
-            <ul className="list-disc pl-5 space-y-2">
-              <li><strong className="text-white">Delta:</strong> How much option price changes when underlying moves Rs 1</li>
-              <li><strong className="text-white">Gamma:</strong> Rate of change of Delta</li>
-              <li><strong className="text-white">Theta:</strong> Daily time decay (how much value lost per day)</li>
-              <li><strong className="text-white">Vega:</strong> Sensitivity to 1% change in volatility</li>
-            </ul>
-            <p>Use the P&L scenarios to see potential profit/loss at different price levels.</p>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+        {/* Page header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">Free Option Calculator</h1>
+          <p className="text-gray-500 text-sm">Black-Scholes model · NIFTY, BANKNIFTY & MCX options · Greeks + P&L scenarios</p>
+        </div>
+
+        {/* Preset buttons */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {PRESETS.map(p => (
+            <button key={p.name} onClick={() => applyPreset(p)}
+              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-500/20' : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'}`}>
+              {p.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid xl:grid-cols-12 gap-5">
+          {/* LEFT: Inputs */}
+          <div className="xl:col-span-3">
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm sticky top-24">
+              {/* CE/PE toggle */}
+              <div className="flex rounded-xl overflow-hidden border border-gray-200 mb-5">
+                <button onClick={() => setType('CE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'CE' ? 'bg-green-500 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                  CALL (CE)
+                </button>
+                <button onClick={() => setType('PE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'PE' ? 'bg-red-500 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                  PUT (PE)
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <InputField label="Spot Price" value={spot} onChange={setSpot} tooltip="Current market price of NIFTY / BANKNIFTY / underlying" />
+                <InputField label="Strike Price" value={strike} onChange={setStrike} tooltip="The price at which option can be exercised" />
+                <InputField label="Days to Expiry" value={dte} onChange={setDte} tooltip="Number of calendar days remaining to expiry. NSE expiry is weekly (Thursday)." />
+                <InputField label="IV (%)" value={iv} onChange={setIv} step={0.5} tooltip="Implied Volatility. Check NSE India VIX or option chain for current IV." />
+                <InputField label="Risk-Free Rate (%)" value={rfr} onChange={setRfr} step={0.1} tooltip="RBI repo rate (~6.5%). Rarely needs to change." />
+
+                <div className="border-t border-gray-100 pt-4">
+                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">P&L Settings</p>
+                  <div className="space-y-3">
+                    <InputField label="Premium Paid (₹)" value={premium} onChange={setPremium} tooltip="The price you paid / received for the option" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <InputField label="Lot Size" value={lotSize} onChange={setLotSize} />
+                      <InputField label="Qty (lots)" value={qty} onChange={setQty} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* MIDDLE: Results */}
+          <div className="xl:col-span-5 space-y-4">
+            {/* Premium card */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold text-gray-900">Theoretical Premium</h2>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${moneynessColor}`}>{moneyness}</span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-4">
+                <span className="text-5xl font-black text-gray-900">₹{results.price.toFixed(2)}</span>
+                <span className="text-gray-400 text-sm">/ unit</span>
+              </div>
+              <div className="grid grid-cols-3 gap-3 text-center">
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="text-xs text-gray-500 mb-1">Intrinsic</div>
+                  <div className="font-bold text-gray-900">₹{intrinsic.toFixed(2)}</div>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="text-xs text-gray-500 mb-1">Time Value</div>
+                  <div className="font-bold text-blue-600">₹{timeValue.toFixed(2)}</div>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-3">
+                  <div className="text-xs text-gray-500 mb-1">Total Cost</div>
+                  <div className="font-bold text-gray-900">₹{(results.price * lotSize * qty).toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Greeks */}
+            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+              <button onClick={() => setShowGreeks(!showGreeks)} className="w-full flex items-center justify-between p-5 text-left">
+                <h2 className="font-bold text-gray-900">Option Greeks</h2>
+                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showGreeks ? 'rotate-180' : ''}`} />
+              </button>
+              {showGreeks && (
+                <div className="px-5 pb-5 grid grid-cols-2 gap-3">
+                  {[
+                    { name: 'Delta', value: results.delta.toFixed(4), color: results.delta >= 0 ? 'text-green-600' : 'text-red-600', bg: results.delta >= 0 ? 'bg-green-50' : 'bg-red-50' },
+                    { name: 'Gamma', value: results.gamma.toFixed(6), color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { name: 'Theta', value: results.theta.toFixed(4), color: 'text-orange-600', bg: 'bg-orange-50' },
+                    { name: 'Vega', value: results.vega.toFixed(4), color: 'text-purple-600', bg: 'bg-purple-50' },
+                  ].map(g => (
+                    <div key={g.name} className={`${g.bg} rounded-xl p-4`}>
+                      <div className="flex items-center text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+                        {g.name} <Tooltip text={GREEKS_INFO[g.name]} />
+                      </div>
+                      <div className={`text-2xl font-black ${g.color}`}>{g.value}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Breakeven */}
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+              <h2 className="font-bold text-gray-900 mb-4">Breakeven & Risk</h2>
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div className="text-center bg-blue-50 rounded-xl p-4">
+                  <div className="text-xs text-blue-600 font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
+                  <div className="text-2xl font-black text-blue-700">{breakeven.toFixed(0)}</div>
+                  <div className="text-xs text-blue-500 mt-1">{type === 'CE' ? `+${(breakeven - spot).toFixed(0)} from spot` : `${(breakeven - spot).toFixed(0)} from spot`}</div>
+                </div>
+                <div className="text-center bg-red-50 rounded-xl p-4">
+                  <div className="text-xs text-red-600 font-semibold mb-1 uppercase tracking-wide">Max Loss</div>
+                  <div className="text-2xl font-black text-red-700">₹{maxLoss.toLocaleString('en-IN')}</div>
+                  <div className="text-xs text-red-500 mt-1">{qty} lot{qty > 1 ? 's' : ''} × {lotSize}</div>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 leading-relaxed">
+                {type === 'CE'
+                  ? `${activePreset} must close above ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot > breakeven ? '✅ profitable' : '❌ not profitable'}.`
+                  : `${activePreset} must close below ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot < breakeven ? '✅ profitable' : '❌ not profitable'}.`}
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT: P&L scenarios */}
+          <div className="xl:col-span-4">
+            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm h-full">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold text-gray-900">P&L Scenarios</h2>
+                <span className="text-xs text-gray-400">Tomorrow, same IV</span>
+              </div>
+              <div className="space-y-1.5">
+                {scenarios.map((s, i) => {
+                  const barWidth = maxPnl > 0 ? Math.abs(s.pnl) / maxPnl * 100 : 0;
+                  const isCenter = s.pct === 0;
+                  return (
+                    <div key={i} className={`rounded-xl overflow-hidden ${isCenter ? 'ring-2 ring-blue-200' : ''}`}>
+                      <div className={`flex items-center justify-between px-3 py-2 ${s.pnl >= 0 ? 'bg-green-50' : 'bg-red-50'}`}>
+                        <div className="flex items-center gap-2 min-w-0">
+                          {s.pct > 0 ? <TrendingUp className="w-3.5 h-3.5 text-green-500 shrink-0" /> : s.pct < 0 ? <TrendingDown className="w-3.5 h-3.5 text-red-500 shrink-0" /> : <div className="w-3.5 h-3.5 shrink-0" />}
+                          <span className={`text-sm font-bold ${s.pct > 0 ? 'text-green-700' : s.pct < 0 ? 'text-red-700' : 'text-gray-700'}`}>
+                            {s.pct === 0 ? 'Flat' : `${s.pct > 0 ? '+' : ''}${s.pct}%`}
+                          </span>
+                          <span className="text-xs text-gray-400 hidden sm:block">{s.newSpot.toLocaleString('en-IN')}</span>
+                        </div>
+                        <div className="text-right shrink-0 ml-2">
+                          <div className={`text-sm font-black ${s.pnl >= 0 ? 'text-green-700' : 'text-red-700'}`}>
+                            {s.pnl >= 0 ? '+' : ''}₹{Math.abs(Math.round(s.pnl)).toLocaleString('en-IN')}
+                          </div>
+                          <div className="text-xs text-gray-400">₹{s.premium.toFixed(1)}</div>
+                        </div>
+                      </div>
+                      {/* Bar indicator */}
+                      <div className={`h-0.5 ${s.pnl >= 0 ? 'bg-green-400' : 'bg-red-400'}`} style={{ width: `${barWidth}%` }} />
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-gray-400 mt-3 text-center">Based on ₹{premium} premium · {qty} lot{qty > 1 ? 's' : ''} · {lotSize} qty/lot</p>
+            </div>
           </div>
         </div>
-      </section>
 
-      <footer className="border-t border-white/10 py-8 px-4">
-        <div className="max-w-4xl mx-auto text-center text-slate-500 text-sm">
-          <p>2026 PaperPe. Free trading tools for Indian markets.</p>
+        {/* How to use */}
+        <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-gray-900 mb-4">How to Use This Calculator</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-gray-600">
+            <div>
+              <div className="font-semibold text-gray-800 mb-2">1. Select Instrument</div>
+              <p>Click NIFTY, BANKNIFTY, etc. to load default lot sizes. Adjust spot & strike to your target levels.</p>
+            </div>
+            <div>
+              <div className="font-semibold text-gray-800 mb-2">2. Enter IV</div>
+              <p>Get current IV from NSE option chain or check India VIX. Higher IV = more expensive options.</p>
+            </div>
+            <div>
+              <div className="font-semibold text-gray-800 mb-2">3. Check Greeks</div>
+              <p>Delta tells position sensitivity. Theta shows daily decay cost. Don't ignore Theta on long options!</p>
+            </div>
+            <div>
+              <div className="font-semibold text-gray-800 mb-2">4. Analyze P&L</div>
+              <p>Enter your actual premium paid to see real P&L at different price levels tomorrow.</p>
+            </div>
+          </div>
         </div>
-      </footer>
+
+        {/* CTA */}
+        <div className="mt-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white text-center">
+          <h3 className="text-lg font-bold mb-2">Practice options trading without risk</h3>
+          <p className="text-blue-100 text-sm mb-4">Get ₹10 Lakh virtual capital. Trade NIFTY & BANKNIFTY options risk-free.</p>
+          <Link href="/" className="inline-block bg-white text-blue-600 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
+            Join Waitlist — It's Free
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
