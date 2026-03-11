@@ -1,49 +1,62 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { ArrowRight, CheckCircle, X, Sparkles, TrendingUp, Shield, BarChart3, Calculator, ChevronRight, ChevronDown, Play, Zap, Target, Award, Users, Clock, IndianRupee, LineChart, CandlestickChart, ArrowUpRight, ArrowDownRight, Star } from 'lucide-react';
+import { ArrowRight, CheckCircle, TrendingUp, TrendingDown, Calculator, Shield, BarChart3, ChevronDown, Star, Zap, Target, IndianRupee, X } from 'lucide-react';
 
-// Animated counter hook
-function useCounter(end: number, duration: number = 2000) {
+// ── Animated counter ──────────────────────────────────────────────────────────
+function useCounter(end: number, duration = 2000) {
   const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  
+  const ref = useRef<HTMLDivElement>(null);
+  const started = useRef(false);
+
   useEffect(() => {
-    if (!inView) return;
-    let start = 0;
-    const increment = end / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= end) { setCount(end); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, end, duration]);
-  
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        let start = 0;
+        const inc = end / (duration / 16);
+        const t = setInterval(() => {
+          start += inc;
+          if (start >= end) { setCount(end); clearInterval(t); }
+          else setCount(Math.floor(start));
+        }, 16);
+      }
+    }, { threshold: 0.3 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [end, duration]);
+
   return { count, ref };
 }
 
+// ── Ticker data ───────────────────────────────────────────────────────────────
+const TICKERS = [
+  { sym: 'NIFTY 50', price: 24352, chg: -2.1 },
+  { sym: 'BANKNIFTY', price: 52180, chg: -1.8 },
+  { sym: 'GOLDM', price: 78450, chg: +1.2 },
+  { sym: 'SILVERM', price: 89200, chg: -0.8 },
+  { sym: 'CRUDEOILM', price: 6890, chg: +3.5 },
+  { sym: 'NATURALGAS', price: 245, chg: +0.4 },
+  { sym: 'COPPER', price: 785, chg: -1.1 },
+  { sym: 'FINNIFTY', price: 23150, chg: -1.5 },
+];
+
 const tools = [
-  { name: 'Option Calculator', desc: 'Greeks, P&L, breakeven analysis', href: '/calculator', icon: Calculator, color: 'from-violet-500 to-purple-500' },
+  { name: 'Option Calculator', desc: 'Greeks, P&L, breakeven analysis', href: '/calculator', icon: Calculator, color: 'from-violet-500 to-purple-600' },
   { name: 'Position Sizing', desc: 'Risk-based lot calculator', href: '/tools/position-size', icon: TrendingUp, color: 'from-blue-500 to-cyan-500' },
   { name: 'Brokerage Calculator', desc: 'Compare broker charges', href: '/tools/brokerage', icon: BarChart3, color: 'from-emerald-500 to-green-500' },
   { name: 'Margin Calculator', desc: 'F&O margin requirements', href: '/tools/margin', icon: Shield, color: 'from-orange-500 to-amber-500' },
 ];
 
-const testimonials = [
-  { name: 'Rahul M.', role: 'Options Trader', text: 'Finally a platform that lets me practice without burning money. Lost Rs 50K learning on real markets before this.', avatar: '👨‍💼' },
-  { name: 'Priya S.', role: 'Swing Trader', text: 'The indicators are game-changing. ARIA SUPREME paid for itself in the first week.', avatar: '👩‍💻' },
-  { name: 'Amit K.', role: 'Day Trader', text: 'Been paper trading for 2 months. My win rate went from 40% to 65% before going live.', avatar: '👨‍🎓' },
-];
-
 const faqs = [
-  { q: 'Is paper trading really free?', a: 'Yes! Paper trading with Rs 10 Lakh virtual capital is completely free. No credit card required.' },
-  { q: 'What markets can I trade?', a: 'NIFTY, BANKNIFTY, FINNIFTY options, and MCX commodities (Gold, Crude, Silver, Natural Gas).' },
-  { q: 'Is the data real-time?', a: 'Yes, we use live market data with minimal delay. Your paper trades execute at real market prices.' },
-  { q: 'Can I use the indicators without paper trading?', a: 'Absolutely! Our TradingView indicators work independently on any TradingView chart.' },
+  { q: 'Is paper trading really free?', a: 'Yes — ₹10 Lakh virtual capital, no credit card needed. Free forever.' },
+  { q: 'What markets can I trade?', a: 'NIFTY, BANKNIFTY, FINNIFTY options + MCX commodities (Gold, Silver, Crude Oil, Natural Gas).' },
+  { q: 'Is the data real-time?', a: 'Yes. Live market data during NSE/MCX trading hours. Paper trades execute at actual market prices.' },
+  { q: 'Can I use the indicators without paper trading?', a: 'Absolutely. Our TradingView indicators work on any chart, independent of the paper trading platform.' },
+  { q: 'When does the platform go live?', a: 'Very soon — join the waitlist to get early access + a launch discount.' },
 ];
 
 export default function HomePage() {
@@ -52,15 +65,29 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  
+  const [tickers, setTickers] = useState(TICKERS);
+
   const stat1 = useCounter(10, 1500);
   const stat2 = useCounter(500, 2000);
   const stat3 = useCounter(4, 1000);
   const stat4 = useCounter(65, 1800);
 
+  // Popup after 10s
   useEffect(() => {
-    const timer = setTimeout(() => setShowPopup(true), 8000);
-    return () => clearTimeout(timer);
+    const t = setTimeout(() => setShowPopup(true), 10000);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Tick prices
+  useEffect(() => {
+    const t = setInterval(() => {
+      setTickers(prev => prev.map(tk => ({
+        ...tk,
+        price: Math.round(tk.price * (1 + (Math.random() - 0.497) * 0.001)),
+        chg: Math.round((tk.chg + (Math.random() - 0.5) * 0.05) * 100) / 100,
+      })));
+    }, 3000);
+    return () => clearInterval(t);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,411 +97,419 @@ export default function HomePage() {
     try {
       const res = await fetch('/api/waitlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email }) });
       if (res.ok) setSubmitted(true);
-    } catch (err) { console.error(err); }
+    } catch {}
     setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
-      {/* Navbar */}
-      <motion.nav initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="border-b border-gray-100 sticky top-0 bg-white/80 backdrop-blur-xl z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <motion.div whileHover={{ scale: 1.05, rotate: 5 }} className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-blue-500/30">P</motion.div>
-            <span className="font-semibold text-xl">PaperPe</span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8 text-sm text-gray-500">
-            <Link href="/calculator" className="hover:text-blue-500 transition-colors">Tools</Link>
-            <Link href="/indicators" className="hover:text-blue-500 transition-colors">Indicators</Link>
-            <Link href="/blog" className="hover:text-blue-500 transition-colors">Learn</Link>
-            <Link href="/brokers" className="hover:text-blue-500 transition-colors">Brokers</Link>
-          </div>
-          <Link href="/indicators" className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-5 py-2.5 rounded-lg font-medium text-sm shadow-lg shadow-blue-500/25 hover:shadow-xl transition-shadow">Get Indicators</Link>
-        </div>
-      </motion.nav>
+  const tickerHtml = [...tickers, ...tickers].map(tk => {
+    const up = tk.chg >= 0;
+    return `<span style="display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:13px;white-space:nowrap">
+      <span style="font-weight:600;color:#e2e8f0">${tk.sym}</span>
+      <span style="color:#e2e8f0">₹${tk.price.toLocaleString('en-IN')}</span>
+      <span style="color:${up ? '#00C076' : '#FF4D4D'}">${up ? '▲' : '▼'} ${Math.abs(tk.chg)}%</span>
+      <span style="color:#334155">|</span>
+    </span>`;
+  }).join('');
 
-      {/* Hero with Platform Preview */}
-      <section className="relative py-16 md:py-24 px-6 overflow-hidden">
-        <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-purple-400/20 rounded-full blur-3xl" />
-        
-        <div className="max-w-6xl mx-auto relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-                <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-100 rounded-full text-blue-600 text-sm font-medium">
-                  <Sparkles className="w-4 h-4" /> Platform Launching Soon
-                </span>
-              </motion.div>
-              
-              <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                Learn to trade
-                <span className="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent"> without losing money</span>
-              </motion.h1>
-              
-              <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-xl text-gray-500 mb-8 leading-relaxed">
-                Practice NIFTY, BANKNIFTY & MCX options with Rs 10 Lakh virtual capital. Make mistakes. Learn. Then go live.
-              </motion.p>
-              
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                {!submitted ? (
-                  <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email" required
-                      className="flex-1 px-5 py-4 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10" />
-                    <motion.button type="submit" disabled={loading} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                      className="px-7 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-500/30 disabled:opacity-50 flex items-center justify-center gap-2">
-                      {loading ? <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <>Join Waitlist <ArrowRight className="w-4 h-4" /></>}
-                    </motion.button>
-                  </form>
-                ) : (
-                  <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="flex items-center gap-2 text-green-600 text-lg font-medium">
-                    <CheckCircle className="w-6 h-6" /> You are on the list!
-                  </motion.div>
-                )}
-              </motion.div>
-              
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="flex items-center gap-6 mt-6 text-sm text-gray-500">
-                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-500" /> Free forever</span>
-                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-500" /> No credit card</span>
-                <span className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-500" /> Real-time data</span>
-              </motion.div>
+  return (
+    <div style={{ background: '#0D1117', color: '#e2e8f0', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
+
+      {/* ── Ticker ─────────────────────────────────────── */}
+      <div style={{ background: '#161B22', borderBottom: '1px solid #21262D', padding: '8px 0', overflow: 'hidden' }}>
+        <div
+          style={{ display: 'inline-flex', animation: 'ticker 35s linear infinite', whiteSpace: 'nowrap' }}
+          dangerouslySetInnerHTML={{ __html: tickerHtml }}
+        />
+      </div>
+
+      <style>{`
+        @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .fade-up { animation: fadeUp 0.6s ease forwards; }
+        .fade-up-1 { animation: fadeUp 0.6s 0.1s ease both; }
+        .fade-up-2 { animation: fadeUp 0.6s 0.2s ease both; }
+        .fade-up-3 { animation: fadeUp 0.6s 0.3s ease both; }
+        .fade-up-4 { animation: fadeUp 0.6s 0.4s ease both; }
+        .card { background:#161B22; border:1px solid #21262D; border-radius:16px; transition:all 0.2s; }
+        .card:hover { border-color:rgba(0,192,118,0.3); transform:translateY(-2px); }
+        .btn-primary { background:#00C076; color:#0D1117; font-weight:700; border:none; cursor:pointer; transition:all 0.2s; }
+        .btn-primary:hover { background:#00a865; transform:translateY(-1px); }
+        .btn-ghost { background:transparent; border:1px solid #21262D; color:#94a3b8; cursor:pointer; transition:all 0.2s; }
+        .btn-ghost:hover { border-color:#00C076; color:#00C076; }
+        .up { color: #00C076; }
+        .down { color: #FF4D4D; }
+        input { background:#0D1117; border:1px solid #21262D; color:#e2e8f0; outline:none; transition:border 0.2s; }
+        input:focus { border-color:#00C076; }
+        input::placeholder { color:#475569; }
+        .pill { display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:rgba(0,192,118,0.1);border:1px solid rgba(0,192,118,0.2);color:#00C076;border-radius:999px;font-size:13px;font-weight:500; }
+        .blink { animation: blink 1.5s ease infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .section-label { font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00C076; }
+      `}</style>
+
+      {/* ── Navbar ─────────────────────────────────────── */}
+      <nav style={{ position:'sticky', top:0, zIndex:50, background:'rgba(13,17,23,0.9)', backdropFilter:'blur(16px)', borderBottom:'1px solid #21262D', padding:'14px 24px' }}>
+        <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:24 }}>
+            <Link href="/" style={{ display:'flex', alignItems:'center', gap:8, textDecoration:'none' }}>
+              <div style={{ width:34, height:34, background:'#00C076', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#0D1117', fontSize:16 }}>P</div>
+              <span style={{ fontWeight:700, fontSize:18, color:'#e2e8f0' }}>Paper<span style={{ color:'#00C076' }}>Pe</span></span>
+            </Link>
+            <div style={{ display:'flex', gap:4 }}>
+              {[['Tools','/calculator'],['Indicators','/indicators'],['Blog','/blog'],['Brokers','/brokers']].map(([label, href]) => (
+                <Link key={href} href={href} style={{ padding:'6px 12px', borderRadius:8, color:'#94a3b8', textDecoration:'none', fontSize:14, fontWeight:500, transition:'all 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color='#e2e8f0', e.currentTarget.style.background='#21262D')}
+                  onMouseLeave={e => (e.currentTarget.style.color='#94a3b8', e.currentTarget.style.background='transparent')}>
+                  {label}
+                </Link>
+              ))}
             </div>
-            
-            {/* Platform Preview */}
-            <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} className="relative">
-              <div className="bg-[#131722] rounded-2xl p-4 shadow-2xl border border-gray-800">
-                {/* Mock trading interface */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
-                  </div>
-                  <span className="text-gray-400 text-xs">NIFTY 24,850.25</span>
+          </div>
+          <Link href="/indicators" style={{ background:'#00C076', color:'#0D1117', padding:'8px 20px', borderRadius:10, fontWeight:700, fontSize:14, textDecoration:'none', boxShadow:'0 0 20px rgba(0,192,118,0.25)' }}>
+            Get Indicators
+          </Link>
+        </div>
+      </nav>
+
+      {/* ── Hero ───────────────────────────────────────── */}
+      <section style={{ padding:'80px 24px 100px', maxWidth:1200, margin:'0 auto' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+          {/* Left */}
+          <div>
+            <div className="pill fade-up" style={{ marginBottom:24 }}>
+              <span className="blink" style={{ width:8, height:8, background:'#00C076', borderRadius:'50%', display:'inline-block' }}></span>
+              Live paper trading · MCX & F&amp;O
+            </div>
+            <h1 className="fade-up-1" style={{ fontSize:56, fontWeight:900, lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
+              Trade Gold, Nifty &amp;<br />
+              <span style={{ background:'linear-gradient(135deg,#00C076,#00a8ff)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
+                Crude Oil — Risk Free
+              </span>
+            </h1>
+            <p className="fade-up-2" style={{ fontSize:18, color:'#94a3b8', lineHeight:1.7, marginBottom:32, maxWidth:480 }}>
+              Practice with ₹10 Lakh virtual capital. Real MCX & F&O prices, real P&L tracking — zero real money at risk.
+            </p>
+
+            {!submitted ? (
+              <form className="fade-up-3" onSubmit={handleSubmit} style={{ display:'flex', gap:10, maxWidth:440, marginBottom:24 }}>
+                <input
+                  type="email" value={email} onChange={e => setEmail(e.target.value)}
+                  placeholder="Enter your email address" required
+                  style={{ flex:1, padding:'14px 18px', borderRadius:12, fontSize:15 }}
+                />
+                <button type="submit" disabled={loading} className="btn-primary"
+                  style={{ padding:'14px 24px', borderRadius:12, fontSize:15, whiteSpace:'nowrap', opacity:loading ? 0.6 : 1, display:'flex', alignItems:'center', gap:8 }}>
+                  {loading ? '...' : <>Join Waitlist <ArrowRight size={16} /></>}
+                </button>
+              </form>
+            ) : (
+              <div className="fade-up-3" style={{ display:'flex', alignItems:'center', gap:10, color:'#00C076', fontSize:18, fontWeight:600, marginBottom:24 }}>
+                <CheckCircle size={22} /> You&apos;re on the list!
+              </div>
+            )}
+
+            <div className="fade-up-4" style={{ display:'flex', gap:20, fontSize:13, color:'#64748b' }}>
+              {['Free forever', 'No credit card', 'Real-time prices'].map(t => (
+                <span key={t} style={{ display:'flex', alignItems:'center', gap:5 }}>
+                  <CheckCircle size={14} color="#00C076" /> {t}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — Terminal mockup */}
+          <div style={{ position:'relative', animation:'float 3s ease-in-out infinite' }}>
+            <div style={{ background:'#0D1117', border:'1px solid #21262D', borderRadius:16, overflow:'hidden', boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
+              {/* Terminal bar */}
+              <div style={{ background:'#161B22', padding:'12px 16px', display:'flex', alignItems:'center', gap:8, borderBottom:'1px solid #21262D' }}>
+                {['#FF5F57','#FFBD2E','#28CA42'].map(c => <div key={c} style={{ width:12, height:12, borderRadius:'50%', background:c }} />)}
+                <span style={{ color:'#475569', fontSize:12, marginLeft:8 }}>PaperPe Dashboard</span>
+              </div>
+              <div style={{ padding:16 }}>
+                {/* Stats */}
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginBottom:14 }}>
+                  {[
+                    { label:'Capital', val:'₹9,87,450', color:'#e2e8f0' },
+                    { label:"Today P&L", val:'+₹12,680', color:'#00C076' },
+                    { label:'Win Rate', val:'68%', color:'#e2e8f0' },
+                  ].map(s => (
+                    <div key={s.label} style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, padding:'10px 12px' }}>
+                      <div style={{ fontSize:11, color:'#64748b', marginBottom:4 }}>{s.label}</div>
+                      <div style={{ fontWeight:700, fontSize:13, color:s.color }}>{s.val}</div>
+                    </div>
+                  ))}
                 </div>
-                {/* Fake chart */}
-                <div className="h-48 relative mb-4">
-                  <svg viewBox="0 0 400 150" className="w-full h-full">
+                {/* Positions */}
+                <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, overflow:'hidden', marginBottom:12 }}>
+                  <div style={{ padding:'8px 12px', borderBottom:'1px solid #21262D', fontSize:11, color:'#64748b', fontWeight:600 }}>OPEN POSITIONS</div>
+                  {[
+                    { sym:'GOLDM', side:'BUY', lots:'2', pnl:'+₹2,340', up:true },
+                    { sym:'BANKNIFTY', side:'SELL', lots:'1', pnl:'+₹8,900', up:true },
+                    { sym:'CRUDEOILM', side:'BUY', lots:'5', pnl:'-₹1,560', up:false },
+                  ].map(p => (
+                    <div key={p.sym} style={{ padding:'8px 12px', display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #21262D', fontSize:12 }}>
+                      <div>
+                        <span style={{ fontWeight:600 }}>{p.sym}</span>
+                        <span style={{ color:'#64748b', marginLeft:8 }}>{p.lots} lots · {p.side}</span>
+                      </div>
+                      <span style={{ fontWeight:700, color:p.up ? '#00C076' : '#FF4D4D' }}>{p.pnl}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Mini chart */}
+                <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, padding:12 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8, fontSize:12 }}>
+                    <span style={{ fontWeight:600 }}>GOLDM</span>
+                    <span className="up">₹78,920 <span style={{ color:'#64748b' }}>+1.2%</span></span>
+                  </div>
+                  <svg viewBox="0 0 280 50" style={{ width:'100%', display:'block' }} preserveAspectRatio="none" height={50}>
                     <defs>
-                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#22c55e" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
+                      <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#00C076" stopOpacity="0.3"/>
+                        <stop offset="100%" stopColor="#00C076" stopOpacity="0"/>
                       </linearGradient>
                     </defs>
-                    <path d="M0,100 Q50,80 100,90 T200,60 T300,70 T400,30" fill="none" stroke="#22c55e" strokeWidth="2" />
-                    <path d="M0,100 Q50,80 100,90 T200,60 T300,70 T400,30 V150 H0 Z" fill="url(#chartGradient)" />
+                    <path d="M0,45 L35,40 L70,42 L105,32 L140,35 L175,22 L210,18 L245,10 L280,6" fill="none" stroke="#00C076" strokeWidth="2"/>
+                    <path d="M0,45 L35,40 L70,42 L105,32 L140,35 L175,22 L210,18 L245,10 L280,6 L280,50 L0,50 Z" fill="url(#g1)"/>
                   </svg>
-                  <div className="absolute top-2 right-2 bg-green-500/20 text-green-400 px-2 py-1 rounded text-xs flex items-center gap-1">
-                    <ArrowUpRight className="w-3 h-3" /> +1.25%
-                  </div>
                 </div>
-                {/* Order panel */}
-                <div className="grid grid-cols-2 gap-2">
-                  <button className="bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-medium text-sm transition-colors">BUY CE</button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-medium text-sm transition-colors">BUY PE</button>
-                </div>
-                <div className="mt-3 text-center text-gray-500 text-xs">Paper Trading Mode • Rs 10,00,000 Virtual Capital</div>
               </div>
-              {/* Floating badge */}
-              <motion.div animate={{ y: [0, -10, 0] }} transition={{ repeat: Infinity, duration: 2 }} className="absolute -top-4 -right-4 bg-white rounded-xl shadow-xl p-3 border border-gray-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500">Today P&L</div>
-                    <div className="text-sm font-bold text-green-600">+Rs 12,450</div>
-                  </div>
+            </div>
+            {/* Floating badge */}
+            <div style={{ position:'absolute', bottom:-16, left:-16, background:'#161B22', border:'1px solid #21262D', borderRadius:14, padding:'12px 16px', boxShadow:'0 20px 40px rgba(0,0,0,0.5)' }}>
+              <div style={{ fontSize:11, color:'#64748b', marginBottom:2 }}>Best Trade Today</div>
+              <div style={{ fontWeight:700, color:'#00C076', fontSize:14 }}>+₹12,450 on GOLDM</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Stats ──────────────────────────────────────── */}
+      <div style={{ background:'#161B22', borderTop:'1px solid #21262D', borderBottom:'1px solid #21262D', padding:'48px 24px' }}>
+        <div style={{ maxWidth:900, margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:32, textAlign:'center' }}>
+          {[
+            { ref: stat1.ref, val: `₹${stat1.count}L+`, label:'Starting Virtual Capital', color:'#00C076' },
+            { ref: stat2.ref, val: `${stat2.count}+`, label:'Traders on Waitlist', color:'#e2e8f0' },
+            { ref: stat3.ref, val: `${stat3.count}`, label:'Free Tools Available', color:'#e2e8f0' },
+            { ref: stat4.ref, val: `${stat4.count}%`, label:'Avg Win Rate Improvement', color:'#00C076' },
+          ].map(s => (
+            <div key={s.label} ref={s.ref as React.RefObject<HTMLDivElement>}>
+              <div style={{ fontSize:42, fontWeight:900, color:s.color, marginBottom:6 }}>{s.val}</div>
+              <div style={{ fontSize:13, color:'#64748b' }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── How it works ───────────────────────────────── */}
+      <section style={{ padding:'96px 24px', maxWidth:1100, margin:'0 auto' }}>
+        <div style={{ textAlign:'center', marginBottom:56 }}>
+          <p className="section-label" style={{ marginBottom:12 }}>Simple Setup</p>
+          <h2 style={{ fontSize:40, fontWeight:900, marginBottom:12 }}>Start in 2 minutes</h2>
+          <p style={{ color:'#64748b', fontSize:16, maxWidth:480, margin:'0 auto' }}>No documents, no KYC, no broker account needed.</p>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
+          {[
+            { n:'01', title:'Create Free Account', desc:'Sign up with email. Get ₹10 Lakh virtual capital credited instantly. No credit card required.', icon:Zap },
+            { n:'02', title:'Pick Your Instrument', desc:'NIFTY/BANKNIFTY F&O options or MCX Gold, Crude, Silver. Live prices, real lot sizes.', icon:Target },
+            { n:'03', title:'Trade & Build Confidence', desc:'Place trades, track P&L, study your win rate. Go live only when your stats say you\'re ready.', icon:IndianRupee },
+          ].map((step, i) => (
+            <div key={i} className="card" style={{ padding:28, position:'relative' }}>
+              <span style={{ position:'absolute', top:16, right:20, fontSize:48, fontWeight:900, color:'#1e293b' }}>{step.n}</span>
+              <div style={{ width:44, height:44, background:'rgba(0,192,118,0.1)', border:'1px solid rgba(0,192,118,0.2)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
+                <step.icon size={20} color="#00C076" />
+              </div>
+              <h3 style={{ fontSize:17, fontWeight:700, marginBottom:8 }}>{step.title}</h3>
+              <p style={{ fontSize:14, color:'#64748b', lineHeight:1.6 }}>{step.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Comparison ─────────────────────────────────── */}
+      <section style={{ padding:'0 24px 96px', maxWidth:900, margin:'0 auto' }}>
+        <div style={{ textAlign:'center', marginBottom:48 }}>
+          <p className="section-label" style={{ marginBottom:12 }}>Why Paper Trade?</p>
+          <h2 style={{ fontSize:40, fontWeight:900 }}>Learn Without The Pain</h2>
+        </div>
+        <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:20, overflow:'hidden' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', textAlign:'center', borderBottom:'1px solid #21262D' }}>
+            <div style={{ padding:'18px 24px' }}></div>
+            <div style={{ padding:'18px 24px', background:'rgba(255,77,77,0.05)', borderLeft:'1px solid #21262D', borderRight:'1px solid #21262D' }}>
+              <div style={{ fontWeight:700, color:'#FF4D4D', marginBottom:2 }}>Real Trading</div>
+              <div style={{ fontSize:12, color:'#64748b' }}>Learning the hard way</div>
+            </div>
+            <div style={{ padding:'18px 24px', background:'rgba(0,192,118,0.05)' }}>
+              <div style={{ fontWeight:700, color:'#00C076', marginBottom:2 }}>PaperPe</div>
+              <div style={{ fontSize:12, color:'#64748b' }}>Smart way to learn</div>
+            </div>
+          </div>
+          {[
+            ['Cost of mistakes', '₹10K – ₹1L+', '₹0'],
+            ['Emotional pressure', 'Extreme (real money)', 'None'],
+            ['Learning speed', 'Slow (fear inhibits)', 'Fast (experiment freely)'],
+            ['Risk of blowup', 'Very real', 'Zero'],
+          ].map(([feat, real, paper], i) => (
+            <div key={i} style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', borderBottom: i < 3 ? '1px solid #21262D' : 'none' }}>
+              <div style={{ padding:'14px 24px', fontWeight:500, fontSize:14 }}>{feat}</div>
+              <div style={{ padding:'14px 24px', textAlign:'center', color:'#FF4D4D', fontSize:14, borderLeft:'1px solid #21262D', borderRight:'1px solid #21262D', background:'rgba(255,77,77,0.03)' }}>{real}</div>
+              <div style={{ padding:'14px 24px', textAlign:'center', color:'#00C076', fontSize:14, fontWeight:600, background:'rgba(0,192,118,0.03)' }}>{paper}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Free Tools ─────────────────────────────────── */}
+      <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
+        <div style={{ textAlign:'center', marginBottom:48 }}>
+          <p className="section-label" style={{ marginBottom:12 }}>Available Now · Free</p>
+          <h2 style={{ fontSize:40, fontWeight:900, marginBottom:12 }}>Trading Tools</h2>
+          <p style={{ color:'#64748b', fontSize:16 }}>No signup required. Open and use instantly.</p>
+        </div>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
+          {tools.map((tool, i) => (
+            <Link key={i} href={tool.href} style={{ textDecoration:'none', color:'inherit' }}>
+              <div className="card" style={{ padding:24, cursor:'pointer' }}>
+                <div style={{ width:48, height:48, background:`linear-gradient(135deg, var(--tw-gradient-stops))`, borderRadius:14, marginBottom:16, display:'flex', alignItems:'center', justifyContent:'center' }}
+                  className={`bg-gradient-to-br ${tool.color}`}>
+                  <tool.icon size={22} color="white" />
                 </div>
-              </motion.div>
-            </motion.div>
+                <h3 style={{ fontSize:15, fontWeight:700, marginBottom:6 }}>{tool.name}</h3>
+                <p style={{ fontSize:13, color:'#64748b', lineHeight:1.5 }}>{tool.desc}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Indicators ─────────────────────────────────── */}
+      <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+          <div>
+            <p className="section-label" style={{ marginBottom:12 }}>Premium · TradingView</p>
+            <h2 style={{ fontSize:40, fontWeight:900, marginBottom:16 }}>Indicators Built for Indian Markets</h2>
+            <p style={{ color:'#64748b', fontSize:16, marginBottom:24, lineHeight:1.7 }}>Clear signals, not noise. Tested on NIFTY, BANKNIFTY, and MCX commodities — not generic global data.</p>
+            <ul style={{ listStyle:'none', padding:0, marginBottom:28 }}>
+              {['ARIA SUPREME — 7 powerful modules in one', 'Score-based signals (0–100 scale)', 'India session awareness built-in', 'Works on weekly & monthly expiry charts'].map((f, i) => (
+                <li key={i} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12, fontSize:14, color:'#cbd5e1' }}>
+                  <CheckCircle size={16} color="#00C076" /> {f}
+                </li>
+              ))}
+            </ul>
+            <Link href="/indicators" style={{ display:'inline-flex', alignItems:'center', gap:8, color:'#00C076', fontWeight:600, fontSize:15, textDecoration:'none' }}>
+              View all indicators <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div style={{ background:'#161B22', border:'2px solid rgba(0,192,118,0.2)', borderRadius:24, padding:32, boxShadow:'0 0 60px rgba(0,192,118,0.1)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+              <span style={{ fontWeight:800, fontSize:20 }}>ARIA SUPREME</span>
+              <span style={{ background:'linear-gradient(135deg,#00C076,#0099ff)', color:'#0D1117', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:700 }}>Flagship</span>
+            </div>
+            <div style={{ fontSize:48, fontWeight:900, marginBottom:4 }}>₹2,999</div>
+            <div style={{ textDecoration:'line-through', color:'#475569', marginBottom:8 }}>₹5,999</div>
+            <div style={{ display:'inline-block', background:'rgba(0,192,118,0.1)', color:'#00C076', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:600, marginBottom:24 }}>
+              50% off — Launch Price
+            </div>
+            <Link href="/indicators" style={{ display:'block', textAlign:'center', background:'#00C076', color:'#0D1117', padding:'16px', borderRadius:14, fontWeight:800, fontSize:16, textDecoration:'none', boxShadow:'0 0 30px rgba(0,192,118,0.3)', marginBottom:12 }}>
+              Buy Now
+            </Link>
+            <p style={{ textAlign:'center', fontSize:12, color:'#475569' }}>One-time payment · Lifetime access</p>
           </div>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div ref={stat1.ref} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900">Rs {stat1.count}L+</div>
-              <div className="text-gray-500 mt-2">Virtual Capital</div>
+      {/* ── FAQ ────────────────────────────────────────── */}
+      <section style={{ padding:'0 24px 96px', maxWidth:720, margin:'0 auto' }}>
+        <div style={{ textAlign:'center', marginBottom:48 }}>
+          <p className="section-label" style={{ marginBottom:12 }}>FAQ</p>
+          <h2 style={{ fontSize:40, fontWeight:900 }}>Common Questions</h2>
+        </div>
+        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+          {faqs.map((faq, i) => (
+            <div key={i} className="card" style={{ overflow:'hidden', cursor:'pointer' }} onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+              <div style={{ padding:'16px 20px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ fontWeight:600, fontSize:15 }}>{faq.q}</span>
+                <ChevronDown size={18} color="#64748b" style={{ transform: openFaq === i ? 'rotate(180deg)' : 'none', transition:'0.2s' }} />
+              </div>
+              {openFaq === i && (
+                <div style={{ padding:'0 20px 16px', color:'#94a3b8', fontSize:14, lineHeight:1.7 }}>{faq.a}</div>
+              )}
             </div>
-            <div ref={stat2.ref} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900">{stat2.count}+</div>
-              <div className="text-gray-500 mt-2">Traders Waiting</div>
-            </div>
-            <div ref={stat3.ref} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900">{stat3.count}</div>
-              <div className="text-gray-500 mt-2">Free Tools</div>
-            </div>
-            <div ref={stat4.ref} className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-gray-900">{stat4.count}%</div>
-              <div className="text-gray-500 mt-2">Avg. Win Rate Improvement</div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">How It Works</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Start in 3 Simple Steps</h2>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+      {/* ── CTA ────────────────────────────────────────── */}
+      <section style={{ padding:'0 24px 96px', maxWidth:700, margin:'0 auto', textAlign:'center' }}>
+        <h2 style={{ fontSize:44, fontWeight:900, marginBottom:12, lineHeight:1.2 }}>Stop losing money learning to trade.</h2>
+        <p style={{ color:'#64748b', fontSize:18, marginBottom:32 }}>Practice first. Go live only when your P&L says you're ready.</p>
+        <Link href="#" onClick={e => { e.preventDefault(); document.querySelector('input[type=email]')?.scrollIntoView({ behavior:'smooth' }); }}
+          style={{ display:'inline-block', background:'#00C076', color:'#0D1117', padding:'16px 40px', borderRadius:16, fontWeight:900, fontSize:18, textDecoration:'none', boxShadow:'0 0 40px rgba(0,192,118,0.3)' }}>
+          Join Waitlist — It&apos;s Free →
+        </Link>
+      </section>
+
+      {/* ── Footer ─────────────────────────────────────── */}
+      <footer style={{ borderTop:'1px solid #21262D', padding:'48px 24px', background:'#161B22' }}>
+        <div style={{ maxWidth:1100, margin:'0 auto' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:40, marginBottom:40 }}>
+            <div>
+              <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+                <div style={{ width:30, height:30, background:'#00C076', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#0D1117', fontSize:14 }}>P</div>
+                <span style={{ fontWeight:700, fontSize:16 }}>Paper<span style={{ color:'#00C076' }}>Pe</span></span>
+              </div>
+              <p style={{ fontSize:13, color:'#475569', lineHeight:1.6, maxWidth:240 }}>India&apos;s paper trading platform for MCX commodities and F&O options.</p>
+            </div>
             {[
-              { step: '01', title: 'Sign Up Free', desc: 'Create your account in 30 seconds. No credit card or KYC required.', icon: Zap },
-              { step: '02', title: 'Get Virtual Capital', desc: 'Receive Rs 10 Lakh virtual money to practice trading NIFTY, BANKNIFTY & MCX.', icon: IndianRupee },
-              { step: '03', title: 'Trade & Learn', desc: 'Execute trades, track P&L, learn from mistakes - all without risking real money.', icon: Target },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative">
-                <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-shadow h-full">
-                  <span className="text-6xl font-bold text-gray-100 absolute top-4 right-6">{item.step}</span>
-                  <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-                    <item.icon className="w-7 h-7 text-blue-600" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                  <p className="text-gray-500 leading-relaxed">{item.desc}</p>
-                </div>
-                {i < 2 && <div className="hidden md:block absolute top-1/2 -right-4 w-8 text-gray-300"><ArrowRight /></div>}
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison */}
-      <section className="py-24 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">Why Paper Trade?</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Learn Without The Pain</h2>
-          </motion.div>
-          
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-xl">
-            <div className="grid grid-cols-3 text-center border-b border-gray-100">
-              <div className="p-6"></div>
-              <div className="p-6 bg-red-50 border-x border-gray-100">
-                <div className="text-red-600 font-bold">Real Trading</div>
-                <div className="text-red-400 text-sm">Learning the hard way</div>
-              </div>
-              <div className="p-6 bg-green-50">
-                <div className="text-green-600 font-bold">PaperPe</div>
-                <div className="text-green-400 text-sm">Smart way to learn</div>
-              </div>
-            </div>
-            {[
-              { feature: 'Cost of mistakes', real: 'Rs 10K - Rs 1L+', paper: 'Rs 0' },
-              { feature: 'Emotional stress', real: 'Very High', paper: 'None' },
-              { feature: 'Learning speed', real: 'Slow (fear of loss)', paper: 'Fast (freedom to experiment)' },
-              { feature: 'Risk of ruin', real: 'Real possibility', paper: 'Zero' },
-            ].map((row, i) => (
-              <div key={i} className="grid grid-cols-3 text-center border-b border-gray-100 last:border-0">
-                <div className="p-5 text-gray-700 font-medium text-left pl-8">{row.feature}</div>
-                <div className="p-5 text-red-600 border-x border-gray-100 bg-red-50/50">{row.real}</div>
-                <div className="p-5 text-green-600 font-medium bg-green-50/50">{row.paper}</div>
+              { title:'Product', links:[['Tools','/calculator'],['Indicators','/indicators'],['Leaderboard','/leaderboard'],['Blog','/blog']] },
+              { title:'Learn', links:[['Options Guide','/blog/nifty-options-trading'],['MCX Guide','/blog/mcx-trading-beginners'],['Greeks','/blog/options-greeks'],['Brokers','/brokers']] },
+              { title:'Legal', links:[['Privacy','/privacy'],['Terms','/terms'],['Refund','/refund'],['Contact','/contact']] },
+            ].map(col => (
+              <div key={col.title}>
+                <h4 style={{ fontWeight:700, fontSize:13, color:'#94a3b8', marginBottom:12, textTransform:'uppercase', letterSpacing:'0.05em' }}>{col.title}</h4>
+                <ul style={{ listStyle:'none', padding:0 }}>
+                  {col.links.map(([label, href]) => (
+                    <li key={href} style={{ marginBottom:8 }}>
+                      <Link href={href} style={{ color:'#475569', fontSize:13, textDecoration:'none', transition:'color 0.2s' }}
+                        onMouseEnter={e => (e.currentTarget.style.color='#94a3b8')}
+                        onMouseLeave={e => (e.currentTarget.style.color='#475569')}>
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Tools */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">Available Now</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Free Trading Tools</h2>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {tools.map((tool, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
-                <Link href={tool.href}>
-                  <motion.div whileHover={{ y: -8 }} className="group h-full bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all cursor-pointer">
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
-                      <tool.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3 className="font-semibold text-lg text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{tool.name}</h3>
-                    <p className="text-gray-500 text-sm">{tool.desc}</p>
-                  </motion.div>
-                </Link>
-              </motion.div>
-            ))}
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">Testimonials</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Traders Love PaperPe</h2>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}
-                className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
-                <div className="flex items-center gap-1 text-yellow-400 mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-gray-600 mb-6 leading-relaxed">"{t.text}"</p>
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">{t.avatar}</div>
-                  <div>
-                    <div className="font-semibold text-gray-900">{t.name}</div>
-                    <div className="text-gray-500 text-sm">{t.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Indicators */}
-      <section className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-              <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">Premium</p>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">TradingView Indicators</h2>
-              <p className="text-gray-500 text-lg mb-8 leading-relaxed">Professional indicators built for Indian markets. Clear signals, no confusion.</p>
-              <ul className="space-y-4 mb-8">
-                {['ARIA SUPREME - 7 powerful modules', 'Score-based signals (0-100)', 'India market session awareness', 'Works on NIFTY, BANKNIFTY, MCX'].map((f, i) => (
-                  <motion.li key={i} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex items-center gap-3 text-gray-600">
-                    <CheckCircle className="w-5 h-5 text-green-500" />{f}
-                  </motion.li>
-                ))}
-              </ul>
-              <Link href="/indicators" className="inline-flex items-center gap-2 text-blue-500 font-semibold group">View all indicators <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></Link>
-            </motion.div>
-            
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl blur-2xl" />
-              <motion.div whileHover={{ y: -5 }} className="relative bg-white rounded-3xl p-8 border border-gray-100 shadow-2xl">
-                <div className="flex items-center justify-between mb-6">
-                  <span className="font-bold text-xl">ARIA SUPREME</span>
-                  <span className="text-xs bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1.5 rounded-full">Flagship</span>
-                </div>
-                <div className="text-5xl font-bold">Rs 2,999</div>
-                <div className="text-gray-400 line-through">Rs 5,999</div>
-                <div className="inline-block bg-green-50 text-green-600 text-sm px-3 py-1.5 rounded-full mt-3 font-medium">50% off - Launch Price</div>
-                <Link href="/indicators" className="mt-8 block w-full text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white py-4 rounded-xl font-semibold shadow-lg shadow-blue-500/30 hover:shadow-xl transition-shadow">Buy Now</Link>
-                <p className="text-center text-gray-400 text-sm mt-4">One-time payment • Lifetime access</p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <p className="text-blue-500 font-semibold text-sm mb-3 tracking-widest uppercase">FAQ</p>
-            <h2 className="text-4xl md:text-5xl font-bold">Common Questions</h2>
-          </motion.div>
-          
-          <div className="space-y-4">
-            {faqs.map((faq, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.05 }}
-                className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="w-full p-6 text-left flex items-center justify-between">
-                  <span className="font-semibold text-gray-900">{faq.q}</span>
-                  <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {openFaq === i && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                      <div className="px-6 pb-6 text-gray-600">{faq.a}</div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-24 px-6">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to start?</h2>
-          <p className="text-gray-500 text-xl mb-10">Join 500+ traders learning to trade the smart way.</p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Link href="/indicators" className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-10 py-5 rounded-2xl font-semibold text-lg shadow-xl shadow-blue-500/30">Get Indicators <ArrowRight className="w-5 h-5" /></Link>
-            </motion.div>
-            <Link href="/calculator" className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 font-medium transition-colors">Try free tools <ChevronRight className="w-4 h-4" /></Link>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-100 py-16 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-10 mb-12">
-            <div>
-              <div className="flex items-center gap-2.5 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/25">P</div>
-                <span className="font-semibold text-lg">PaperPe</span>
-              </div>
-              <p className="text-gray-500 text-sm">India paper trading platform</p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Tools</h4>
-              <div className="space-y-3 text-sm text-gray-500">
-                <Link href="/calculator" className="block hover:text-blue-500">Option Calculator</Link>
-                <Link href="/tools/position-size" className="block hover:text-blue-500">Position Size</Link>
-                <Link href="/tools/brokerage" className="block hover:text-blue-500">Brokerage</Link>
-                <Link href="/tools/margin" className="block hover:text-blue-500">Margin</Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Learn</h4>
-              <div className="space-y-3 text-sm text-gray-500">
-                <Link href="/blog" className="block hover:text-blue-500">Blog</Link>
-                <Link href="/blog/nifty-options-trading" className="block hover:text-blue-500">Options Guide</Link>
-                <Link href="/blog/mcx-trading-beginners" className="block hover:text-blue-500">MCX Guide</Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
-              <div className="space-y-3 text-sm text-gray-500">
-                <Link href="/indicators" className="block hover:text-blue-500">Indicators</Link>
-                <Link href="/brokers" className="block hover:text-blue-500">Brokers</Link>
-                <a href="mailto:support@paperpe.in" className="block hover:text-blue-500">Contact</a>
-              </div>
+          <div style={{ borderTop:'1px solid #21262D', paddingTop:24, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <p style={{ fontSize:12, color:'#334155' }}>© 2026 PaperPe. For educational purposes only. Not SEBI registered.</p>
+            <div style={{ display:'flex', gap:16 }}>
+              <a href="https://twitter.com/paperpe_in" style={{ color:'#334155', fontSize:12, textDecoration:'none' }}>Twitter</a>
+              <a href="https://reddit.com/u/Paperpe_in" style={{ color:'#334155', fontSize:12, textDecoration:'none' }}>Reddit</a>
             </div>
           </div>
-          <div className="border-t border-gray-200 pt-8 text-center text-gray-400 text-sm">© 2026 PaperPe. Made with love in India</div>
         </div>
       </footer>
 
-      {/* Popup */}
-      <AnimatePresence>
-        {showPopup && (
-          <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 100 }} className="fixed bottom-6 right-6 z-50">
-            <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 max-w-sm">
-              <button onClick={() => setShowPopup(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><X className="w-5 h-5" /></button>
-              <div className="flex gap-4">
-                <span className="text-4xl">🎯</span>
-                <div>
-                  <h3 className="font-bold text-gray-900 mb-1">50% Launch Discount!</h3>
-                  <p className="text-gray-500 text-sm mb-3">Get ARIA SUPREME at Rs 2,999</p>
-                  <Link href="/indicators" onClick={() => setShowPopup(false)} className="text-blue-500 font-semibold text-sm">View indicators →</Link>
-                </div>
-              </div>
+      {/* ── Popup ──────────────────────────────────────── */}
+      {showPopup && (
+        <div style={{ position:'fixed', bottom:24, right:24, zIndex:100, background:'#161B22', border:'1px solid #21262D', borderRadius:20, padding:24, maxWidth:320, boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
+          <button onClick={() => setShowPopup(false)} style={{ position:'absolute', top:12, right:12, background:'none', border:'none', color:'#475569', cursor:'pointer' }}>
+            <X size={18} />
+          </button>
+          <div style={{ display:'flex', gap:14 }}>
+            <span style={{ fontSize:36 }}>🎯</span>
+            <div>
+              <h3 style={{ fontWeight:800, marginBottom:4, fontSize:15 }}>50% Launch Discount!</h3>
+              <p style={{ color:'#64748b', fontSize:13, marginBottom:10 }}>Get ARIA SUPREME at ₹2,999</p>
+              <Link href="/indicators" onClick={() => setShowPopup(false)} style={{ color:'#00C076', fontWeight:700, fontSize:13, textDecoration:'none' }}>
+                View indicators →
+              </Link>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
