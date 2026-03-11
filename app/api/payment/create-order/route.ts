@@ -1,10 +1,5 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
 
 const PRODUCTS: Record<string, { name: string; price: number }> = {
   'early-bird': { name: 'Early Bird Lifetime Access', price: 499 },
@@ -18,14 +13,23 @@ const PRODUCTS: Record<string, { name: string; price: number }> = {
 export async function POST(req: NextRequest) {
   try {
     const { productId, email, name } = await req.json();
-    
+
     const product = PRODUCTS[productId];
     if (!product) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
     }
 
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      return NextResponse.json({ error: 'Payment not configured' }, { status: 503 });
+    }
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+
     const order = await razorpay.orders.create({
-      amount: product.price * 100, // paise
+      amount: product.price * 100,
       currency: 'INR',
       receipt: `order_${Date.now()}`,
       notes: {
