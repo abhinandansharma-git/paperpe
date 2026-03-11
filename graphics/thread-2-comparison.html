@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 675px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding: 40px;
+    }
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #c9a227 0%, #8b6914 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #1a1a2e;
+    }
+    .brand { color: #c9a227; font-size: 18px; font-weight: 600; }
+    .title {
+      color: white;
+      font-size: 28px;
+      font-weight: 300;
+    }
+    .title strong { font-weight: 700; }
+    .comparison {
+      display: flex;
+      gap: 30px;
+      flex: 1;
+    }
+    .side {
+      flex: 1;
+      border-radius: 20px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .wrong {
+      background: linear-gradient(135deg, rgba(255,71,87,0.15) 0%, rgba(255,71,87,0.05) 100%);
+      border: 2px solid rgba(255,71,87,0.3);
+    }
+    .right {
+      background: linear-gradient(135deg, rgba(46,213,115,0.15) 0%, rgba(46,213,115,0.05) 100%);
+      border: 2px solid rgba(46,213,115,0.3);
+    }
+    .side-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+    .side-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .wrong .side-icon { background: rgba(255,71,87,0.2); }
+    .right .side-icon { background: rgba(46,213,115,0.2); }
+    .side-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .wrong .side-title { color: #ff4757; }
+    .right .side-title { color: #2ed573; }
+    .items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 17px;
+    }
+    .wrong .item {
+      background: rgba(255,71,87,0.1);
+      color: rgba(255,255,255,0.9);
+    }
+    .right .item {
+      background: rgba(46,213,115,0.1);
+      color: rgba(255,255,255,0.9);
+    }
+    .item-icon { font-size: 20px; }
+    .vs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.3);
+      width: 60px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand-section">
+        <div class="logo">P</div>
+        <span class="brand">PAPERPE</span>
+      </div>
+      <div class="title">How most traders <strong>learn</strong></div>
+    </div>
+    
+    <div class="comparison">
+      <div class="side wrong">
+        <div class="side-header">
+          <div class="side-icon">💸</div>
+          <div class="side-title">Live Trading First</div>
+        </div>
+        <div class="items">
+          <div class="item">
+            <span class="item-icon">❌</span>
+            <span>Real money at risk from Day 1</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">❌</span>
+            <span>Fear & greed cloud decisions</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">❌</span>
+            <span>Expensive lessons (₹75K avg loss)</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">❌</span>
+            <span>No room to experiment</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">❌</span>
+            <span>Quit after blowing up</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="vs">VS</div>
+      
+      <div class="side right">
+        <div class="side-header">
+          <div class="side-icon">📝</div>
+          <div class="side-title">Paper Trade First</div>
+        </div>
+        <div class="items">
+          <div class="item">
+            <span class="item-icon">✅</span>
+            <span>Zero financial risk</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">✅</span>
+            <span>Learn market mechanics stress-free</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">✅</span>
+            <span>Test strategies without losing</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">✅</span>
+            <span>Build confidence & discipline</span>
+          </div>
+          <div class="item">
+            <span class="item-icon">✅</span>
+            <span>Go live when ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

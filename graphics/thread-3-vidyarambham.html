@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1200px;
+      height: 675px;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      padding: 40px;
+    }
+    .container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #c9a227 0%, #8b6914 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 20px;
+      color: #1a1a2e;
+    }
+    .brand { color: #c9a227; font-size: 18px; font-weight: 600; }
+    .main-content {
+      flex: 1;
+      display: flex;
+      gap: 50px;
+      align-items: center;
+    }
+    .left {
+      flex: 1;
+    }
+    .concept-label {
+      color: #c9a227;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+    }
+    .main-title {
+      font-size: 52px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .main-title span {
+      color: #c9a227;
+    }
+    .description {
+      font-size: 20px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c9a227 0%, #8b6914 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #1a1a2e;
+    }
+    .step-text {
+      font-size: 18px;
+      color: white;
+    }
+    .right {
+      width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .rice-visual {
+      width: 300px;
+      height: 300px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rice-circle {
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(201,162,39,0.2) 0%, rgba(139,105,20,0.1) 100%);
+      border: 3px solid rgba(201,162,39,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .rice-icon {
+      font-size: 80px;
+      margin-bottom: 10px;
+    }
+    .rice-text {
+      font-size: 16px;
+      color: #c9a227;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .rice-grains {
+      position: absolute;
+      font-size: 24px;
+      color: rgba(201,162,39,0.6);
+    }
+    .grain1 { top: 20px; left: 50px; transform: rotate(-30deg); }
+    .grain2 { top: 40px; right: 40px; transform: rotate(20deg); }
+    .grain3 { bottom: 50px; left: 30px; transform: rotate(45deg); }
+    .grain4 { bottom: 30px; right: 60px; transform: rotate(-15deg); }
+    .quote {
+      margin-top: 20px;
+      font-style: italic;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">P</div>
+      <span class="brand">PAPERPE</span>
+    </div>
+    
+    <div class="main-content">
+      <div class="left">
+        <div class="concept-label">Ancient Indian Wisdom</div>
+        <div class="main-title">विद्यारम्भम्<br><span>Vidyarambham</span></div>
+        <div class="description">
+          Before children learn to write, they trace letters in rice grains.<br>
+          No ink wasted. No paper ruined. Just practice.
+        </div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Practice in rice (Paper Trading)</div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Master the strokes (Learn patterns)</div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Then pick up the pen (Go Live)</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="right">
+        <div class="rice-visual">
+          <span class="rice-grains grain1">🌾</span>
+          <span class="rice-grains grain2">🌾</span>
+          <span class="rice-grains grain3">🌾</span>
+          <span class="rice-grains grain4">🌾</span>
+          <div class="rice-circle">
+            <div class="rice-icon">✍️</div>
+            <div class="rice-text">Practice First</div>
+          </div>
+        </div>
+        <div class="quote">"The wise practice before they perform"</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

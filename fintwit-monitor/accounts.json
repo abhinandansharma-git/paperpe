@@ -1,0 +1,35 @@
+{
+  "indian_fintwit": [
+    {"handle": "rachabordia", "name": "Rachana Ranade", "niche": "education", "followers": "500K+"},
+    {"handle": "PranjalKamra", "name": "Pranjal Kamra", "niche": "education", "followers": "600K+"},
+    {"handle": "deepakshenoy", "name": "Deepak Shenoy", "niche": "macro", "followers": "182K"},
+    {"handle": "BMTheEquityDesk", "name": "Basant Maheshwari", "niche": "derivatives", "followers": "191K"},
+    {"handle": "porinju", "name": "Porinju Veliyath", "niche": "portfolio", "followers": "1M+"},
+    {"handle": "Mitesh_Engr", "name": "Mitesh Patel", "niche": "F&O", "followers": "100K+"},
+    {"handle": "Iamsamirarora", "name": "Samir Arora", "niche": "fund management", "followers": "494K"},
+    {"handle": "financewithsharan", "name": "Sharan Hegde", "niche": "personal finance", "followers": "350K+"},
+    {"handle": "warikoo", "name": "Ankur Warikoo", "niche": "wealth building", "followers": "1M+"},
+    {"handle": "iamnehanagar", "name": "Neha Nagar", "niche": "financial literacy", "followers": "400K+"},
+    {"handle": "vivabordia", "name": "Vivek Bajaj", "niche": "trading education", "followers": "200K+"},
+    {"handle": "P_R_Sundar", "name": "P R Sundar", "niche": "options", "followers": "150K+"},
+    {"handle": "niki_poojary", "name": "Niki Poojary", "niche": "technical analysis", "followers": "100K+"},
+    {"handle": "chartlovers", "name": "Chart Lovers", "niche": "charts", "followers": "50K+"},
+    {"handle": "zeabordia", "name": "Zerodha", "niche": "broker", "followers": "500K+"},
+    {"handle": "nitabordia", "name": "Nithin Kamath", "niche": "founder/trading", "followers": "1M+"},
+    {"handle": "kabordia", "name": "Kailash Concepts", "niche": "quant", "followers": "50K+"},
+    {"handle": "markets_mitesh", "name": "Markets Mitesh", "niche": "intraday", "followers": "80K+"},
+    {"handle": "stockabordia", "name": "StockEdge", "niche": "analysis", "followers": "100K+"},
+    {"handle": "tradabordia", "name": "TradingView India", "niche": "charts", "followers": "200K+"}
+  ],
+  "topics_to_engage": [
+    "paper trading", "risk management", "beginner mistakes", 
+    "stop loss", "position sizing", "trading psychology",
+    "MCX", "NIFTY", "options basics", "learning to trade"
+  ],
+  "reply_style": {
+    "tone": "helpful, knowledgeable, not promotional",
+    "length": "2-3 sentences max",
+    "include": "value-add insight or question",
+    "avoid": "promoting PaperPe directly, being salesy"
+  }
+}

@@ -1,0 +1,7 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://paperpe.in/sitemap.xml
+
+# Disallow API routes from indexing
+Disallow: /api/
