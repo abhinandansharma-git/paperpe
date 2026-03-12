@@ -181,7 +181,7 @@ export default function HomePage() {
               <span className="blink" style={{ width:8, height:8, background:'#00C076', borderRadius:'50%', display:'inline-block' }}></span>
               Live paper trading · MCX & F&amp;O
             </div>
-            <h1 className="fade-up-1" style={{ fontSize:56, fontWeight:900, lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
+            <h1 className="fade-up-1" style={{ , lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
               Trade Gold, Nifty &amp;<br />
               <span style={{ background:'linear-gradient(135deg,#00C076,#00a8ff)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
                 Crude Oil — Risk Free
@@ -295,7 +295,7 @@ export default function HomePage() {
             { ref: stat4.ref, val: `${stat4.count}%`, label:'Avg Win Rate Improvement', color:'#00C076' },
           ].map(s => (
             <div key={s.label} ref={s.ref as React.RefObject<HTMLDivElement>}>
-              <div style={{ fontSize:42, fontWeight:900, color:s.color, marginBottom:6 }}>{s.val}</div>
+              <div style={{ , color:s.color, marginBottom:6 }}>{s.val}</div>
               <div style={{ fontSize:13, color:'#64748b' }}>{s.label}</div>
             </div>
           ))}
@@ -306,7 +306,7 @@ export default function HomePage() {
       <section style={{ padding:'96px 24px', maxWidth:1100, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:56 }}>
           <p className="section-label" style={{ marginBottom:12 }}>Simple Setup</p>
-          <h2 style={{ fontSize:40, fontWeight:900, marginBottom:12 }}>Start in 2 minutes</h2>
+          <h2 style={{ , marginBottom:12 }}>Start in 2 minutes</h2>
           <p style={{ color:'#64748b', fontSize:16, maxWidth:480, margin:'0 auto' }}>No documents, no KYC, no broker account needed.</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
@@ -316,7 +316,7 @@ export default function HomePage() {
             { n:'03', title:'Trade & Build Confidence', desc:'Place trades, track P&L, study your win rate. Go live only when your stats say you\'re ready.', icon:IndianRupee },
           ].map((step, i) => (
             <div key={i} className="card" style={{ padding:28, position:'relative' }}>
-              <span style={{ position:'absolute', top:16, right:20, fontSize:48, fontWeight:900, color:'#1e293b' }}>{step.n}</span>
+              <span style={{ position:'absolute', top:16, right:20, , color:'#1e293b' }}>{step.n}</span>
               <div style={{ width:44, height:44, background:'rgba(0,192,118,0.1)', border:'1px solid rgba(0,192,118,0.2)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
                 <step.icon size={20} color="#00C076" />
               </div>
@@ -331,7 +331,7 @@ export default function HomePage() {
       <section style={{ padding:'0 24px 96px', maxWidth:900, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <p className="section-label" style={{ marginBottom:12 }}>Why Paper Trade?</p>
-          <h2 style={{ fontSize:40, fontWeight:900 }}>Learn Without The Pain</h2>
+          <h2 style={{  }}>Learn Without The Pain</h2>
         </div>
         <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:20, overflow:'hidden' }}>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', textAlign:'center', borderBottom:'1px solid #21262D' }}>
@@ -364,7 +364,7 @@ export default function HomePage() {
       <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <p className="section-label" style={{ marginBottom:12 }}>Available Now · Free</p>
-          <h2 style={{ fontSize:40, fontWeight:900, marginBottom:12 }}>Trading Tools</h2>
+          <h2 style={{ , marginBottom:12 }}>Trading Tools</h2>
           <p style={{ color:'#64748b', fontSize:16 }}>No signup required. Open and use instantly.</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
@@ -388,7 +388,7 @@ export default function HomePage() {
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           <div>
             <p className="section-label" style={{ marginBottom:12 }}>Premium · TradingView</p>
-            <h2 style={{ fontSize:40, fontWeight:900, marginBottom:16 }}>Indicators Built for Indian Markets</h2>
+            <h2 style={{ , marginBottom:16 }}>Indicators Built for Indian Markets</h2>
             <p style={{ color:'#64748b', fontSize:16, marginBottom:24, lineHeight:1.7 }}>Clear signals, not noise. Tested on NIFTY, BANKNIFTY, and MCX commodities — not generic global data.</p>
             <ul style={{ listStyle:'none', padding:0, marginBottom:28 }}>
               {['ARIA SUPREME — 7 powerful modules in one', 'Score-based signals (0–100 scale)', 'India session awareness built-in', 'Works on weekly & monthly expiry charts'].map((f, i) => (
@@ -406,7 +406,7 @@ export default function HomePage() {
               <span style={{ fontWeight:800, fontSize:20 }}>ARIA SUPREME</span>
               <span style={{ background:'linear-gradient(135deg,#00C076,#0099ff)', color:'#0D1117', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:700 }}>Flagship</span>
             </div>
-            <div style={{ fontSize:48, fontWeight:900, marginBottom:4 }}>₹2,999</div>
+            <div style={{ , marginBottom:4 }}>₹2,999</div>
             <div style={{ textDecoration:'line-through', color:'#475569', marginBottom:8 }}>₹5,999</div>
             <div style={{ display:'inline-block', background:'rgba(0,192,118,0.1)', color:'#00C076', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:600, marginBottom:24 }}>
               50% off — Launch Price
@@ -423,7 +423,7 @@ export default function HomePage() {
       <section style={{ padding:'0 24px 96px', maxWidth:720, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <p className="section-label" style={{ marginBottom:12 }}>FAQ</p>
-          <h2 style={{ fontSize:40, fontWeight:900 }}>Common Questions</h2>
+          <h2 style={{  }}>Common Questions</h2>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {faqs.map((faq, i) => (
@@ -442,7 +442,7 @@ export default function HomePage() {
 
       {/* ── CTA ────────────────────────────────────────── */}
       <section style={{ padding:'0 24px 96px', maxWidth:700, margin:'0 auto', textAlign:'center' }}>
-        <h2 style={{ fontSize:44, fontWeight:900, marginBottom:12, lineHeight:1.2 }}>Stop losing money learning to trade.</h2>
+        <h2 style={{ fontSize:44, fontWeight:700, marginBottom:12, lineHeight:1.2 }}>Stop losing money learning to trade.</h2>
         <p style={{ color:'#64748b', fontSize:18, marginBottom:32 }}>Practice first. Go live only when your P&L says you're ready.</p>
         <Link href="#" onClick={e => { e.preventDefault(); document.querySelector('input[type=email]')?.scrollIntoView({ behavior:'smooth' }); }}
           style={{ display:'inline-block', background:'#00C076', color:'#0D1117', padding:'16px 40px', borderRadius:16, fontWeight:900, fontSize:18, textDecoration:'none', boxShadow:'0 0 40px rgba(0,192,118,0.3)' }}>
@@ -513,3 +513,5 @@ export default function HomePage() {
     </div>
   );
 }
+
+
