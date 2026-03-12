@@ -21,7 +21,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-outfit)', 'Outfit', 'system-ui', 'sans-serif'],
+        sans: ['var(--geist-sans)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out',
