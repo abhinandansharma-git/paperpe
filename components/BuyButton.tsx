@@ -1,11 +1,11 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
 
 declare global {
-  interface Window {
-    Razorpay: any;
-  }
+  interface Window { Razorpay: any; }
 }
 
 interface BuyButtonProps {
@@ -17,35 +17,31 @@ interface BuyButtonProps {
 
 export default function BuyButton({ productId, productName, price, color = 'orange' }: BuyButtonProps) {
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const router = useRouter();
 
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
+  const loadRazorpay = () => new Promise((resolve) => {
+    if (window.Razorpay) { resolve(true); return; }
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
 
   const handleBuy = async () => {
-    if (!email || !name) {
-      alert('Please enter your name and email');
+    setLoading(true);
+
+    // Check auth
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push('/login?redirect=/indicators');
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
-    
     const loaded = await loadRazorpay();
     if (!loaded) {
-      alert('Razorpay failed to load');
+      alert('Razorpay failed to load. Please try again.');
       setLoading(false);
       return;
     }
@@ -54,11 +50,15 @@ export default function BuyButton({ productId, productName, price, color = 'oran
       const res = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ productId, email, name }),
+        body: JSON.stringify({
+          productId,
+          email: user.email,
+          name: user.user_metadata?.full_name || user.email?.split('@')[0],
+        }),
       });
-      
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || 'Failed to create order');
 
       const options = {
         key: data.keyId,
@@ -67,7 +67,10 @@ export default function BuyButton({ productId, productName, price, color = 'oran
         name: 'PaperPe',
         description: data.productName,
         order_id: data.orderId,
-        prefill: { name, email },
+        prefill: {
+          name: user.user_metadata?.full_name || '',
+          email: user.email || '',
+        },
         theme: { color: '#F97316' },
         handler: async (response: any) => {
           const verifyRes = await fetch('/api/payment/verify', {
@@ -75,33 +78,34 @@ export default function BuyButton({ productId, productName, price, color = 'oran
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               ...response,
-              email,
+              email: user.email,
               productId,
               productName: data.productName,
+              userId: user.id,
+              amount: price,
             }),
           });
-          
+
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
-            alert('Payment successful! Check your email for the indicator file.');
-            setShowModal(false);
+            router.push('/dashboard?payment=success');
           } else {
-            alert('Payment verification failed. Contact support.');
+            alert('Payment verification failed. Contact support@paperpe.in');
           }
         },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      alert('Failed to initiate payment');
+      alert(error.message || 'Failed to initiate payment');
     } finally {
       setLoading(false);
     }
   };
 
-  const colorClasses = {
+  const colorClasses: Record<string, string> = {
     orange: 'bg-orange-500 hover:bg-orange-600',
     green: 'bg-green-500 hover:bg-green-600',
     blue: 'bg-blue-500 hover:bg-blue-600',
@@ -109,53 +113,12 @@ export default function BuyButton({ productId, productName, price, color = 'oran
   };
 
   return (
-    <>
-      <button
-        onClick={() => setShowModal(true)}
-        className={`w-full py-3 px-6 rounded-lg font-bold text-white transition-colors ${colorClasses[color as keyof typeof colorClasses] || colorClasses.orange}`}
-      >
-        Buy Now - {String.fromCharCode(8377)}{price}
-      </button>
-
-      {showModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1e222d] rounded-xl p-6 max-w-md w-full border border-[#2a2e39]">
-            <h3 className="text-xl font-bold text-white mb-4">Buy {productName}</h3>
-            <p className="text-gray-400 mb-4">Enter your details to receive the indicator file via email.</p>
-            
-            <input
-              type="text"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 rounded-lg bg-[#131722] border border-[#2a2e39] text-white mb-3"
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 rounded-lg bg-[#131722] border border-[#2a2e39] text-white mb-4"
-            />
-            
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowModal(false)}
-                className="flex-1 py-3 rounded-lg border border-[#2a2e39] text-gray-400 hover:bg-[#2a2e39]"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleBuy}
-                disabled={loading}
-                className={`flex-1 py-3 rounded-lg font-bold text-white ${colorClasses[color as keyof typeof colorClasses] || colorClasses.orange} disabled:opacity-50`}
-              >
-                {loading ? 'Processing...' : `Pay ${String.fromCharCode(8377)}${price}`}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+    <button
+      onClick={handleBuy}
+      disabled={loading}
+      className={`w-full py-3 px-6 rounded-lg font-bold text-white transition-colors disabled:opacity-60 ${colorClasses[color] || colorClasses.orange}`}
+    >
+      {loading ? 'Processing...' : `Buy Now — ₹${price}`}
+    </button>
   );
 }
