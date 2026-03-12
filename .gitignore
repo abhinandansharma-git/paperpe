@@ -35,3 +35,7 @@ app/.env
 next-env.d.ts
 
 .vercel
+
+CREDENTIALS.md
+.env.local
+.env*.local

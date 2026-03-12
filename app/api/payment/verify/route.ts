@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { getResend, FROM_EMAIL } from '@/lib/email/resend';
+import { purchaseEmail } from '@/lib/email/templates';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
     // Find product in DB
     const { data: product } = await supabaseAdmin
       .from('products')
-      .select('id')
+      .select('id, name')
       .eq('slug', productId)
       .single();
 
@@ -55,20 +57,31 @@ export async function POST(req: NextRequest) {
 
     if (orderError) {
       console.error('Order save error:', orderError);
-      // Don't fail — payment is real even if DB save fails
     }
 
-    console.log('Payment verified & saved:', {
-      orderId: razorpay_order_id,
-      paymentId: razorpay_payment_id,
-      email,
-      productId,
-      dbOrderId: order?.id,
-    });
+    // Send purchase confirmation email
+    if (email && process.env.RESEND_API_KEY) {
+      try {
+        const template = purchaseEmail({
+          name: email.split('@')[0],
+          productName: product?.name || productName,
+          amount: amount || 0,
+          orderId: order?.id || razorpay_order_id,
+        });
+        await getResend()?.emails.send({
+          from: FROM_EMAIL,
+          to: email,
+          subject: template.subject,
+          html: template.html,
+        });
+      } catch (emailErr) {
+        console.error('Purchase email failed (non-critical):', emailErr);
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      message: 'Payment successful! Go to your dashboard to download.',
+      message: 'Payment successful! Check your email and dashboard.',
       paymentId: razorpay_payment_id,
       orderId: order?.id,
     });
