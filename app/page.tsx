@@ -112,7 +112,7 @@ export default function HomePage() {
   }).join('');
 
   return (
-    <div style={{ background: '#0D1117', color: '#e2e8f0', fontFamily: 'Outfit, sans-serif', overflowX: 'hidden' }}>
+    <div style={{ background: '#0D1117', color: '#e2e8f0', overflowX: 'hidden' }}>
 
       {/* ── Ticker ─────────────────────────────────────── */}
       <div style={{ background: '#161B22', borderBottom: '1px solid #21262D', padding: '8px 0', overflow: 'hidden' }}>
