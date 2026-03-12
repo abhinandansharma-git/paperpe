@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, CheckCircle, TrendingUp, TrendingDown, Calculator, Shield, BarChart3, ChevronDown, Star, Zap, Target, IndianRupee, X } from 'lucide-react';
 
-// ── Animated counter ──────────────────────────────────────────────────────────
+// ΓöÇΓöÇ Animated counter ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 function useCounter(end: number, duration = 2000) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ function useCounter(end: number, duration = 2000) {
   return { count, ref };
 }
 
-// ── Ticker data ───────────────────────────────────────────────────────────────
+// ΓöÇΓöÇ Ticker data ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const TICKERS = [
   { sym: 'NIFTY 50', price: 24352, chg: -2.1 },
   { sym: 'BANKNIFTY', price: 52180, chg: -1.8 },
@@ -52,11 +52,11 @@ const tools = [
 ];
 
 const faqs = [
-  { q: 'Is paper trading really free?', a: 'Yes — ₹10 Lakh virtual capital, no credit card needed. Free forever.' },
+  { q: 'Is paper trading really free?', a: 'Yes ΓÇö Γé╣10 Lakh virtual capital, no credit card needed. Free forever.' },
   { q: 'What markets can I trade?', a: 'NIFTY, BANKNIFTY, FINNIFTY options + MCX commodities (Gold, Silver, Crude Oil, Natural Gas).' },
   { q: 'Is the data real-time?', a: 'Yes. Live market data during NSE/MCX trading hours. Paper trades execute at actual market prices.' },
   { q: 'Can I use the indicators without paper trading?', a: 'Absolutely. Our TradingView indicators work on any chart, independent of the paper trading platform.' },
-  { q: 'When does the platform go live?', a: 'Very soon — join the waitlist to get early access + a launch discount.' },
+  { q: 'When does the platform go live?', a: 'Very soon ΓÇö join the waitlist to get early access + a launch discount.' },
 ];
 
 export default function HomePage() {
@@ -105,8 +105,8 @@ export default function HomePage() {
     const up = tk.chg >= 0;
     return `<span style="display:inline-flex;align-items:center;gap:6px;padding:0 20px;font-size:13px;white-space:nowrap">
       <span style="font-weight:600;color:#e2e8f0">${tk.sym}</span>
-      <span style="color:#e2e8f0">₹${tk.price.toLocaleString('en-IN')}</span>
-      <span style="color:${up ? '#00C076' : '#FF4D4D'}">${up ? '▲' : '▼'} ${Math.abs(tk.chg)}%</span>
+      <span style="color:#e2e8f0">Γé╣${tk.price.toLocaleString('en-IN')}</span>
+      <span style="color:${up ? '#00C076' : '#FF4D4D'}">${up ? 'Γû▓' : 'Γû╝'} ${Math.abs(tk.chg)}%</span>
       <span style="color:#334155">|</span>
     </span>`;
   }).join('');
@@ -114,7 +114,7 @@ export default function HomePage() {
   return (
     <div style={{ background: '#0D1117', color: '#e2e8f0', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
 
-      {/* ── Ticker ─────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Ticker ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <div style={{ background: '#161B22', borderBottom: '1px solid #21262D', padding: '8px 0', overflow: 'hidden' }}>
         <div
           style={{ display: 'inline-flex', animation: 'ticker 35s linear infinite', whiteSpace: 'nowrap' }}
@@ -148,7 +148,7 @@ export default function HomePage() {
         .section-label { font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00C076; }
       `}</style>
 
-      {/* ── Navbar ─────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Navbar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <nav style={{ position:'sticky', top:0, zIndex:50, background:'rgba(13,17,23,0.9)', backdropFilter:'blur(16px)', borderBottom:'1px solid #21262D', padding:'14px 24px' }}>
         <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
           <div style={{ display:'flex', alignItems:'center', gap:24 }}>
@@ -172,23 +172,23 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* ── Hero ───────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Hero ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'80px 24px 100px', maxWidth:1200, margin:'0 auto' }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           {/* Left */}
           <div>
             <div className="pill fade-up" style={{ marginBottom:24 }}>
               <span className="blink" style={{ width:8, height:8, background:'#00C076', borderRadius:'50%', display:'inline-block' }}></span>
-              Live paper trading · MCX & F&amp;O
+              Live paper trading ┬╖ MCX & F&amp;O
             </div>
-            <h1 className="fade-up-1" style={{ , lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
+            <h1 className="fade-up-1" style={{ fontSize:56, fontWeight:700, lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
               Trade Gold, Nifty &amp;<br />
               <span style={{ background:'linear-gradient(135deg,#00C076,#00a8ff)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>
-                Crude Oil — Risk Free
+                Crude Oil ΓÇö Risk Free
               </span>
             </h1>
             <p className="fade-up-2" style={{ fontSize:18, color:'#94a3b8', lineHeight:1.7, marginBottom:32, maxWidth:480 }}>
-              Practice with ₹10 Lakh virtual capital. Real MCX & F&O prices, real P&L tracking — zero real money at risk.
+              Practice with Γé╣10 Lakh virtual capital. Real MCX & F&O prices, real P&L tracking ΓÇö zero real money at risk.
             </p>
 
             {!submitted ? (
@@ -218,7 +218,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right — Terminal mockup */}
+          {/* Right ΓÇö Terminal mockup */}
           <div style={{ position:'relative', animation:'float 3s ease-in-out infinite' }}>
             <div style={{ background:'#0D1117', border:'1px solid #21262D', borderRadius:16, overflow:'hidden', boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
               {/* Terminal bar */}
@@ -230,8 +230,8 @@ export default function HomePage() {
                 {/* Stats */}
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:10, marginBottom:14 }}>
                   {[
-                    { label:'Capital', val:'₹9,87,450', color:'#e2e8f0' },
-                    { label:"Today P&L", val:'+₹12,680', color:'#00C076' },
+                    { label:'Capital', val:'Γé╣9,87,450', color:'#e2e8f0' },
+                    { label:"Today P&L", val:'+Γé╣12,680', color:'#00C076' },
                     { label:'Win Rate', val:'68%', color:'#e2e8f0' },
                   ].map(s => (
                     <div key={s.label} style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, padding:'10px 12px' }}>
@@ -244,14 +244,14 @@ export default function HomePage() {
                 <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, overflow:'hidden', marginBottom:12 }}>
                   <div style={{ padding:'8px 12px', borderBottom:'1px solid #21262D', fontSize:11, color:'#64748b', fontWeight:600 }}>OPEN POSITIONS</div>
                   {[
-                    { sym:'GOLDM', side:'BUY', lots:'2', pnl:'+₹2,340', up:true },
-                    { sym:'BANKNIFTY', side:'SELL', lots:'1', pnl:'+₹8,900', up:true },
-                    { sym:'CRUDEOILM', side:'BUY', lots:'5', pnl:'-₹1,560', up:false },
+                    { sym:'GOLDM', side:'BUY', lots:'2', pnl:'+Γé╣2,340', up:true },
+                    { sym:'BANKNIFTY', side:'SELL', lots:'1', pnl:'+Γé╣8,900', up:true },
+                    { sym:'CRUDEOILM', side:'BUY', lots:'5', pnl:'-Γé╣1,560', up:false },
                   ].map(p => (
                     <div key={p.sym} style={{ padding:'8px 12px', display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #21262D', fontSize:12 }}>
                       <div>
                         <span style={{ fontWeight:600 }}>{p.sym}</span>
-                        <span style={{ color:'#64748b', marginLeft:8 }}>{p.lots} lots · {p.side}</span>
+                        <span style={{ color:'#64748b', marginLeft:8 }}>{p.lots} lots ┬╖ {p.side}</span>
                       </div>
                       <span style={{ fontWeight:700, color:p.up ? '#00C076' : '#FF4D4D' }}>{p.pnl}</span>
                     </div>
@@ -261,7 +261,7 @@ export default function HomePage() {
                 <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:10, padding:12 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', marginBottom:8, fontSize:12 }}>
                     <span style={{ fontWeight:600 }}>GOLDM</span>
-                    <span className="up">₹78,920 <span style={{ color:'#64748b' }}>+1.2%</span></span>
+                    <span className="up">Γé╣78,920 <span style={{ color:'#64748b' }}>+1.2%</span></span>
                   </div>
                   <svg viewBox="0 0 280 50" style={{ width:'100%', display:'block' }} preserveAspectRatio="none" height={50}>
                     <defs>
@@ -279,44 +279,44 @@ export default function HomePage() {
             {/* Floating badge */}
             <div style={{ position:'absolute', bottom:-16, left:-16, background:'#161B22', border:'1px solid #21262D', borderRadius:14, padding:'12px 16px', boxShadow:'0 20px 40px rgba(0,0,0,0.5)' }}>
               <div style={{ fontSize:11, color:'#64748b', marginBottom:2 }}>Best Trade Today</div>
-              <div style={{ fontWeight:700, color:'#00C076', fontSize:14 }}>+₹12,450 on GOLDM</div>
+              <div style={{ fontWeight:700, color:'#00C076', fontSize:14 }}>+Γé╣12,450 on GOLDM</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Stats ──────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Stats ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <div style={{ background:'#161B22', borderTop:'1px solid #21262D', borderBottom:'1px solid #21262D', padding:'48px 24px' }}>
         <div style={{ maxWidth:900, margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:32, textAlign:'center' }}>
           {[
-            { ref: stat1.ref, val: `₹${stat1.count}L+`, label:'Starting Virtual Capital', color:'#00C076' },
+            { ref: stat1.ref, val: `Γé╣${stat1.count}L+`, label:'Starting Virtual Capital', color:'#00C076' },
             { ref: stat2.ref, val: `${stat2.count}+`, label:'Traders on Waitlist', color:'#e2e8f0' },
             { ref: stat3.ref, val: `${stat3.count}`, label:'Free Tools Available', color:'#e2e8f0' },
             { ref: stat4.ref, val: `${stat4.count}%`, label:'Avg Win Rate Improvement', color:'#00C076' },
           ].map(s => (
             <div key={s.label} ref={s.ref as React.RefObject<HTMLDivElement>}>
-              <div style={{ , color:s.color, marginBottom:6 }}>{s.val}</div>
+              <div style={{ fontSize:42, fontWeight:700, color:s.color, marginBottom:6 }}>{s.val}</div>
               <div style={{ fontSize:13, color:'#64748b' }}>{s.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* ── How it works ───────────────────────────────── */}
+      {/* ΓöÇΓöÇ How it works ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'96px 24px', maxWidth:1100, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:56 }}>
           <p className="section-label" style={{ marginBottom:12 }}>Simple Setup</p>
-          <h2 style={{ , marginBottom:12 }}>Start in 2 minutes</h2>
+          <h2 style={{ fontSize:40, fontWeight:700, marginBottom:12 }}>Start in 2 minutes</h2>
           <p style={{ color:'#64748b', fontSize:16, maxWidth:480, margin:'0 auto' }}>No documents, no KYC, no broker account needed.</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
           {[
-            { n:'01', title:'Create Free Account', desc:'Sign up with email. Get ₹10 Lakh virtual capital credited instantly. No credit card required.', icon:Zap },
+            { n:'01', title:'Create Free Account', desc:'Sign up with email. Get Γé╣10 Lakh virtual capital credited instantly. No credit card required.', icon:Zap },
             { n:'02', title:'Pick Your Instrument', desc:'NIFTY/BANKNIFTY F&O options or MCX Gold, Crude, Silver. Live prices, real lot sizes.', icon:Target },
             { n:'03', title:'Trade & Build Confidence', desc:'Place trades, track P&L, study your win rate. Go live only when your stats say you\'re ready.', icon:IndianRupee },
           ].map((step, i) => (
             <div key={i} className="card" style={{ padding:28, position:'relative' }}>
-              <span style={{ position:'absolute', top:16, right:20, , color:'#1e293b' }}>{step.n}</span>
+              <span style={{ position:'absolute', top:16, right:20, fontSize:48, fontWeight:700, color:'#1e293b' }}>{step.n}</span>
               <div style={{ width:44, height:44, background:'rgba(0,192,118,0.1)', border:'1px solid rgba(0,192,118,0.2)', borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16 }}>
                 <step.icon size={20} color="#00C076" />
               </div>
@@ -327,11 +327,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Comparison ─────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Comparison ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'0 24px 96px', maxWidth:900, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <p className="section-label" style={{ marginBottom:12 }}>Why Paper Trade?</p>
-          <h2 style={{  }}>Learn Without The Pain</h2>
+          <h2 style={{ fontSize:40, fontWeight:700 }}>Learn Without The Pain</h2>
         </div>
         <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:20, overflow:'hidden' }}>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', textAlign:'center', borderBottom:'1px solid #21262D' }}>
@@ -346,7 +346,7 @@ export default function HomePage() {
             </div>
           </div>
           {[
-            ['Cost of mistakes', '₹10K – ₹1L+', '₹0'],
+            ['Cost of mistakes', 'Γé╣10K ΓÇô Γé╣1L+', 'Γé╣0'],
             ['Emotional pressure', 'Extreme (real money)', 'None'],
             ['Learning speed', 'Slow (fear inhibits)', 'Fast (experiment freely)'],
             ['Risk of blowup', 'Very real', 'Zero'],
@@ -360,11 +360,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Free Tools ─────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Free Tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
-          <p className="section-label" style={{ marginBottom:12 }}>Available Now · Free</p>
-          <h2 style={{ , marginBottom:12 }}>Trading Tools</h2>
+          <p className="section-label" style={{ marginBottom:12 }}>Available Now ┬╖ Free</p>
+          <h2 style={{ fontSize:40, fontWeight:700, marginBottom:12 }}>Trading Tools</h2>
           <p style={{ color:'#64748b', fontSize:16 }}>No signup required. Open and use instantly.</p>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
@@ -383,15 +383,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Indicators ─────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Indicators ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           <div>
-            <p className="section-label" style={{ marginBottom:12 }}>Premium · TradingView</p>
-            <h2 style={{ , marginBottom:16 }}>Indicators Built for Indian Markets</h2>
-            <p style={{ color:'#64748b', fontSize:16, marginBottom:24, lineHeight:1.7 }}>Clear signals, not noise. Tested on NIFTY, BANKNIFTY, and MCX commodities — not generic global data.</p>
+            <p className="section-label" style={{ marginBottom:12 }}>Premium ┬╖ TradingView</p>
+            <h2 style={{ fontSize:40, fontWeight:700, marginBottom:16 }}>Indicators Built for Indian Markets</h2>
+            <p style={{ color:'#64748b', fontSize:16, marginBottom:24, lineHeight:1.7 }}>Clear signals, not noise. Tested on NIFTY, BANKNIFTY, and MCX commodities ΓÇö not generic global data.</p>
             <ul style={{ listStyle:'none', padding:0, marginBottom:28 }}>
-              {['ARIA SUPREME — 7 powerful modules in one', 'Score-based signals (0–100 scale)', 'India session awareness built-in', 'Works on weekly & monthly expiry charts'].map((f, i) => (
+              {['ARIA SUPREME ΓÇö 7 powerful modules in one', 'Score-based signals (0ΓÇô100 scale)', 'India session awareness built-in', 'Works on weekly & monthly expiry charts'].map((f, i) => (
                 <li key={i} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12, fontSize:14, color:'#cbd5e1' }}>
                   <CheckCircle size={16} color="#00C076" /> {f}
                 </li>
@@ -406,24 +406,24 @@ export default function HomePage() {
               <span style={{ fontWeight:800, fontSize:20 }}>ARIA SUPREME</span>
               <span style={{ background:'linear-gradient(135deg,#00C076,#0099ff)', color:'#0D1117', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:700 }}>Flagship</span>
             </div>
-            <div style={{ , marginBottom:4 }}>₹2,999</div>
-            <div style={{ textDecoration:'line-through', color:'#475569', marginBottom:8 }}>₹5,999</div>
+            <div style={{ fontSize:48, fontWeight:700, marginBottom:4 }}>Γé╣2,999</div>
+            <div style={{ textDecoration:'line-through', color:'#475569', marginBottom:8 }}>Γé╣5,999</div>
             <div style={{ display:'inline-block', background:'rgba(0,192,118,0.1)', color:'#00C076', padding:'4px 12px', borderRadius:999, fontSize:12, fontWeight:600, marginBottom:24 }}>
-              50% off — Launch Price
+              50% off ΓÇö Launch Price
             </div>
             <Link href="/indicators" style={{ display:'block', textAlign:'center', background:'#00C076', color:'#0D1117', padding:'16px', borderRadius:14, fontWeight:800, fontSize:16, textDecoration:'none', boxShadow:'0 0 30px rgba(0,192,118,0.3)', marginBottom:12 }}>
               Buy Now
             </Link>
-            <p style={{ textAlign:'center', fontSize:12, color:'#475569' }}>One-time payment · Lifetime access</p>
+            <p style={{ textAlign:'center', fontSize:12, color:'#475569' }}>One-time payment ┬╖ Lifetime access</p>
           </div>
         </div>
       </section>
 
-      {/* ── FAQ ────────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ FAQ ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'0 24px 96px', maxWidth:720, margin:'0 auto' }}>
         <div style={{ textAlign:'center', marginBottom:48 }}>
           <p className="section-label" style={{ marginBottom:12 }}>FAQ</p>
-          <h2 style={{  }}>Common Questions</h2>
+          <h2 style={{ fontSize:40, fontWeight:700 }}>Common Questions</h2>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
           {faqs.map((faq, i) => (
@@ -440,17 +440,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── CTA ────────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ CTA ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <section style={{ padding:'0 24px 96px', maxWidth:700, margin:'0 auto', textAlign:'center' }}>
         <h2 style={{ fontSize:44, fontWeight:700, marginBottom:12, lineHeight:1.2 }}>Stop losing money learning to trade.</h2>
         <p style={{ color:'#64748b', fontSize:18, marginBottom:32 }}>Practice first. Go live only when your P&L says you're ready.</p>
         <Link href="#" onClick={e => { e.preventDefault(); document.querySelector('input[type=email]')?.scrollIntoView({ behavior:'smooth' }); }}
           style={{ display:'inline-block', background:'#00C076', color:'#0D1117', padding:'16px 40px', borderRadius:16, fontWeight:900, fontSize:18, textDecoration:'none', boxShadow:'0 0 40px rgba(0,192,118,0.3)' }}>
-          Join Waitlist — It&apos;s Free →
+          Join Waitlist ΓÇö It&apos;s Free ΓåÆ
         </Link>
       </section>
 
-      {/* ── Footer ─────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Footer ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       <footer style={{ borderTop:'1px solid #21262D', padding:'48px 24px', background:'#161B22' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
           <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:40, marginBottom:40 }}>
@@ -483,7 +483,7 @@ export default function HomePage() {
             ))}
           </div>
           <div style={{ borderTop:'1px solid #21262D', paddingTop:24, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-            <p style={{ fontSize:12, color:'#334155' }}>© 2026 PaperPe. For educational purposes only. Not SEBI registered.</p>
+            <p style={{ fontSize:12, color:'#334155' }}>┬⌐ 2026 PaperPe. For educational purposes only. Not SEBI registered.</p>
             <div style={{ display:'flex', gap:16 }}>
               <a href="https://twitter.com/paperpe_in" style={{ color:'#334155', fontSize:12, textDecoration:'none' }}>Twitter</a>
               <a href="https://reddit.com/u/Paperpe_in" style={{ color:'#334155', fontSize:12, textDecoration:'none' }}>Reddit</a>
@@ -492,19 +492,19 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* ── Popup ──────────────────────────────────────── */}
+      {/* ΓöÇΓöÇ Popup ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */}
       {showPopup && (
         <div style={{ position:'fixed', bottom:24, right:24, zIndex:100, background:'#161B22', border:'1px solid #21262D', borderRadius:20, padding:24, maxWidth:320, boxShadow:'0 40px 80px rgba(0,0,0,0.6)' }}>
           <button onClick={() => setShowPopup(false)} style={{ position:'absolute', top:12, right:12, background:'none', border:'none', color:'#475569', cursor:'pointer' }}>
             <X size={18} />
           </button>
           <div style={{ display:'flex', gap:14 }}>
-            <span style={{ fontSize:36 }}>🎯</span>
+            <span style={{ fontSize:36 }}>≡ƒÄ»</span>
             <div>
               <h3 style={{ fontWeight:800, marginBottom:4, fontSize:15 }}>50% Launch Discount!</h3>
-              <p style={{ color:'#64748b', fontSize:13, marginBottom:10 }}>Get ARIA SUPREME at ₹2,999</p>
+              <p style={{ color:'#64748b', fontSize:13, marginBottom:10 }}>Get ARIA SUPREME at Γé╣2,999</p>
               <Link href="/indicators" onClick={() => setShowPopup(false)} style={{ color:'#00C076', fontWeight:700, fontSize:13, textDecoration:'none' }}>
-                View indicators →
+                View indicators ΓåÆ
               </Link>
             </div>
           </div>
@@ -513,5 +513,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
