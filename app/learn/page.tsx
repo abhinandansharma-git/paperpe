@@ -86,7 +86,7 @@ export default function LearnPage() {
       {/* Header */}
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <Link href="/dashboard" className="text-xl font-bold text-white">PaperPe</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
@@ -105,7 +105,7 @@ export default function LearnPage() {
             <BookOpen className="w-4 h-4" />
             Learning Center
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Learn to Trade Like a Pro
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl">

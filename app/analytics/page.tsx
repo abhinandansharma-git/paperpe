@@ -41,7 +41,7 @@ export default function AnalyticsPage() {
     <div className="min-h-screen bg-[#0a0e17]">
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
@@ -55,7 +55,7 @@ export default function AnalyticsPage() {
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">Trading Analytics</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-white">Trading Analytics</h1>
             <p className="text-slate-400">Deep insights into your trading performance</p>
           </div>
           <select className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white">
@@ -132,7 +132,7 @@ export default function AnalyticsPage() {
 
           <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-yellow-500" />Achievements</h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {achievements.map((ach, i) => (
                 <div key={i} className={`p-3 rounded-xl text-center ${ach.earned ? 'bg-yellow-500/10 border border-yellow-500/30' : 'bg-white/5 border border-white/5 opacity-50'}`}>
                   <div className="text-2xl mb-1">{ach.icon}</div>

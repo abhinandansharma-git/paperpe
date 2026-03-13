@@ -131,7 +131,7 @@ export default function BrokersPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 rounded-full text-sm mb-6">
             <TrendingUp className="w-4 h-4" /> Ready to trade with real money?
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Choose Your Broker</h1>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-6">Choose Your Broker</h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">You have practiced. You have learned. Now open a real trading account with India\'s top brokers.</p>
         </div>
       </section>
@@ -219,7 +219,7 @@ export default function BrokersPage() {
                       <div><h4 className="font-semibold mb-3 text-sm text-slate-400">Cons</h4><ul className="space-y-2">{broker.cons.map((c) => (<li key={c} className="flex items-start gap-2 text-sm"><span className="text-red-400">-</span> {c}</li>))}</ul></div>
                     </div>
                     <div className="mt-6 p-4 bg-[#131722] rounded-lg">
-                      <div className="grid grid-cols-3 gap-4 text-center">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                         <div><div className="text-lg font-bold text-green-400">{broker.equity}</div><div className="text-xs text-slate-500">Equity Delivery</div></div>
                         <div><div className="text-lg font-bold">{broker.fno}</div><div className="text-xs text-slate-500">F&O per order</div></div>
                         <div><div className="text-lg font-bold">{broker.accountFee}</div><div className="text-xs text-slate-500">Account Opening</div></div>
@@ -237,7 +237,7 @@ export default function BrokersPage() {
       <section className="py-16 px-6 border-t border-white/10 bg-gradient-to-b from-[#1e222d] to-[#131722]">
         <div className="max-w-3xl mx-auto text-center">
           <Gift className="w-12 h-12 text-[#00C076] mx-auto mb-4" />
-          <h2 className="text-3xl font-bold mb-4">Not Ready Yet?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">Not Ready Yet?</h2>
           <p className="text-slate-400 mb-8">Keep practicing on PaperPe until you are confident. There is no rush!</p>
           <Link href="/dashboard" className="inline-flex items-center gap-2 px-6 py-3 bg-[#00C076] hover:bg-[#00a865] rounded-lg font-semibold">Continue Practicing <ArrowRight className="w-5 h-5" /></Link>
         </div>

@@ -190,7 +190,7 @@ export default function CalculatorPage() {
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">P&L Settings</p>
                   <div className="space-y-3">
                     <InputField label="Premium Paid (₹)" value={premium} onChange={setPremium} tooltip="The price you paid / received for the option" />
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <InputField label="Lot Size" value={lotSize} onChange={setLotSize} />
                       <InputField label="Qty (lots)" value={qty} onChange={setQty} />
                     </div>
@@ -212,7 +212,7 @@ export default function CalculatorPage() {
                 <span className="text-5xl font-black text-white">₹{results.price.toFixed(2)}</span>
                 <span className="text-gray-400 text-sm">/ unit</span>
               </div>
-              <div className="grid grid-cols-3 gap-3 text-center">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
                 <div className="bg-[#161B22] rounded-xl p-3">
                   <div className="text-xs text-gray-500 mb-1">Intrinsic</div>
                   <div className="font-bold text-white">₹{intrinsic.toFixed(2)}</div>
@@ -256,7 +256,7 @@ export default function CalculatorPage() {
             {/* Breakeven */}
             <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm">
               <h2 className="font-bold text-white mb-4">Breakeven & Risk</h2>
-              <div className="grid grid-cols-2 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div className="text-center bg-[#00C076]/10 rounded-xl p-4">
                   <div className="text-xs text-[#00C076] font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
                   <div className="text-2xl font-black text-blue-700">{breakeven.toFixed(0)}</div>

@@ -94,7 +94,7 @@ export default function BlogPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" /> Free Learning Resources
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Trading Guides & Tutorials</h1>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Trading Guides & Tutorials</h1>
           <p className="text-xl text-gray-500 max-w-2xl mx-auto">
             Learn trading from scratch. Free guides on options, commodities, risk management, and strategies - written for Indian traders.
           </p>

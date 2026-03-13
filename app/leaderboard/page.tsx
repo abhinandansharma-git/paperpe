@@ -38,7 +38,7 @@ export default function LeaderboardPage() {
     <div className="min-h-screen bg-[#0a0e17]">
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
@@ -55,7 +55,7 @@ export default function LeaderboardPage() {
             <Trophy className="w-6 h-6" />
             <span className="font-medium">Leaderboard</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Top Traders</h1>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Top Traders</h1>
           <p className="text-slate-400 text-lg">Compete with the best paper traders in India</p>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function LeaderboardPage() {
               <div className="text-4xl mb-4">{trader.avatar}</div>
               <h3 className="text-xl font-bold text-white mb-1">{trader.name}</h3>
               <div className={`inline-block px-2 py-0.5 rounded text-xs bg-gradient-to-r ${getBadgeColor(trader.badge)} text-white mb-4`}>{trader.badge}</div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div><div className="text-2xl font-bold text-emerald-400">+{trader.returns}%</div><div className="text-xs text-slate-500">Returns</div></div>
                 <div><div className="text-2xl font-bold text-white">{trader.winRate}%</div><div className="text-xs text-slate-500">Win Rate</div></div>
                 <div><div className="text-lg font-semibold text-white">{trader.trades}</div><div className="text-xs text-slate-500">Trades</div></div>

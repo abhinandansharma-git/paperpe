@@ -43,7 +43,7 @@ export default function InsiderPage() {
     <div className="min-h-screen bg-[#0a0e17]">
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
@@ -61,7 +61,7 @@ export default function InsiderPage() {
             <Crown className="w-6 h-6" />
             <span className="font-medium">Pro Feature</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Insider Trading Data</h1>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">Insider Trading Data</h1>
           <p className="text-slate-400 text-lg max-w-2xl">Track what the big players are doing. Bulk deals, block deals, FII/DII flows, and insider transactions - all in real-time.</p>
         </div>
       </div>
@@ -145,13 +145,13 @@ export default function InsiderPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
                   <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-blue-400" />FII Activity</h3>
-                  <div className="text-3xl font-bold text-emerald-400 mb-1">+₹3,530 Cr</div>
+                  <div className="text-2xl md:text-3xl font-bold text-emerald-400 mb-1">+₹3,530 Cr</div>
                   <div className="text-sm text-slate-500">Net buying today</div>
                   <div className="mt-4 flex gap-4 text-sm"><div><span className="text-slate-500">Buy:</span> <span className="text-emerald-400">₹12,450 Cr</span></div><div><span className="text-slate-500">Sell:</span> <span className="text-red-400">₹8,920 Cr</span></div></div>
                 </div>
                 <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
                   <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><TrendingDown className="w-5 h-5 text-orange-400" />DII Activity</h3>
-                  <div className="text-3xl font-bold text-red-400 mb-1">-₹1,400 Cr</div>
+                  <div className="text-2xl md:text-3xl font-bold text-red-400 mb-1">-₹1,400 Cr</div>
                   <div className="text-sm text-slate-500">Net selling today</div>
                   <div className="mt-4 flex gap-4 text-sm"><div><span className="text-slate-500">Buy:</span> <span className="text-emerald-400">₹9,800 Cr</span></div><div><span className="text-slate-500">Sell:</span> <span className="text-red-400">₹11,200 Cr</span></div></div>
                 </div>

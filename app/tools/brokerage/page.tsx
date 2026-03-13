@@ -89,7 +89,7 @@ export default function BrokerageCalculator() {
             ))}
           </div>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { label: 'Buy Price (₹)', value: buyPrice, set: setBuyPrice },
               { label: 'Sell Price (₹)', value: sellPrice, set: setSellPrice },

@@ -106,7 +106,7 @@ export default function AdminPage() {
         {/* Overview */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               {statCards.map(card => (
                 <div key={card.label} className="bg-[#161B22] border border-[#21262D] rounded-2xl p-5">
                   <div className="flex items-center justify-between mb-3">

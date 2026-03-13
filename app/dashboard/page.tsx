@@ -77,10 +77,10 @@ export default function DashboardPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
 
           {/* Sidebar */}
-          <div className="col-span-12 md:col-span-3">
+          <div className="col-span-1 md:col-span-3">
             {/* Profile Card */}
             <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-5 mb-4">
               <div className="flex flex-col items-center text-center">
@@ -134,7 +134,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Main */}
-          <div className="col-span-12 md:col-span-9 space-y-6">
+          <div className="col-span-1 md:col-span-9 space-y-6">
 
             {/* Overview Tab */}
             {activeTab === 'overview' && (

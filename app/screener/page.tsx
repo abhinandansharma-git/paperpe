@@ -39,7 +39,7 @@ export default function ScreenerPage() {
       {/* Header */}
       <header className="border-b border-white/5 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-8">
+          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
             <Link href="/dashboard" className="text-xl font-bold text-white">PaperPe</Link>
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>

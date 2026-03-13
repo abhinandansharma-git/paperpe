@@ -24,8 +24,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={GeistSans.className}>
       <body className="antialiased">
         {children}
-        <footer className="bg-gray-950 border-t border-gray-800 py-6 mt-auto">
-          <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
+        <footer className="bg-[#0D1117] border-t border-[#21262D] py-6 mt-auto">
+          <div className="max-w-6xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
             <p>© {new Date().getFullYear()} PaperPe. All rights reserved.</p>
             <div className="flex gap-6">
               <a href="/legal/terms" className="hover:text-gray-300 transition-colors">Terms of Service</a>

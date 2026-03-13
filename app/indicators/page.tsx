@@ -262,7 +262,7 @@ export default function IndicatorsPage() {
           <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-8">
             Professional-grade indicators built specifically for Indian markets. Clear signals. No confusion. One-time payment, lifetime access.
           </p>
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-sm text-gray-500">
             <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Works on TradingView</span>
             <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Indian market calibrated</span>
             <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Lifetime updates</span>
@@ -274,7 +274,7 @@ export default function IndicatorsPage() {
       <section className="py-8 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-[#00C076] to-[#007a4f] rounded-2xl p-8 text-white">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex flex-col items-center justify-between gap-6 text-center md:text-left">
               <div>
                 <span className="text-[#00C076]/60 text-sm font-medium">BEST VALUE</span>
                 <h2 className="text-2xl font-bold mt-1 mb-2">Complete Bundle - All 4 Indicators</h2>
@@ -287,7 +287,7 @@ export default function IndicatorsPage() {
               </div>
               <div className="text-center md:text-right">
                 <div className="text-white/60 line-through">₹{bundle.originalPrice.toLocaleString()}</div>
-                <div className="text-4xl font-bold">₹{bundle.price.toLocaleString()}</div>
+                <div className="text-3xl md:text-4xl font-bold">₹{bundle.price.toLocaleString()}</div>
                 <button 
                   onClick={() => handleBuyClick({ id: bundle.id, name: bundle.name, price: bundle.price })}
                   className="mt-4 bg-[#0D1117] text-[#00C076] px-8 py-3 rounded-xl font-semibold hover:bg-[#161B22] transition-colors"
@@ -304,7 +304,7 @@ export default function IndicatorsPage() {
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Or Buy Individually</h2>
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {indicators.map((ind, i) => (
               <div key={i} className={`bg-[#0D1117] border rounded-2xl p-6 ${ind.highlight ? 'border-blue-300 ring-2 ring-blue-100' : 'border-[#21262D]'}`}>
                 <div className="flex items-center justify-between mb-4">
@@ -438,7 +438,7 @@ export default function IndicatorsPage() {
       {/* Auth Modal — shown when unauthenticated user clicks Buy */}
       {showAuthModal && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-8 max-w-sm w-full shadow-2xl">
+          <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 md:p-8 max-w-sm w-full mx-4 shadow-2xl">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-xl font-bold text-white">Sign in to continue</h3>

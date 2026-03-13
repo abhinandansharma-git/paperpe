@@ -146,6 +146,34 @@ export default function HomePage() {
         .blink { animation: blink 1.5s ease infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .section-label { font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00C076; }
+
+        /* ── Mobile Responsive ── */
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; text-align: center; }
+          .hero-grid h1 { font-size: 36px !important; }
+          .hero-grid p { font-size: 16px !important; max-width: 100% !important; }
+          .hero-grid form { flex-direction: column !important; max-width: 100% !important; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+          .tools-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+          .comparison-grid { grid-template-columns: 1fr !important; }
+          .comparison-row { grid-template-columns: 1fr !important; text-align: left; }
+          .pricing-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+          .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center; }
+          .features-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+          .trust-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
+          .nav-links { display: none !important; }
+          .nav-cta { font-size: 12px !important; padding: 6px 14px !important; }
+          .section-padding { padding: 48px 16px !important; }
+          .hero-section { padding: 48px 16px 64px !important; }
+          .faq-grid { grid-template-columns: 1fr !important; }
+          .popup-box { width: 90vw !important; right: 16px !important; bottom: 16px !important; }
+        }
+        @media (max-width: 480px) {
+          .hero-grid h1 { font-size: 28px !important; }
+          .stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .features-grid { grid-template-columns: 1fr !important; }
+          .trust-grid { grid-template-columns: 1fr 1fr !important; }
+        }
       `}</style>
 
       {/* ── Navbar ─────────────────────────────────────── */}
@@ -156,7 +184,7 @@ export default function HomePage() {
               <div style={{ width:34, height:34, background:'#00C076', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#0D1117', fontSize:16 }}>P</div>
               <span style={{ fontWeight:700, fontSize:18, color:'#e2e8f0' }}>Paper<span style={{ color:'#00C076' }}>Pe</span></span>
             </Link>
-            <div style={{ display:'flex', gap:4 }}>
+            <div className='nav-links' style={{ display:'flex', gap:4 }}>
               {[['Tools','/calculator'],['Indicators','/indicators'],['Blog','/blog'],['Brokers','/brokers']].map(([label, href]) => (
                 <Link key={href} href={href} style={{ padding:'6px 12px', borderRadius:8, color:'#94a3b8', textDecoration:'none', fontSize:14, fontWeight:500, transition:'all 0.2s' }}
                   onMouseEnter={e => (e.currentTarget.style.color='#e2e8f0', e.currentTarget.style.background='#21262D')}
@@ -166,15 +194,12 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-          <Link href="/indicators" style={{ background:'#00C076', color:'#0D1117', padding:'8px 20px', borderRadius:10, fontWeight:700, fontSize:14, textDecoration:'none', boxShadow:'0 0 20px rgba(0,192,118,0.25)' }}>
-            Get Indicators
-          </Link>
-        </div>
-      </nav>
+          <Link className="nav-cta" href="/indicators" style={{ background:'#00C076', color:'#0D1117', padding:'8px 20px', borderRadius:10, fontWeight:700, fontSize:14, textDecoration:'none', boxShadow:'0 0 20px rgba(0,192,118,0.25)' }}>
+            Get Indicators</Link></div></nav>
 
       {/* ── Hero ───────────────────────────────────────── */}
-      <section style={{ padding:'80px 24px 100px', maxWidth:1200, margin:'0 auto' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+      <section className='hero-section' style={{ padding:'80px 24px 100px', maxWidth:1200, margin:'0 auto' }}>
+        <div className='hero-grid' className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           {/* Left */}
           <div>
             <div className="pill fade-up" style={{ marginBottom:24 }}>
@@ -287,7 +312,7 @@ export default function HomePage() {
 
       {/* ── Stats ──────────────────────────────────────── */}
       <div style={{ background:'#161B22', borderTop:'1px solid #21262D', borderBottom:'1px solid #21262D', padding:'48px 24px' }}>
-        <div style={{ maxWidth:900, margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:32, textAlign:'center' }}>
+        <div className='stats-grid' style={{ maxWidth:900, margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:32, textAlign:'center' }}>
           {[
             { ref: stat1.ref, val: `₹${stat1.count}L+`, label:'Starting Virtual Capital', color:'#00C076' },
             { ref: stat2.ref, val: `${stat2.count}+`, label:'Traders on Waitlist', color:'#e2e8f0' },
@@ -309,7 +334,7 @@ export default function HomePage() {
           <h2 style={{ fontSize:40, fontWeight:700, marginBottom:12 }}>Start in 2 minutes</h2>
           <p style={{ color:'#64748b', fontSize:16, maxWidth:480, margin:'0 auto' }}>No documents, no KYC, no broker account needed.</p>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
+        <div className='features-grid' style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:20 }}>
           {[
             { n:'01', title:'Create Free Account', desc:'Sign up with email. Get ₹10 Lakh virtual capital credited instantly. No credit card required.', icon:Zap },
             { n:'02', title:'Pick Your Instrument', desc:'NIFTY/BANKNIFTY F&O options or MCX Gold, Crude, Silver. Live prices, real lot sizes.', icon:Target },
@@ -334,7 +359,7 @@ export default function HomePage() {
           <h2 style={{ fontSize:40, fontWeight:700 }}>Learn Without The Pain</h2>
         </div>
         <div style={{ background:'#161B22', border:'1px solid #21262D', borderRadius:20, overflow:'hidden' }}>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', textAlign:'center', borderBottom:'1px solid #21262D' }}>
+          <div className='comparison-row' style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', textAlign:'center', borderBottom:'1px solid #21262D' }}>
             <div style={{ padding:'18px 24px' }}></div>
             <div style={{ padding:'18px 24px', background:'rgba(255,77,77,0.05)', borderLeft:'1px solid #21262D', borderRight:'1px solid #21262D' }}>
               <div style={{ fontWeight:700, color:'#FF4D4D', marginBottom:2 }}>Real Trading</div>
@@ -351,7 +376,7 @@ export default function HomePage() {
             ['Learning speed', 'Slow (fear inhibits)', 'Fast (experiment freely)'],
             ['Risk of blowup', 'Very real', 'Zero'],
           ].map(([feat, real, paper], i) => (
-            <div key={i} style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', borderBottom: i < 3 ? '1px solid #21262D' : 'none' }}>
+            <div key={i} className='comparison-row' style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', borderBottom: i < 3 ? '1px solid #21262D' : 'none' }}>
               <div style={{ padding:'14px 24px', fontWeight:500, fontSize:14 }}>{feat}</div>
               <div style={{ padding:'14px 24px', textAlign:'center', color:'#FF4D4D', fontSize:14, borderLeft:'1px solid #21262D', borderRight:'1px solid #21262D', background:'rgba(255,77,77,0.03)' }}>{real}</div>
               <div style={{ padding:'14px 24px', textAlign:'center', color:'#00C076', fontSize:14, fontWeight:600, background:'rgba(0,192,118,0.03)' }}>{paper}</div>
@@ -367,7 +392,7 @@ export default function HomePage() {
           <h2 style={{ fontSize:40, fontWeight:700, marginBottom:12 }}>Trading Tools</h2>
           <p style={{ color:'#64748b', fontSize:16 }}>No signup required. Open and use instantly.</p>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
+        <div className='tools-grid' style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16 }}>
           {tools.map((tool, i) => (
             <Link key={i} href={tool.href} style={{ textDecoration:'none', color:'inherit' }}>
               <div className="card" style={{ padding:24, cursor:'pointer' }}>
@@ -385,7 +410,7 @@ export default function HomePage() {
 
       {/* ── Indicators ─────────────────────────────────── */}
       <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+        <div className='hero-grid' className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           <div>
             <p className="section-label" style={{ marginBottom:12 }}>Premium · TradingView</p>
             <h2 style={{ fontSize:40, fontWeight:700, marginBottom:16 }}>Indicators Built for Indian Markets</h2>
@@ -453,7 +478,7 @@ export default function HomePage() {
       {/* ── Footer ─────────────────────────────────────── */}
       <footer style={{ borderTop:'1px solid #21262D', padding:'48px 24px', background:'#161B22' }}>
         <div style={{ maxWidth:1100, margin:'0 auto' }}>
-          <div style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:40, marginBottom:40 }}>
+          <div className='footer-grid' style={{ display:'grid', gridTemplateColumns:'2fr 1fr 1fr 1fr', gap:40, marginBottom:40 }}>
             <div>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
                 <div style={{ width:30, height:30, background:'#00C076', borderRadius:8, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:900, color:'#0D1117', fontSize:14 }}>P</div>
