@@ -40,9 +40,28 @@ export default function TermsPage() {
             <p className="mt-2">Digital products (Pine Script indicators, tools) are delivered electronically and are non-transferable.</p>
           </section>
 
-          <section>
-            <h2 className="text-xl font-semibold text-white mb-3">5. Intellectual Property</h2>
-            <p>All content, indicators, scripts, and materials available on PaperPe are the intellectual property of PaperPe Technologies. You may use purchased products for personal use only. Redistribution, resale, or sharing of purchased products is strictly prohibited.</p>
+          <section className="border border-red-800 bg-red-950/30 rounded-lg p-5">
+            <h2 className="text-xl font-semibold text-red-400 mb-3">⚠️ 5. Intellectual Property & Strict Anti-Sharing Policy</h2>
+            <p className="text-red-300 font-semibold mb-3">READ THIS CAREFULLY — VIOLATION WILL RESULT IN LEGAL ACTION.</p>
+            <p>All Pine Script indicators, tools, scripts, and materials purchased from PaperPe are the exclusive intellectual property of PaperPe Technologies, protected under the Copyright Act, 1957 (India) and applicable international copyright laws.</p>
+            <div className="mt-4 space-y-2">
+              <p className="font-semibold text-white">The following are strictly prohibited:</p>
+              <ul className="list-disc list-inside space-y-1 ml-4 text-red-200">
+                <li>Sharing, distributing, or forwarding purchased Pine Scripts to any third party</li>
+                <li>Uploading scripts to public repositories (GitHub, TradingView public library, etc.)</li>
+                <li>Reselling or sublicensing scripts under any arrangement</li>
+                <li>Sharing your account credentials to give others access</li>
+                <li>Screenshots or screen recordings of script source code shared publicly</li>
+              </ul>
+            </div>
+            <p className="mt-4 text-red-300 font-semibold">Legal Consequences: Violation of this clause will result in:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-red-200">
+              <li>Immediate permanent account termination without refund</li>
+              <li>Civil lawsuit for damages under the Indian Copyright Act, 1957</li>
+              <li>Claim for actual damages plus statutory damages up to ₹10,00,000 per infringement</li>
+              <li>Recovery of legal fees and court costs from the infringing party</li>
+            </ul>
+            <p className="mt-4 text-gray-300">Each script purchase is tied to your account and email address. Our scripts contain embedded identifiers that allow us to trace unauthorized sharing back to the original purchaser.</p>
           </section>
 
           <section>

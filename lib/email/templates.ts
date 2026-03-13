@@ -118,6 +118,17 @@ export function purchaseEmail({
       <div style="text-align:center;margin:28px 0;">
         <a href="https://paperpe.in/dashboard" style="${btnStyle}">Download Now →</a>
       </div>
+      <div style="background:#1a0a0a;border:1px solid #7f1d1d;border-radius:12px;padding:20px;margin:24px 0;">
+        <p style="color:#f87171;font-weight:700;font-size:14px;margin:0 0 8px;">⚠️ IMPORTANT — Please Read</p>
+        <p style="color:#fca5a5;font-size:13px;line-height:1.6;margin:0;">
+          This Pine Script is licensed for your <strong>personal use only</strong>. 
+          Sharing, redistributing, or forwarding this script to anyone is a violation of our 
+          <a href="https://paperpe.in/legal/terms" style="color:#f87171;">Terms of Service</a> 
+          and Indian Copyright Law. <strong>Violators will be identified and face legal action 
+          including civil damages up to ₹10,00,000.</strong> Each script contains a unique 
+          identifier linked to your account.
+        </p>
+      </div>
       <p style="color:#6B7280;font-size:13px;">
         Need help setting up the indicator? Reply to this email or contact
         <a href="mailto:support@paperpe.in" style="color:#00C076;">support@paperpe.in</a>
