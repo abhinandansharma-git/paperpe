@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { runSupportAgent, getPopularQuestions, getCategories } from '../../../../agents/support/agent';
 import { getAllFAQs, getFAQsByCategory } from '../../../../agents/support/knowledge';
 

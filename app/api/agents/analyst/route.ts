@@ -1,7 +1,8 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { runAnalystAgent, getQuickLevels } from '../../../../agents/analyst/agent';
 
-const AGENT_SECRET = process.env.AGENT_SECRET || 'paperpe-social-2026';
+const AGENT_SECRET = process.env.AGENT_SECRET;
+if (!AGENT_SECRET) throw new Error('AGENT_SECRET not configured');
 
 export async function POST(request: NextRequest) {
   try {

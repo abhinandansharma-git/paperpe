@@ -1,9 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 import { getResend, FROM_EMAIL } from '@/lib/email/resend';
 import { welcomeEmail, purchaseEmail, newsletterEmail, promoEmail } from '@/lib/email/templates';
 
+const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
 export async function POST(req: NextRequest) {
   try {
+    // ── Auth: only admin or internal calls can send emails ──
+    const authHeader = req.headers.get('authorization');
+    const internalSecret = req.headers.get('x-internal-secret');
+
+    // Allow internal calls (from payment verify route etc.)
+    if (internalSecret === process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      // Trusted internal call — proceed
+    } else if (authHeader) {
+      // Verify admin user
+      const token = authHeader.replace('Bearer ', '');
+      const { data: { user } } = await supabaseAdmin.auth.getUser(token);
+      if (!user || user.email !== ADMIN_EMAIL) {
+        return NextResponse.json({ error: 'Forbidden — admin only' }, { status: 403 });
+      }
+    } else {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { type, to, data } = body;
 

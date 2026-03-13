@@ -1,8 +1,9 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { ALL_SKILLS, getSkill, getSkillsByCategory } from '../../../../agents/skills';
 import { AGENTS, getAgent, getAgentSkills, executeAgentSkill } from '../../../../agents/skills/registry';
 
-const AGENT_SECRET = process.env.AGENT_SECRET || 'paperpe-social-2026';
+const AGENT_SECRET = process.env.AGENT_SECRET;
+if (!AGENT_SECRET) throw new Error('AGENT_SECRET not configured');
 
 export async function POST(request: NextRequest) {
   try {
