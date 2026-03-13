@@ -53,7 +53,7 @@ export default function ContestsPage() {
           {[{ icon: Trophy, label: 'Total Prizes', value: '₹2.5L+', color: 'text-yellow-500' },
             { icon: Users, label: 'Participants', value: '5,000+', color: 'text-blue-400' },
             { icon: Award, label: 'Contests Held', value: '50+', color: 'text-purple-400' },
-            { icon: Gift, label: 'Winners', value: '500+', color: 'text-emerald-400' }].map((stat, i) => (
+            { icon: Gift, label: 'Winners', value: '500+', color: 'text-[#00C076]' }].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
               <stat.icon className={`w-5 h-5 ${stat.color} mb-3`} />
               <div className="text-2xl font-bold text-white">{stat.value}</div>
@@ -69,8 +69,8 @@ export default function ContestsPage() {
               <div className="h-32 bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center text-5xl">{contest.image}</div>
               <div className="p-5">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="px-2 py-1 rounded text-xs bg-purple-500/20 text-purple-400">{contest.type}</span>
-                  <span className="px-2 py-1 rounded text-xs bg-white/10 text-slate-400">{contest.difficulty}</span>
+                  <span className="px-2 py-1 rounded text-xs bg-purple-500/100/20 text-purple-400">{contest.type}</span>
+                  <span className="px-2 py-1 rounded text-xs bg-[#0D1117]/10 text-slate-400">{contest.difficulty}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-purple-400 transition-colors">{contest.name}</h3>
                 <div className="flex items-center justify-between text-sm mb-4">
@@ -78,8 +78,8 @@ export default function ContestsPage() {
                   <div className="flex items-center gap-1 text-orange-400"><Clock className="w-4 h-4" />{contest.endsIn}</div>
                 </div>
                 <div className="flex items-center justify-between">
-                  <div><div className="text-xs text-slate-500">Prize Pool</div><div className="text-xl font-bold text-emerald-400">₹{contest.prize}</div></div>
-                  <button className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors">Join Now</button>
+                  <div><div className="text-xs text-slate-500">Prize Pool</div><div className="text-xl font-bold text-[#00C076]">₹{contest.prize}</div></div>
+                  <button className="px-4 py-2 bg-purple-500/100 hover:bg-purple-600 text-white rounded-lg font-medium transition-colors">Join Now</button>
                 </div>
               </div>
             </div>
@@ -93,15 +93,15 @@ export default function ContestsPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <span className="px-2 py-1 rounded text-xs bg-[#00C076]/20 text-blue-400">{contest.type}</span>
-                  <span className="px-2 py-1 rounded text-xs bg-white/10 text-slate-400">{contest.difficulty}</span>
+                  <span className="px-2 py-1 rounded text-xs bg-[#0D1117]/10 text-slate-400">{contest.difficulty}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white">{contest.name}</h3>
                 <div className="flex items-center gap-4 mt-2 text-sm">
-                  <span className="text-emerald-400 font-medium">₹{contest.prize} prize</span>
+                  <span className="text-[#00C076] font-medium">₹{contest.prize} prize</span>
                   <span className="text-slate-500">Starts in {contest.startsIn}</span>
                 </div>
               </div>
-              <button className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg font-medium transition-colors">Remind Me</button>
+              <button className="px-4 py-2 bg-[#0D1117]/5 hover:bg-[#0D1117]/10 text-white rounded-lg font-medium transition-colors">Remind Me</button>
             </div>
           ))}
         </div>
@@ -112,7 +112,7 @@ export default function ContestsPage() {
             <thead><tr className="border-b border-white/5"><th className="px-6 py-4 text-left text-sm text-slate-500">Contest</th><th className="px-6 py-4 text-left text-sm text-slate-500">Winner</th><th className="px-6 py-4 text-right text-sm text-slate-500">Prize</th><th className="px-6 py-4 text-right text-sm text-slate-500">Returns</th></tr></thead>
             <tbody>
               {pastWinners.map((w, i) => (
-                <tr key={i} className="border-b border-white/5"><td className="px-6 py-4 text-white">{w.contest}</td><td className="px-6 py-4"><span className="flex items-center gap-2"><Trophy className="w-4 h-4 text-yellow-500" /><span className="text-white font-medium">{w.winner}</span></span></td><td className="px-6 py-4 text-right text-emerald-400 font-semibold">₹{w.prize}</td><td className="px-6 py-4 text-right text-emerald-400">{w.returns}</td></tr>
+                <tr key={i} className="border-b border-white/5"><td className="px-6 py-4 text-white">{w.contest}</td><td className="px-6 py-4"><span className="flex items-center gap-2"><Trophy className="w-4 h-4 text-yellow-500" /><span className="text-white font-medium">{w.winner}</span></span></td><td className="px-6 py-4 text-right text-[#00C076] font-semibold">₹{w.prize}</td><td className="px-6 py-4 text-right text-[#00C076]">{w.returns}</td></tr>
               ))}
             </tbody>
           </table>

@@ -69,10 +69,10 @@ export default function ChartsPage() {
           </nav>
         </div>
         <div className="flex items-center gap-3">
-          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-white/5">
+          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-[#0D1117]/5">
             <Settings className="w-4 h-4" />
           </button>
-          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-white/5">
+          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-[#0D1117]/5">
             <Maximize2 className="w-4 h-4" />
           </button>
         </div>
@@ -81,7 +81,7 @@ export default function ChartsPage() {
       {/* Toolbar */}
       <div className="border-b border-white/5 px-4 py-2 flex items-center gap-4 bg-[#0d1117]/50">
         {/* Symbol Selector */}
-        <button className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded hover:bg-white/10">
+        <button className="flex items-center gap-2 px-3 py-1.5 bg-[#0D1117]/5 rounded hover:bg-[#0D1117]/10">
           <span className="text-white font-medium">{selectedSymbol}</span>
           <ChevronDown className="w-4 h-4 text-slate-400" />
         </button>
@@ -89,7 +89,7 @@ export default function ChartsPage() {
         {/* Price Info */}
         <div className="flex items-center gap-3">
           <span className="text-xl font-bold text-white">₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-          <span className={`flex items-center gap-1 text-sm ${change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+          <span className={`flex items-center gap-1 text-sm ${change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
             {change >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
             {change >= 0 ? '+' : ''}{change.toFixed(2)}%
           </span>
@@ -102,7 +102,7 @@ export default function ChartsPage() {
               key={tf}
               onClick={() => setTimeframe(tf)}
               className={`px-3 py-1 rounded text-sm ${
-                timeframe === tf ? 'bg-[#00C076] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                timeframe === tf ? 'bg-[#00C076] text-white' : 'text-slate-400 hover:text-white hover:bg-[#0D1117]/5'
               }`}
             >
               {tf}
@@ -112,11 +112,11 @@ export default function ChartsPage() {
 
         {/* Indicators */}
         <div className="flex items-center gap-2 ml-auto">
-          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded">
+          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-[#0D1117]/5 rounded">
             <TrendingUp className="w-4 h-4" />
             Indicators
           </button>
-          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-white/5 rounded">
+          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-[#0D1117]/5 rounded">
             <BarChart2 className="w-4 h-4" />
             Compare
           </button>
@@ -207,7 +207,7 @@ export default function ChartsPage() {
           
           <div className="space-y-3">
             <div className="flex rounded-lg bg-[#0a0e17] p-1">
-              <button className="flex-1 py-2 rounded-md font-medium text-sm bg-emerald-500 text-white">
+              <button className="flex-1 py-2 rounded-md font-medium text-sm bg-[#00C076]/100 text-white">
                 BUY
               </button>
               <button className="flex-1 py-2 rounded-md font-medium text-sm text-slate-400 hover:text-white">
@@ -224,7 +224,7 @@ export default function ChartsPage() {
               />
             </div>
 
-            <button className="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium text-sm">
+            <button className="w-full py-2.5 bg-[#00C076]/100 hover:bg-[#00a865] text-white rounded-lg font-medium text-sm">
               Place Order
             </button>
           </div>
@@ -234,14 +234,14 @@ export default function ChartsPage() {
             <div className="space-y-1 text-xs">
               {[5, 4, 3, 2, 1].map(i => (
                 <div key={`bid-${i}`} className="flex items-center">
-                  <div className="flex-1 h-4 bg-emerald-500/20 rounded-l" style={{ width: `${60 + i * 8}%` }} />
+                  <div className="flex-1 h-4 bg-[#00C076]/100/20 rounded-l" style={{ width: `${60 + i * 8}%` }} />
                   <span className="w-16 text-right text-slate-400">{22450 + i * 5}</span>
                 </div>
               ))}
               <div className="h-px bg-[#00C076] my-2" />
               {[1, 2, 3, 4, 5].map(i => (
                 <div key={`ask-${i}`} className="flex items-center">
-                  <div className="flex-1 h-4 bg-red-500/20 rounded-l" style={{ width: `${70 - i * 6}%` }} />
+                  <div className="flex-1 h-4 bg-red-500/100/20 rounded-l" style={{ width: `${70 - i * 6}%` }} />
                   <span className="w-16 text-right text-slate-400">{22460 + i * 5}</span>
                 </div>
               ))}

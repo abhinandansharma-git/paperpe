@@ -62,7 +62,7 @@ export default function NewsPage() {
               <div className="text-sm text-slate-500 uppercase mb-1">{key}</div>
               <div className="flex items-end justify-between">
                 <span className="text-xl font-bold text-white">{data.value.toLocaleString()}</span>
-                <span className={`flex items-center gap-1 text-sm ${data.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                <span className={`flex items-center gap-1 text-sm ${data.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
                   {data.change >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                   {data.change >= 0 ? '+' : ''}{data.change}%
                 </span>
@@ -77,8 +77,8 @@ export default function NewsPage() {
               <h2 className="text-xl font-semibold text-white flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-500" />Latest News</h2>
               <div className="flex gap-2">
                 <button className="px-3 py-1 bg-[#00C076]/20 text-blue-400 rounded text-sm">All</button>
-                <button className="px-3 py-1 bg-white/5 text-slate-400 rounded text-sm">Stocks</button>
-                <button className="px-3 py-1 bg-white/5 text-slate-400 rounded text-sm">Global</button>
+                <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Stocks</button>
+                <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Global</button>
               </div>
             </div>
             {topNews.map((news) => (
@@ -86,7 +86,7 @@ export default function NewsPage() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${news.impact === 'positive' ? 'bg-emerald-400' : news.impact === 'negative' ? 'bg-red-400' : 'bg-slate-400'}`}></div>
-                    <span className="px-2 py-0.5 bg-white/10 rounded text-xs text-slate-400">{news.sector}</span>
+                    <span className="px-2 py-0.5 bg-[#0D1117]/10 rounded text-xs text-slate-400">{news.sector}</span>
                     <span className="text-xs text-slate-500 flex items-center gap-1"><Clock className="w-3 h-3" />{news.time}</span>
                   </div>
                   <span className="text-xs text-slate-600">{news.source}</span>
@@ -105,7 +105,7 @@ export default function NewsPage() {
                   <div key={i} className="flex items-center justify-between">
                     <span className="text-slate-300">{sector.name}</span>
                     <div className="text-right">
-                      <div className={`font-medium ${sector.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>{sector.change >= 0 ? '+' : ''}{sector.change}%</div>
+                      <div className={`font-medium ${sector.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>{sector.change >= 0 ? '+' : ''}{sector.change}%</div>
                       <div className="text-xs text-slate-500">{sector.top}</div>
                     </div>
                   </div>

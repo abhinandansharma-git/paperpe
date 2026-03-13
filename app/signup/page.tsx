@@ -51,7 +51,7 @@ export default function SignupPage() {
         <div className="flex-1 flex items-center justify-center px-6">
           <div className="text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+              <CheckCircle className="w-8 h-8 text-[#00C076]" />
             </div>
             <h1 className="text-2xl font-bold text-white mb-2">Check your email</h1>
             <p className="text-gray-500 mb-6 max-w-sm">
@@ -89,7 +89,7 @@ export default function SignupPage() {
             <p className="text-gray-500 mb-8">Start your trading journey with PaperPe</p>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
+              <div className="bg-red-500/10 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
                 {error}
               </div>
             )}

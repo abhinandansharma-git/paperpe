@@ -64,12 +64,12 @@ export default function LeaderboardPage() {
         <div className="flex flex-wrap gap-4 mb-8 justify-between">
           <div className="flex gap-2">
             {timeframes.map(t => (
-              <button key={t} onClick={() => setTimeframe(t)} className={`px-4 py-2 rounded-lg text-sm transition-colors ${timeframe === t ? 'bg-yellow-500 text-black font-medium' : 'bg-white/5 text-slate-400 hover:text-white'}`}>{t}</button>
+              <button key={t} onClick={() => setTimeframe(t)} className={`px-4 py-2 rounded-lg text-sm transition-colors ${timeframe === t ? 'bg-yellow-500/100 text-black font-medium' : 'bg-[#0D1117]/5 text-slate-400 hover:text-white'}`}>{t}</button>
             ))}
           </div>
           <div className="flex gap-2">
             {categories.map(c => (
-              <button key={c} onClick={() => setCategory(c)} className={`px-4 py-2 rounded-lg text-sm transition-colors ${category === c ? 'bg-white/10 text-white' : 'bg-white/5 text-slate-400 hover:text-white'}`}>{c}</button>
+              <button key={c} onClick={() => setCategory(c)} className={`px-4 py-2 rounded-lg text-sm transition-colors ${category === c ? 'bg-[#0D1117]/10 text-white' : 'bg-[#0D1117]/5 text-slate-400 hover:text-white'}`}>{c}</button>
             ))}
           </div>
         </div>
@@ -84,7 +84,7 @@ export default function LeaderboardPage() {
               <h3 className="text-xl font-bold text-white mb-1">{trader.name}</h3>
               <div className={`inline-block px-2 py-0.5 rounded text-xs bg-gradient-to-r ${getBadgeColor(trader.badge)} text-white mb-4`}>{trader.badge}</div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div><div className="text-2xl font-bold text-emerald-400">+{trader.returns}%</div><div className="text-xs text-slate-500">Returns</div></div>
+                <div><div className="text-2xl font-bold text-[#00C076]">+{trader.returns}%</div><div className="text-xs text-slate-500">Returns</div></div>
                 <div><div className="text-2xl font-bold text-white">{trader.winRate}%</div><div className="text-xs text-slate-500">Win Rate</div></div>
                 <div><div className="text-lg font-semibold text-white">{trader.trades}</div><div className="text-xs text-slate-500">Trades</div></div>
                 <div><div className="text-lg font-semibold text-[#00C076] flex items-center gap-1"><Flame className="w-4 h-4" />{trader.streak}</div><div className="text-xs text-slate-500">Streak</div></div>
@@ -98,10 +98,10 @@ export default function LeaderboardPage() {
             <thead><tr className="border-b border-white/5"><th className="px-6 py-4 text-left text-sm text-slate-500">Rank</th><th className="px-6 py-4 text-left text-sm text-slate-500">Trader</th><th className="px-6 py-4 text-right text-sm text-slate-500">Returns</th><th className="px-6 py-4 text-right text-sm text-slate-500 hidden md:table-cell">Win Rate</th><th className="px-6 py-4 text-right text-sm text-slate-500 hidden md:table-cell">Trades</th><th className="px-6 py-4 text-right text-sm text-slate-500">Streak</th></tr></thead>
             <tbody>
               {leaderboardData.map((trader) => (
-                <tr key={trader.rank} className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="px-6 py-4"><span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${trader.rank <= 3 ? 'bg-yellow-500/20 text-yellow-500' : 'bg-white/5 text-slate-400'}`}>{trader.rank}</span></td>
+                <tr key={trader.rank} className="border-b border-white/5 hover:bg-[#0D1117]/5 transition-colors">
+                  <td className="px-6 py-4"><span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${trader.rank <= 3 ? 'bg-yellow-500/100/20 text-yellow-500' : 'bg-[#0D1117]/5 text-slate-400'}`}>{trader.rank}</span></td>
                   <td className="px-6 py-4"><div className="flex items-center gap-3"><span className="text-2xl">{trader.avatar}</span><div><div className="font-medium text-white">{trader.name}</div><div className={`text-xs px-2 py-0.5 rounded inline-block bg-gradient-to-r ${getBadgeColor(trader.badge)} text-white`}>{trader.badge}</div></div></div></td>
-                  <td className="px-6 py-4 text-right text-emerald-400 font-semibold">+{trader.returns}%</td>
+                  <td className="px-6 py-4 text-right text-[#00C076] font-semibold">+{trader.returns}%</td>
                   <td className="px-6 py-4 text-right text-white hidden md:table-cell">{trader.winRate}%</td>
                   <td className="px-6 py-4 text-right text-slate-400 hidden md:table-cell">{trader.trades}</td>
                   <td className="px-6 py-4 text-right"><span className="flex items-center justify-end gap-1 text-[#00C076]"><Flame className="w-4 h-4" />{trader.streak}</span></td>

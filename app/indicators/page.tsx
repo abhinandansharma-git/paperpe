@@ -39,7 +39,7 @@ const indicators = [
     price: 999,
     originalPrice: 1999,
     badge: 'POPULAR',
-    badgeColor: 'from-emerald-500 to-green-500',
+    badgeColor: 'from-[#00C076] to-green-500',
     description: 'Track smart money through Open Interest changes. Know when institutions are building positions and in which direction.',
     features: [
       'Real-time OI change tracking',
@@ -299,7 +299,7 @@ export default function IndicatorsPage() {
                 <p className="text-[#00C076]/40">Get everything for one low price. Save ₹{bundle.savings.toLocaleString()}</p>
                 <div className="flex items-center gap-2 mt-3 flex-wrap">
                   {bundle.includes.map((name, i) => (
-                    <span key={i} className="text-xs bg-white/20 px-2 py-1 rounded">{name}</span>
+                    <span key={i} className="text-xs bg-[#0D1117]/20 px-2 py-1 rounded">{name}</span>
                   ))}
                 </div>
               </div>
@@ -319,7 +319,7 @@ export default function IndicatorsPage() {
       </section>
 
       {/* Individual Indicators */}
-      <section className="py-16 px-6">
+      <section className="relative py-16 px-6 overflow-hidden">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Or Buy Individually</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -340,14 +340,14 @@ export default function IndicatorsPage() {
                 <ul className="space-y-2 mb-6">
                   {ind.features.map((f, j) => (
                     <li key={j} className="flex items-start gap-2 text-sm text-gray-400">
-                      <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="w-4 h-4 text-[#00C076] flex-shrink-0 mt-0.5" />
                       {f}
                     </li>
                   ))}
                 </ul>
                 <button 
                   onClick={() => handleBuyClick({ id: ind.id, name: ind.name, price: ind.price })}
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white py-3 rounded-xl font-medium transition-colors"
+                  className="w-full bg-[#0D1117] hover:bg-[#161B22] text-white py-3 rounded-xl font-medium transition-colors"
                 >
                   Buy {ind.name} - ₹{ind.price.toLocaleString()}
                 </button>
@@ -380,7 +380,7 @@ export default function IndicatorsPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 px-6">
+      <section className="relative py-16 px-6 overflow-hidden">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
           <div className="space-y-4">

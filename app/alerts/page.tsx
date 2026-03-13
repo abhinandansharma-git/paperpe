@@ -53,15 +53,15 @@ export default function AlertsPage() {
           <div className="bg-[#141820] rounded-xl p-6 border border-[#00C076]/30 mb-8">
             <h3 className="text-lg font-semibold text-white mb-4">New Alert</h3>
             <div className="grid md:grid-cols-4 gap-4">
-              <input type="text" placeholder="Symbol (e.g. NIFTY)" value={newSymbol} onChange={(e) => setNewSymbol(e.target.value.toUpperCase())} className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]" />
-              <select value={newCondition} onChange={(e) => setNewCondition(e.target.value)} className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#00C076]">
+              <input type="text" placeholder="Symbol (e.g. NIFTY)" value={newSymbol} onChange={(e) => setNewSymbol(e.target.value.toUpperCase())} className="bg-[#0D1117]/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]" />
+              <select value={newCondition} onChange={(e) => setNewCondition(e.target.value)} className="bg-[#0D1117]/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#00C076]">
                 <option value="above">Price Above</option>
                 <option value="below">Price Below</option>
               </select>
-              <input type="number" placeholder="Target Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]" />
+              <input type="number" placeholder="Target Price" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="bg-[#0D1117]/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]" />
               <div className="flex gap-2">
                 <button onClick={() => { setAlerts([...alerts, { id: Date.now(), symbol: newSymbol, condition: newCondition, price: parseFloat(newPrice), current: 0, status: 'active' }]); setShowCreate(false); setNewSymbol(''); setNewPrice(''); }} className="flex-1 py-3 bg-[#00C076] hover:bg-[#00a865] text-white rounded-lg font-medium">Create</button>
-                <button onClick={() => setShowCreate(false)} className="px-4 py-3 bg-white/5 hover:bg-white/10 text-slate-400 rounded-lg"><X className="w-5 h-5" /></button>
+                <button onClick={() => setShowCreate(false)} className="px-4 py-3 bg-[#0D1117]/5 hover:bg-[#0D1117]/10 text-slate-400 rounded-lg"><X className="w-5 h-5" /></button>
               </div>
             </div>
           </div>
@@ -74,10 +74,10 @@ export default function AlertsPage() {
           </div>
           <div className="divide-y divide-white/5">
             {alerts.map((alert) => (
-              <div key={alert.id} className={`p-4 flex items-center justify-between ${alert.status === 'triggered' ? 'bg-emerald-500/10' : ''}`}>
+              <div key={alert.id} className={`p-4 flex items-center justify-between ${alert.status === 'triggered' ? 'bg-[#00C076]/100/10' : ''}`}>
                 <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${alert.condition === 'above' ? 'bg-emerald-500/20' : 'bg-red-500/20'}`}>
-                    {alert.condition === 'above' ? <TrendingUp className="w-5 h-5 text-emerald-400" /> : <TrendingDown className="w-5 h-5 text-red-400" />}
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${alert.condition === 'above' ? 'bg-[#00C076]/100/20' : 'bg-red-500/100/20'}`}>
+                    {alert.condition === 'above' ? <TrendingUp className="w-5 h-5 text-[#00C076]" /> : <TrendingDown className="w-5 h-5 text-red-400" />}
                   </div>
                   <div>
                     <div className="font-semibold text-white">{alert.symbol}</div>
@@ -86,7 +86,7 @@ export default function AlertsPage() {
                 </div>
                 <div className="flex items-center gap-6">
                   {alert.status === 'triggered' ? (
-                    <div className="flex items-center gap-2 text-emerald-400"><Check className="w-5 h-5" /><span className="text-sm">Triggered at {alert.triggeredAt}</span></div>
+                    <div className="flex items-center gap-2 text-[#00C076]"><Check className="w-5 h-5" /><span className="text-sm">Triggered at {alert.triggeredAt}</span></div>
                   ) : (
                     <div className="text-right"><div className="text-white font-medium">₹{alert.current?.toLocaleString()}</div><div className="text-xs text-slate-500">Current</div></div>
                   )}
@@ -101,7 +101,7 @@ export default function AlertsPage() {
           <h3 className="font-semibold text-white mb-4">Popular Alerts</h3>
           <div className="grid md:grid-cols-3 gap-4">
             {popularAlerts.map((alert, i) => (
-              <button key={i} className="p-4 bg-white/5 hover:bg-white/10 rounded-lg text-left transition-colors group">
+              <button key={i} className="p-4 bg-[#0D1117]/5 hover:bg-[#0D1117]/10 rounded-lg text-left transition-colors group">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium text-white">{alert.symbol}</span>
                   <Plus className="w-4 h-4 text-slate-500 group-hover:text-[#00C076]" />

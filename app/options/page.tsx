@@ -58,7 +58,7 @@ export default function OptionsPage() {
             <div className="flex items-center gap-2">
               <span className="text-slate-400 text-sm">Spot:</span>
               <span className="text-white font-bold text-lg">₹{mockOptionChain.spotPrice.toLocaleString('en-IN')}</span>
-              <span className="text-emerald-400 text-sm flex items-center gap-1">
+              <span className="text-[#00C076] text-sm flex items-center gap-1">
                 <ArrowUpRight className="w-4 h-4" />+1.24%
               </span>
             </div>
@@ -87,9 +87,9 @@ export default function OptionsPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-white/10">
-                  <th colSpan={5} className="bg-emerald-500/10 text-emerald-400 p-3 text-center">CALLS</th>
+                  <th colSpan={5} className="bg-[#00C076]/100/10 text-[#00C076] p-3 text-center">CALLS</th>
                   <th className="bg-slate-800 text-white p-3">Strike</th>
-                  <th colSpan={5} className="bg-red-500/10 text-red-400 p-3 text-center">PUTS</th>
+                  <th colSpan={5} className="bg-red-500/100/10 text-red-400 p-3 text-center">PUTS</th>
                 </tr>
                 <tr className="text-xs text-slate-500 border-b border-white/5">
                   <th className="p-3 text-left">OI</th>
@@ -115,29 +115,29 @@ export default function OptionsPage() {
                   return (
                     <tr
                       key={row.strike}
-                      className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
+                      className={`border-b border-white/5 hover:bg-[#0D1117]/5 transition-colors ${
                         isATM ? 'bg-[#00C076]/10' : ''
                       }`}
                     >
                       {/* CALLS */}
-                      <td className={`p-3 text-sm ${isITM_CE ? 'bg-emerald-500/5' : ''}`}>
+                      <td className={`p-3 text-sm ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
                         <span className="text-white">{(row.ceOI / 1000).toFixed(0)}K</span>
                       </td>
-                      <td className={`p-3 text-sm ${isITM_CE ? 'bg-emerald-500/5' : ''}`}>
-                        <span className={row.ceCOI >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                      <td className={`p-3 text-sm ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
+                        <span className={row.ceCOI >= 0 ? 'text-[#00C076]' : 'text-red-400'}>
                           {row.ceCOI >= 0 ? '+' : ''}{(row.ceCOI / 1000).toFixed(0)}K
                         </span>
                       </td>
-                      <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-emerald-500/5' : ''}`}>
+                      <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
                         <span className="text-white font-medium">₹{row.ceLTP.toFixed(2)}</span>
                       </td>
-                      <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-emerald-500/5' : ''}`}>
+                      <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
                         <span className="text-slate-400">{row.ceIV}%</span>
                       </td>
-                      <td className={`p-3 ${isITM_CE ? 'bg-emerald-500/5' : ''}`}>
+                      <td className={`p-3 ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
                         <div className="w-20 h-3 bg-slate-800 rounded overflow-hidden">
                           <div
-                            className="h-full bg-emerald-500/50"
+                            className="h-full bg-[#00C076]/100/50"
                             style={{ width: `${ceOIWidth}%` }}
                           />
                         </div>
@@ -150,26 +150,26 @@ export default function OptionsPage() {
                       </td>
 
                       {/* PUTS */}
-                      <td className={`p-3 ${!isITM_CE ? 'bg-red-500/5' : ''}`}>
+                      <td className={`p-3 ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
                         <div className="w-20 h-3 bg-slate-800 rounded overflow-hidden flex justify-end">
                           <div
-                            className="h-full bg-red-500/50"
+                            className="h-full bg-red-500/100/50"
                             style={{ width: `${peOIWidth}%` }}
                           />
                         </div>
                       </td>
-                      <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/5' : ''}`}>
+                      <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
                         <span className="text-slate-400">{row.peIV}%</span>
                       </td>
-                      <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/5' : ''}`}>
+                      <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
                         <span className="text-white font-medium">₹{row.peLTP.toFixed(2)}</span>
                       </td>
-                      <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/5' : ''}`}>
-                        <span className={row.peCOI >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+                      <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
+                        <span className={row.peCOI >= 0 ? 'text-[#00C076]' : 'text-red-400'}>
                           {row.peCOI >= 0 ? '+' : ''}{(row.peCOI / 1000).toFixed(0)}K
                         </span>
                       </td>
-                      <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/5' : ''}`}>
+                      <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
                         <span className="text-white">{(row.peOI / 1000).toFixed(0)}K</span>
                       </td>
                     </tr>
@@ -184,8 +184,8 @@ export default function OptionsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
             <h3 className="text-slate-400 text-sm mb-2">Total Call OI</h3>
-            <div className="text-2xl font-bold text-emerald-400">1.38 Cr</div>
-            <div className="text-sm text-emerald-400/70 mt-1">+12.5L added</div>
+            <div className="text-2xl font-bold text-[#00C076]">1.38 Cr</div>
+            <div className="text-sm text-[#00C076]/70 mt-1">+12.5L added</div>
           </div>
           <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
             <h3 className="text-slate-400 text-sm mb-2">Total Put OI</h3>
@@ -195,7 +195,7 @@ export default function OptionsPage() {
           <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
             <h3 className="text-slate-400 text-sm mb-2">PCR (OI)</h3>
             <div className="text-2xl font-bold text-white">0.75</div>
-            <div className="text-sm text-emerald-400 mt-1 flex items-center gap-1">
+            <div className="text-sm text-[#00C076] mt-1 flex items-center gap-1">
               <TrendingUp className="w-4 h-4" /> Bullish Bias
             </div>
           </div>

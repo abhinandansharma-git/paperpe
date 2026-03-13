@@ -58,7 +58,7 @@ export default function AnalyticsPage() {
             <h1 className="text-2xl md:text-3xl font-bold text-white">Trading Analytics</h1>
             <p className="text-slate-400">Deep insights into your trading performance</p>
           </div>
-          <select className="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white">
+          <select className="bg-[#0D1117]/5 border border-white/10 rounded-lg px-4 py-2 text-white">
             <option>Last 30 Days</option>
             <option>Last 90 Days</option>
             <option>This Year</option>
@@ -67,9 +67,9 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          {[{ icon: TrendingUp, label: 'Total P&L', value: '+₹56,000', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+          {[{ icon: TrendingUp, label: 'Total P&L', value: '+₹56,000', color: 'text-[#00C076]', bg: 'bg-[#00C076]/100/10' },
             { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-blue-400', bg: 'bg-[#00C076]/10' },
-            { icon: Activity, label: 'Total Trades', value: '118', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+            { icon: Activity, label: 'Total Trades', value: '118', color: 'text-purple-400', bg: 'bg-purple-500/100/10' },
             { icon: Zap, label: 'Best Streak', value: '12 days', color: 'text-orange-400', bg: 'bg-[#00C076]/10' }].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
               <div className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center mb-3`}><stat.icon className={`w-5 h-5 ${stat.color}`} /></div>
@@ -86,7 +86,7 @@ export default function AnalyticsPage() {
               {monthlyData.map((pnl, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center">
                   <div className="w-full flex flex-col items-center justify-end h-40">
-                    <div className={`w-full rounded-t ${pnl >= 0 ? 'bg-emerald-500' : 'bg-red-500'}`} style={{ height: `${(Math.abs(pnl) / maxPnl) * 100}%` }}></div>
+                    <div className={`w-full rounded-t ${pnl >= 0 ? 'bg-[#00C076]/100' : 'bg-red-500/100'}`} style={{ height: `${(Math.abs(pnl) / maxPnl) * 100}%` }}></div>
                   </div>
                   <span className="text-xs text-slate-500 mt-2">{months[i]}</span>
                 </div>
@@ -101,10 +101,10 @@ export default function AnalyticsPage() {
                 <div key={i}>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-white font-medium">{item.name}</span>
-                    <span className={item.pnl >= 0 ? 'text-emerald-400' : 'text-red-400'}>₹{item.pnl.toLocaleString()}</span>
+                    <span className={item.pnl >= 0 ? 'text-[#00C076]' : 'text-red-400'}>₹{item.pnl.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-[#00C076] rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
+                    <div className="flex-1 h-2 bg-[#0D1117]/5 rounded-full overflow-hidden"><div className="h-full bg-[#00C076] rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
                     <span className="text-xs text-slate-500">{item.winRate}%</span>
                   </div>
                 </div>
@@ -120,8 +120,8 @@ export default function AnalyticsPage() {
               {tradesByTime.map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
                   <span className="text-slate-400 text-sm w-24">{item.time}</span>
-                  <div className="flex-1 h-6 bg-white/5 rounded-lg overflow-hidden relative">
-                    <div className={`h-full rounded-lg ${item.winRate >= 60 ? 'bg-emerald-500/50' : item.winRate >= 50 ? 'bg-yellow-500/50' : 'bg-red-500/50'}`} style={{ width: `${item.winRate}%` }}></div>
+                  <div className="flex-1 h-6 bg-[#0D1117]/5 rounded-lg overflow-hidden relative">
+                    <div className={`h-full rounded-lg ${item.winRate >= 60 ? 'bg-[#00C076]/100/50' : item.winRate >= 50 ? 'bg-yellow-500/100/50' : 'bg-red-500/100/50'}`} style={{ width: `${item.winRate}%` }}></div>
                     <span className="absolute inset-0 flex items-center justify-center text-xs text-white font-medium">{item.winRate}% ({item.trades} trades)</span>
                   </div>
                 </div>
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
             <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-yellow-500" />Achievements</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {achievements.map((ach, i) => (
-                <div key={i} className={`p-3 rounded-xl text-center ${ach.earned ? 'bg-yellow-500/10 border border-yellow-500/30' : 'bg-white/5 border border-white/5 opacity-50'}`}>
+                <div key={i} className={`p-3 rounded-xl text-center ${ach.earned ? 'bg-yellow-500/100/10 border border-yellow-500/30' : 'bg-[#0D1117]/5 border border-white/5 opacity-50'}`}>
                   <div className="text-2xl mb-1">{ach.icon}</div>
                   <div className="text-xs text-slate-400">{ach.name}</div>
                 </div>
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
               <h3 className="text-xl font-bold text-white mb-1">Export Your Trade Journal</h3>
               <p className="text-slate-300">Download detailed reports in PDF or Excel format</p>
             </div>
-            <button className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-colors">Export Report</button>
+            <button className="px-6 py-3 bg-[#0D1117]/10 hover:bg-[#0D1117]/20 text-white rounded-xl font-medium transition-colors">Export Report</button>
           </div>
         </div>
       </main>

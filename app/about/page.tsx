@@ -4,10 +4,10 @@ export default function About() {
   return (
     <main className="min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 border-b border-[#21262D]">
+      <nav className="fixed top-0 left-0 right-0 bg-[#0D1117]/90 backdrop-blur-md z-50 border-b border-[#21262D]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-[#00C076] rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-[#00C076] to-[#00C076] rounded-lg flex items-center justify-center">
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
               </svg>
@@ -16,7 +16,7 @@ export default function About() {
           </Link>
           <Link 
             href="/#join"
-            className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-semibold transition-all hover:-translate-y-0.5"
+            className="bg-[#00C076]/100 hover:bg-[#00a865] text-white px-6 py-2.5 rounded-full font-semibold transition-all hover:-translate-y-0.5"
           >
             Join Free
           </Link>
@@ -42,19 +42,19 @@ export default function About() {
             <h2 className="text-2xl font-bold mt-12 mb-4">What makes us different</h2>
             <ul className="space-y-4 text-gray-400">
               <li className="flex gap-3">
-                <span className="text-emerald-500 font-bold">✓</span>
+                <span className="text-[#00C076] font-bold">✓</span>
                 <span><strong>Real-time MCX & F&O data</strong> — Same prices your broker sees</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-emerald-500 font-bold">✓</span>
+                <span className="text-[#00C076] font-bold">✓</span>
                 <span><strong>Realistic execution</strong> — Proper lot sizes, margins, and slippage</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-emerald-500 font-bold">✓</span>
+                <span className="text-[#00C076] font-bold">✓</span>
                 <span><strong>Built for India</strong> — MCX commodities, Nifty, Bank Nifty</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-emerald-500 font-bold">✓</span>
+                <span className="text-[#00C076] font-bold">✓</span>
                 <span><strong>Free forever</strong> — No hidden charges, no premium tiers</span>
               </li>
             </ul>
@@ -69,7 +69,7 @@ export default function About() {
           <div className="mt-12 pt-8 border-t">
             <Link 
               href="/#join" 
-              className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-xl font-semibold transition-all"
+              className="inline-flex items-center gap-2 bg-[#00C076]/100 hover:bg-[#00a865] text-white px-8 py-4 rounded-xl font-semibold transition-all"
             >
               Join the waitlist
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

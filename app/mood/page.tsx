@@ -18,11 +18,11 @@ const indicators = [
 ];
 
 const getMoodLabel = (score: number) => {
-  if (score <= 20) return { label: 'Extreme Fear', color: 'text-red-500', bg: 'bg-red-500' };
+  if (score <= 20) return { label: 'Extreme Fear', color: 'text-red-500', bg: 'bg-red-500/100' };
   if (score <= 40) return { label: 'Fear', color: 'text-[#00C076]', bg: 'bg-[#00C076]' };
-  if (score <= 60) return { label: 'Neutral', color: 'text-yellow-500', bg: 'bg-yellow-500' };
+  if (score <= 60) return { label: 'Neutral', color: 'text-yellow-500', bg: 'bg-yellow-500/100' };
   if (score <= 80) return { label: 'Greed', color: 'text-lime-500', bg: 'bg-lime-500' };
-  return { label: 'Extreme Greed', color: 'text-emerald-500', bg: 'bg-emerald-500' };
+  return { label: 'Extreme Greed', color: 'text-[#00C076]', bg: 'bg-[#00C076]/100' };
 };
 
 const mood = getMoodLabel(moodScore);
@@ -79,7 +79,7 @@ export default function MoodPage() {
                 <circle cx="100" cy="90" r="8" fill="white" />
               </svg>
               <div className="absolute bottom-0 left-0 text-xs text-red-500">Fear</div>
-              <div className="absolute bottom-0 right-0 text-xs text-emerald-500">Greed</div>
+              <div className="absolute bottom-0 right-0 text-xs text-[#00C076]">Greed</div>
             </div>
 
             <div className={`text-5xl font-bold ${mood.color} mb-2`}>{moodScore}</div>
@@ -90,7 +90,7 @@ export default function MoodPage() {
           <div className="grid grid-cols-5 gap-4 mt-8 text-center text-xs">
             {['Extreme Fear', 'Fear', 'Neutral', 'Greed', 'Extreme Greed'].map((label, i) => (
               <div key={i}>
-                <div className={`h-2 rounded-full mb-1 ${['bg-red-500', 'bg-[#00C076]', 'bg-yellow-500', 'bg-lime-500', 'bg-emerald-500'][i]}`}></div>
+                <div className={`h-2 rounded-full mb-1 ${['bg-red-500/100', 'bg-[#00C076]', 'bg-yellow-500/100', 'bg-lime-500', 'bg-[#00C076]/100'][i]}`}></div>
                 <span className="text-slate-500">{label}</span>
               </div>
             ))}
@@ -124,17 +124,17 @@ export default function MoodPage() {
           <div className="p-4 border-b border-white/5"><h3 className="font-semibold text-white flex items-center gap-2"><BarChart2 className="w-5 h-5 text-purple-400" />Contributing Indicators</h3></div>
           <div className="divide-y divide-white/5">
             {indicators.map((ind, i) => (
-              <div key={i} className="p-4 flex items-center justify-between hover:bg-white/5">
+              <div key={i} className="p-4 flex items-center justify-between hover:bg-[#0D1117]/5">
                 <div className="flex-1">
                   <div className="font-medium text-white">{ind.name}</div>
                   <div className="text-sm text-slate-500">{ind.desc}</div>
                 </div>
                 <div className="text-right mr-6">
                   <div className="text-white font-semibold">{ind.value}</div>
-                  <div className={`text-sm ${ind.signal === 'Greed' ? 'text-emerald-400' : ind.signal === 'Fear' ? 'text-red-400' : 'text-yellow-400'}`}>{ind.signal}</div>
+                  <div className={`text-sm ${ind.signal === 'Greed' ? 'text-[#00C076]' : ind.signal === 'Fear' ? 'text-red-400' : 'text-yellow-400'}`}>{ind.signal}</div>
                 </div>
                 <div className="w-32">
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#0D1117]/10 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${getMoodLabel(ind.score).bg}`} style={{ width: `${ind.score}%` }}></div>
                   </div>
                   <div className="text-xs text-slate-500 text-right mt-1">{ind.score}/100</div>

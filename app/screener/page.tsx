@@ -103,7 +103,7 @@ export default function ScreenerPage() {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-slate-500 border-b border-white/5 bg-white/5">
+                <tr className="text-left text-xs text-slate-500 border-b border-white/5 bg-[#0D1117]/5">
                   <th className="p-4"></th>
                   <th className="p-4">Symbol</th>
                   <th className="p-4">Sector</th>
@@ -118,7 +118,7 @@ export default function ScreenerPage() {
               </thead>
               <tbody>
                 {filteredData.map((stock, i) => (
-                  <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <tr key={i} className="border-b border-white/5 hover:bg-[#0D1117]/5 transition-colors">
                     <td className="p-4">
                       <button className="text-slate-500 hover:text-[#00C076]">
                         <Star className="w-4 h-4" />
@@ -134,7 +134,7 @@ export default function ScreenerPage() {
                       <span className="text-white font-medium">₹{stock.price.toLocaleString('en-IN')}</span>
                     </td>
                     <td className="p-4 text-right">
-                      <span className={`flex items-center justify-end gap-1 ${stock.change >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                      <span className={`flex items-center justify-end gap-1 ${stock.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
                         {stock.change >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                         {stock.change >= 0 ? '+' : ''}{stock.change}%
                       </span>
@@ -142,8 +142,8 @@ export default function ScreenerPage() {
                     <td className="p-4 text-right text-slate-300">{stock.volume}</td>
                     <td className="p-4 text-center">
                       <span className={`px-2 py-1 rounded text-xs ${
-                        stock.rsi > 70 ? 'bg-red-500/20 text-red-400' :
-                        stock.rsi < 30 ? 'bg-emerald-500/20 text-emerald-400' :
+                        stock.rsi > 70 ? 'bg-red-500/100/20 text-red-400' :
+                        stock.rsi < 30 ? 'bg-[#00C076]/100/20 text-[#00C076]' :
                         'bg-slate-500/20 text-slate-400'
                       }`}>
                         {stock.rsi}
@@ -151,8 +151,8 @@ export default function ScreenerPage() {
                     </td>
                     <td className="p-4 text-center">
                       <span className={`px-2 py-1 rounded text-xs ${
-                        stock.macd === 'Buy' ? 'bg-emerald-500/20 text-emerald-400' :
-                        stock.macd === 'Sell' ? 'bg-red-500/20 text-red-400' :
+                        stock.macd === 'Buy' ? 'bg-[#00C076]/100/20 text-[#00C076]' :
+                        stock.macd === 'Sell' ? 'bg-red-500/100/20 text-red-400' :
                         'bg-slate-500/20 text-slate-400'
                       }`}>
                         {stock.macd}
@@ -160,8 +160,8 @@ export default function ScreenerPage() {
                     </td>
                     <td className="p-4 text-center">
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                        stock.signal === 'Bullish' || stock.signal === 'Strong Buy' ? 'bg-emerald-500/20 text-emerald-400' :
-                        stock.signal === 'Bearish' ? 'bg-red-500/20 text-red-400' :
+                        stock.signal === 'Bullish' || stock.signal === 'Strong Buy' ? 'bg-[#00C076]/100/20 text-[#00C076]' :
+                        stock.signal === 'Bearish' ? 'bg-red-500/100/20 text-red-400' :
                         'bg-slate-500/20 text-slate-400'
                       }`}>
                         {stock.signal}

@@ -33,11 +33,11 @@ const tips = [
 
 const getVerdictStyle = (verdict: string) => {
   switch(verdict) {
-    case 'Great': return { bg: 'bg-emerald-500', text: 'text-emerald-500', icon: '☀️' };
+    case 'Great': return { bg: 'bg-[#00C076]/100', text: 'text-[#00C076]', icon: '☀️' };
     case 'Good': return { bg: 'bg-lime-500', text: 'text-lime-500', icon: '🌤️' };
-    case 'Okay': return { bg: 'bg-yellow-500', text: 'text-yellow-500', icon: '⛅' };
+    case 'Okay': return { bg: 'bg-yellow-500/100', text: 'text-yellow-500', icon: '⛅' };
     case 'Risky': return { bg: 'bg-[#00C076]', text: 'text-[#00C076]', icon: '🌧️' };
-    case 'Avoid': return { bg: 'bg-red-500', text: 'text-red-500', icon: '⛈️' };
+    case 'Avoid': return { bg: 'bg-red-500/100', text: 'text-red-500', icon: '⛈️' };
     default: return { bg: 'bg-slate-500', text: 'text-slate-500', icon: '❓' };
   }
 };
@@ -75,7 +75,7 @@ export default function TodayPage() {
           
           <div className="flex justify-center gap-8 mt-8">
             <div className="text-center"><div className="text-2xl font-bold text-white">9:15 AM</div><div className="text-xs text-slate-500">Market Opens</div></div>
-            <div className="text-center"><div className="text-2xl font-bold text-emerald-400">Bullish</div><div className="text-xs text-slate-500">Expected Bias</div></div>
+            <div className="text-center"><div className="text-2xl font-bold text-[#00C076]">Bullish</div><div className="text-xs text-slate-500">Expected Bias</div></div>
             <div className="text-center"><div className="text-2xl font-bold text-white">Low</div><div className="text-xs text-slate-500">Risk Level</div></div>
           </div>
         </div>
@@ -89,12 +89,12 @@ export default function TodayPage() {
                   <factor.icon className="w-5 h-5 text-slate-400" />
                   <span className="text-sm text-slate-400">{factor.name}</span>
                 </div>
-                <span className={`text-sm font-bold ${factor.score >= 70 ? 'text-emerald-400' : factor.score >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>{factor.score}</span>
+                <span className={`text-sm font-bold ${factor.score >= 70 ? 'text-[#00C076]' : factor.score >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>{factor.score}</span>
               </div>
               <div className="text-xl font-semibold text-white mb-2">{factor.value}</div>
               <div className="text-xs text-slate-500">{factor.note}</div>
-              <div className="mt-3 h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div className={`h-full rounded-full ${factor.score >= 70 ? 'bg-emerald-500' : factor.score >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${factor.score}%` }}></div>
+              <div className="mt-3 h-1.5 bg-[#0D1117]/10 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full ${factor.score >= 70 ? 'bg-[#00C076]/100' : factor.score >= 50 ? 'bg-yellow-500/100' : 'bg-red-500/100'}`} style={{ width: `${factor.score}%` }}></div>
               </div>
             </div>
           ))}
@@ -107,7 +107,7 @@ export default function TodayPage() {
             {weekOutlook.map((day, i) => {
               const dayStyle = getVerdictStyle(day.verdict);
               return (
-                <div key={i} className={`p-4 rounded-xl text-center ${i === 0 ? 'bg-white/10 ring-2 ring-white/20' : 'bg-white/5'}`}>
+                <div key={i} className={`p-4 rounded-xl text-center ${i === 0 ? 'bg-[#0D1117]/10 ring-2 ring-white/20' : 'bg-[#0D1117]/5'}`}>
                   <div className="text-xs text-slate-500">{day.day}</div>
                   <div className="text-sm text-slate-400 mb-2">{day.date}</div>
                   <div className="text-2xl mb-1">{dayStyle.icon}</div>
@@ -124,10 +124,10 @@ export default function TodayPage() {
           <h3 className="font-semibold text-white mb-4">Today's Trading Tips</h3>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <div className="text-emerald-400 text-sm font-medium mb-3 flex items-center gap-2"><CheckCircle className="w-4 h-4" />DO</div>
+              <div className="text-[#00C076] text-sm font-medium mb-3 flex items-center gap-2"><CheckCircle className="w-4 h-4" />DO</div>
               <div className="space-y-2">
                 {tips.filter(t => t.type === 'do').map((tip, i) => (
-                  <div key={i} className="flex items-start gap-2 text-sm"><span className="text-emerald-400 mt-1">✓</span><span className="text-slate-300">{tip.text}</span></div>
+                  <div key={i} className="flex items-start gap-2 text-sm"><span className="text-[#00C076] mt-1">✓</span><span className="text-slate-300">{tip.text}</span></div>
                 ))}
               </div>
             </div>
