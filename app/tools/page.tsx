@@ -68,14 +68,17 @@ export default function ToolsPage() {
       </header>
 
       {/* Hero */}
-      <section className="py-14 px-6 border-b border-[#21262D]">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6">
+      <section className="relative py-14 px-6 border-b border-[#21262D] overflow-hidden">
+        <div className="absolute inset-0 bg-mesh" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6 animate-fade-in-up">
             <Sparkles className="w-3.5 h-3.5" /> 100% Free — No Login Required
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Trading Calculators</h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Professional-grade calculators for Indian F&O traders. Options, position sizing, brokerage, and margin — all in one place.
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-fade-in-up" style={{animationDelay:'0.1s'}}>
+            Trading <span className="text-gradient">Calculators</span>
+          </h1>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+            The tools every Indian F&O trader needs. Options pricing, position sizing, brokerage comparison, margin requirements — all free, forever.
           </p>
         </div>
       </section>
@@ -87,7 +90,7 @@ export default function ToolsPage() {
           <div className="grid md:grid-cols-2 gap-5">
             {ourTools.map((tool) => (
               <Link key={tool.href} href={tool.href} className="group">
-                <div className="bg-[#161B22] border border-[#21262D] hover:border-[#30363D] rounded-2xl p-6 transition-all hover:bg-[#1c2128] h-full">
+                <div className="soul-card border-gradient p-6 h-full">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: `${tool.color}20` }}>
                       <tool.icon className="w-6 h-6" style={{ color: tool.color }} />

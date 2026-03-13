@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className="antialiased">
+      <body className="antialiased bg-noise">
         {children}
         <footer className="bg-[#0D1117] border-t border-[#21262D] py-6 mt-auto">
           <div className="max-w-6xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">

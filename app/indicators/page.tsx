@@ -256,16 +256,33 @@ export default function IndicatorsPage() {
       </header>
 
       {/* Hero */}
-      <section className="py-16 px-6 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">TradingView Indicators</h1>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-8">
-            Professional-grade indicators built specifically for Indian markets. Clear signals. No confusion. One-time payment, lifetime access.
+      <section className="relative py-20 px-4 md:px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-mesh" />
+        <div className="absolute inset-0 bg-dots opacity-30" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6 animate-fade-in-up">
+            <span className="w-2 h-2 bg-[#00C076] rounded-full animate-pulse" />
+            Built for Indian F&O traders
+          </div>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 animate-fade-in-up" style={{animationDelay:'0.1s'}}>
+            Stop Guessing.<br />
+            <span className="text-gradient">Start Trading with Clarity.</span>
+          </h1>
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+            Professional TradingView indicators that tell you exactly when to enter and exit. Calibrated for NIFTY, BANKNIFTY & Indian markets. One-time payment, lifetime access.
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-sm text-gray-500">
-            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Works on TradingView</span>
-            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Indian market calibrated</span>
-            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-green-500" /> Lifetime updates</span>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-sm text-gray-400 animate-fade-in-up" style={{animationDelay:'0.3s'}}>
+            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[#00C076]" /> Works on free TradingView</span>
+            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[#00C076]" /> NIFTY & BANKNIFTY tested</span>
+            <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[#00C076]" /> Lifetime updates included</span>
+          </div>
+          <div className="flex items-center justify-center gap-3 mt-8 text-xs text-gray-500 animate-fade-in-up" style={{animationDelay:'0.4s'}}>
+            <div className="flex -space-x-2">
+              {['🟢','🔵','🟣','🟡','🔴'].map((c,i) => (
+                <div key={i} className="w-7 h-7 rounded-full bg-[#161B22] border-2 border-[#0D1117] flex items-center justify-center text-xs">{c}</div>
+              ))}
+            </div>
+            <span>Trusted by <strong className="text-white">100+</strong> Indian traders</span>
           </div>
         </div>
       </section>
@@ -273,7 +290,8 @@ export default function IndicatorsPage() {
       {/* Bundle Offer */}
       <section className="py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-[#00C076] to-[#007a4f] rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-r from-[#00C076] to-[#00a8ff] rounded-2xl p-8 text-white animate-pulse-glow relative overflow-hidden">
+            <div className="absolute inset-0 animate-shimmer" />
             <div className="flex flex-col items-center justify-between gap-6 text-center md:text-left">
               <div>
                 <span className="text-[#00C076]/60 text-sm font-medium">BEST VALUE</span>
