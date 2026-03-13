@@ -93,7 +93,7 @@ export default function InsiderPage() {
           {activeTab === 'bulk' && (
             <div className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden">
               <div className="p-4 border-b border-white/5 flex items-center justify-between">
-                <h3 className="font-semibold text-white flex items-center gap-2"><Building2 className="w-5 h-5 text-blue-400" />Bulk Deals (Last 7 Days)</h3>
+                <h3 className="font-semibold text-white flex items-center gap-2"><Building2 className="w-5 h-5 text-[#00C076]" />Bulk Deals (Last 7 Days)</h3>
                 <span className="text-sm text-slate-500">Updated: 02 Mar 2026, 6:30 PM</span>
               </div>
               <table className="w-full">
@@ -144,7 +144,7 @@ export default function InsiderPage() {
             <div className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
-                  <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-blue-400" />FII Activity</h3>
+                  <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-[#00C076]" />FII Activity</h3>
                   <div className="text-2xl md:text-3xl font-bold text-[#00C076] mb-1">+₹3,530 Cr</div>
                   <div className="text-sm text-slate-500">Net buying today</div>
                   <div className="mt-4 flex gap-4 text-sm"><div><span className="text-slate-500">Buy:</span> <span className="text-[#00C076]">₹12,450 Cr</span></div><div><span className="text-slate-500">Sell:</span> <span className="text-red-400">₹8,920 Cr</span></div></div>

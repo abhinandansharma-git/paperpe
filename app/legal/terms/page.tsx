@@ -92,7 +92,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">10. Contact</h2>
-            <p>For any questions regarding these terms, contact us at: <a href="mailto:hello@paperpe.in" className="text-blue-400 hover:underline">hello@paperpe.in</a></p>
+            <p>For any questions regarding these terms, contact us at: <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a></p>
           </section>
 
         </div>

@@ -51,7 +51,7 @@ export default function ContestsPage() {
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-4 gap-4 mb-12">
           {[{ icon: Trophy, label: 'Total Prizes', value: '₹2.5L+', color: 'text-yellow-500' },
-            { icon: Users, label: 'Participants', value: '5,000+', color: 'text-blue-400' },
+            { icon: Users, label: 'Participants', value: '5,000+', color: 'text-[#00C076]' },
             { icon: Award, label: 'Contests Held', value: '50+', color: 'text-purple-400' },
             { icon: Gift, label: 'Winners', value: '500+', color: 'text-[#00C076]' }].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
@@ -86,13 +86,13 @@ export default function ContestsPage() {
           ))}
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Calendar className="w-6 h-6 text-blue-400" />Upcoming Contests</h2>
+        <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Calendar className="w-6 h-6 text-[#00C076]" />Upcoming Contests</h2>
         <div className="grid md:grid-cols-2 gap-4 mb-12">
           {upcomingContests.map((contest) => (
             <div key={contest.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-[#00C076]/30 transition-all">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-1 rounded text-xs bg-[#00C076]/20 text-blue-400">{contest.type}</span>
+                  <span className="px-2 py-1 rounded text-xs bg-[#00C076]/20 text-[#00C076]">{contest.type}</span>
                   <span className="px-2 py-1 rounded text-xs bg-[#0D1117]/10 text-slate-400">{contest.difficulty}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white">{contest.name}</h3>

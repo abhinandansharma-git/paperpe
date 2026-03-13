@@ -106,7 +106,7 @@ const brokers = [
 const colorMap: Record<string, string> = {
   emerald: 'bg-[#00C076]/100/20 text-[#00C076] border-[#00C076]/30',
   orange: 'bg-[#00C076]/20 text-orange-400 border-[#00C076]/30',
-  blue: 'bg-[#00C076]/20 text-blue-400 border-[#00C076]/30',
+  blue: 'bg-[#00C076]/20 text-[#00C076] border-[#00C076]/30',
   purple: 'bg-purple-500/100/20 text-purple-400 border-purple-500/30',
   slate: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
   red: 'bg-red-500/100/20 text-red-400 border-red-500/30',

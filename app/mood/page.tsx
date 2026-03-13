@@ -99,7 +99,7 @@ export default function MoodPage() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><Activity className="w-5 h-5 text-blue-400" />Mood History (7 Days)</h3>
+            <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><Activity className="w-5 h-5 text-[#00C076]" />Mood History (7 Days)</h3>
             <div className="flex items-end justify-between h-32 gap-2">
               {moodHistory.map((score, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center">
@@ -115,7 +115,7 @@ export default function MoodPage() {
             <div className="space-y-3 text-sm">
               <div className="flex items-start gap-3"><Shield className="w-5 h-5 text-lime-500 mt-0.5" /><div><span className="text-white font-medium">Greed Territory</span><p className="text-slate-400">Markets are optimistic. Consider taking profits on winners.</p></div></div>
               <div className="flex items-start gap-3"><AlertTriangle className="w-5 h-5 text-yellow-500 mt-0.5" /><div><span className="text-white font-medium">Caution</span><p className="text-slate-400">When everyone is greedy, smart money starts selling.</p></div></div>
-              <div className="flex items-start gap-3"><TrendingUp className="w-5 h-5 text-blue-400 mt-0.5" /><div><span className="text-white font-medium">Trend</span><p className="text-slate-400">Mood rising for 5 days. Watch for reversal signs.</p></div></div>
+              <div className="flex items-start gap-3"><TrendingUp className="w-5 h-5 text-[#00C076] mt-0.5" /><div><span className="text-white font-medium">Trend</span><p className="text-slate-400">Mood rising for 5 days. Watch for reversal signs.</p></div></div>
             </div>
           </div>
         </div>

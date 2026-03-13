@@ -76,7 +76,7 @@ export default function NewsPage() {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-white flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-500" />Latest News</h2>
               <div className="flex gap-2">
-                <button className="px-3 py-1 bg-[#00C076]/20 text-blue-400 rounded text-sm">All</button>
+                <button className="px-3 py-1 bg-[#00C076]/20 text-[#00C076] rounded text-sm">All</button>
                 <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Stocks</button>
                 <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Global</button>
               </div>
@@ -114,7 +114,7 @@ export default function NewsPage() {
             </div>
 
             <div className="bg-[#141820] rounded-xl p-5 border border-white/5">
-              <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><Globe className="w-5 h-5 text-blue-400" />Upcoming Events</h3>
+              <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><Globe className="w-5 h-5 text-[#00C076]" />Upcoming Events</h3>
               <div className="space-y-3">
                 {upcomingEvents.map((event, i) => (
                   <div key={i} className="flex items-start gap-3">

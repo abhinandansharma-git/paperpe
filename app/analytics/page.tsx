@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           {[{ icon: TrendingUp, label: 'Total P&L', value: '+₹56,000', color: 'text-[#00C076]', bg: 'bg-[#00C076]/100/10' },
-            { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-blue-400', bg: 'bg-[#00C076]/10' },
+            { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-[#00C076]', bg: 'bg-[#00C076]/10' },
             { icon: Activity, label: 'Total Trades', value: '118', color: 'text-purple-400', bg: 'bg-purple-500/100/10' },
             { icon: Zap, label: 'Best Streak', value: '12 days', color: 'text-orange-400', bg: 'bg-[#00C076]/10' }].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
@@ -81,7 +81,7 @@ export default function AnalyticsPage() {
 
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
           <div className="lg:col-span-2 bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2"><BarChart3 className="w-5 h-5 text-blue-400" />Monthly P&L</h3>
+            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[#00C076]" />Monthly P&L</h3>
             <div className="flex items-end justify-between h-48 gap-2">
               {monthlyData.map((pnl, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center">

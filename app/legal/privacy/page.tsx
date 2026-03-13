@@ -66,7 +66,7 @@ export default function PrivacyPage() {
               <li>Request deletion of your account and associated data</li>
               <li>Unsubscribe from marketing emails at any time</li>
             </ul>
-            <p className="mt-2">To exercise these rights, email us at <a href="mailto:hello@paperpe.in" className="text-blue-400 hover:underline">hello@paperpe.in</a></p>
+            <p className="mt-2">To exercise these rights, email us at <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a></p>
           </section>
 
           <section>
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">9. Contact</h2>
-            <p>For privacy-related queries: <a href="mailto:hello@paperpe.in" className="text-blue-400 hover:underline">hello@paperpe.in</a></p>
+            <p>For privacy-related queries: <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a></p>
           </section>
 
         </div>

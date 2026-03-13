@@ -31,7 +31,7 @@ export default function RefundPage() {
 
           <section>
             <h2 className="text-xl font-semibold text-white mb-3">3. How to Request a Refund</h2>
-            <p>To request a refund, email us at <a href="mailto:hello@paperpe.in" className="text-blue-400 hover:underline">hello@paperpe.in</a> with:</p>
+            <p>To request a refund, email us at <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a> with:</p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
               <li>Your registered email address</li>
               <li>Order ID / Payment ID</li>
@@ -61,7 +61,7 @@ export default function RefundPage() {
             <h2 className="text-xl font-semibold text-white mb-3">6. Contact Us</h2>
             <p>For refund queries or payment issues, reach out to us:</p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
-              <li>Email: <a href="mailto:hello@paperpe.in" className="text-blue-400 hover:underline">hello@paperpe.in</a></li>
+              <li>Email: <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a></li>
               <li>Response time: Within 24-48 business hours</li>
             </ul>
           </section>
