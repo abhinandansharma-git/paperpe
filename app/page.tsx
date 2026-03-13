@@ -146,34 +146,6 @@ export default function HomePage() {
         .blink { animation: blink 1.5s ease infinite; }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .section-label { font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00C076; }
-
-        /* ── Mobile Responsive ── */
-        @media (max-width: 768px) {
-          .hero-grid { grid-template-columns: 1fr !important; gap: 32px !important; text-align: center; }
-          .hero-grid h1 { font-size: 36px !important; }
-          .hero-grid p { font-size: 16px !important; max-width: 100% !important; }
-          .hero-grid form { flex-direction: column !important; max-width: 100% !important; }
-          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .tools-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
-          .comparison-grid { grid-template-columns: 1fr !important; }
-          .comparison-row { grid-template-columns: 1fr !important; text-align: left; }
-          .pricing-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
-          .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center; }
-          .features-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
-          .trust-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-          .nav-links { display: none !important; }
-          .nav-cta { font-size: 12px !important; padding: 6px 14px !important; }
-          .section-padding { padding: 48px 16px !important; }
-          .hero-section { padding: 48px 16px 64px !important; }
-          .faq-grid { grid-template-columns: 1fr !important; }
-          .popup-box { width: 90vw !important; right: 16px !important; bottom: 16px !important; }
-        }
-        @media (max-width: 480px) {
-          .hero-grid h1 { font-size: 28px !important; }
-          .stats-grid { grid-template-columns: 1fr 1fr !important; }
-          .features-grid { grid-template-columns: 1fr !important; }
-          .trust-grid { grid-template-columns: 1fr 1fr !important; }
-        }
       `}</style>
 
       {/* ── Navbar ─────────────────────────────────────── */}
@@ -199,7 +171,7 @@ export default function HomePage() {
 
       {/* ── Hero ───────────────────────────────────────── */}
       <section className='hero-section' style={{ padding:'80px 24px 100px', maxWidth:1200, margin:'0 auto' }}>
-        <div className='hero-grid' className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+        <div className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           {/* Left */}
           <div>
             <div className="pill fade-up" style={{ marginBottom:24 }}>
@@ -410,7 +382,7 @@ export default function HomePage() {
 
       {/* ── Indicators ─────────────────────────────────── */}
       <section style={{ padding:'0 24px 96px', maxWidth:1100, margin:'0 auto' }}>
-        <div className='hero-grid' className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
+        <div className='hero-grid' style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:64, alignItems:'center' }}>
           <div>
             <p className="section-label" style={{ marginBottom:12 }}>Premium · TradingView</p>
             <h2 style={{ fontSize:40, fontWeight:700, marginBottom:16 }}>Indicators Built for Indian Markets</h2>
