@@ -108,7 +108,7 @@ export default function CalculatorPage() {
   const intrinsic = type === 'CE' ? Math.max(0, spot - strike) : Math.max(0, strike - spot);
   const timeValue = Math.max(0, results.price - intrinsic);
   const moneyness = spot === strike ? 'ATM' : (type === 'CE' ? (spot > strike ? 'ITM' : 'OTM') : (spot < strike ? 'ITM' : 'OTM'));
-  const moneynessColor = moneyness === 'ITM' ? 'text-[#00C076] bg-[#00C076]/10 border-green-200' : moneyness === 'OTM' ? 'text-red-600 bg-red-500/10 border-red-200' : 'text-[#00C076] bg-[#00C076]/10 border-blue-200';
+  const moneynessColor = moneyness === 'ITM' ? 'text-[#00C076] bg-[#00C076]/10 border-green-200' : moneyness === 'OTM' ? 'text-red-600 bg-red-500/10 border-red-200' : 'text-[#00C076] bg-[#00C076]/10 border-[#00C076]/30';
 
   const scenarios = useMemo(() => {
     return [-5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5].map(pct => {
@@ -159,7 +159,7 @@ export default function CalculatorPage() {
         <div className="flex flex-wrap gap-2 mb-6">
           {PRESETS.map(p => (
             <button key={p.name} onClick={() => applyPreset(p)}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-[#00C076] text-white border-[#00C076] shadow-md shadow-black/20 shadow-blue-500/20' : 'bg-[#0D1117] text-gray-400 border-[#21262D] hover:border-blue-300'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-[#00C076] text-white border-[#00C076] shadow-md shadow-black/20 shadow-blue-500/20' : 'bg-[#0D1117] text-gray-400 border-[#21262D] hover:border-[#00C076]/30'}`}>
               {p.name}
             </button>
           ))}
@@ -239,7 +239,7 @@ export default function CalculatorPage() {
                   {[
                     { name: 'Delta', value: results.delta.toFixed(4), color: results.delta >= 0 ? 'text-[#00C076]' : 'text-red-600', bg: results.delta >= 0 ? 'bg-[#00C076]/10' : 'bg-red-500/10' },
                     { name: 'Gamma', value: results.gamma.toFixed(6), color: 'text-[#00C076]', bg: 'bg-[#00C076]/10' },
-                    { name: 'Theta', value: results.theta.toFixed(4), color: 'text-[#00C076]', bg: 'bg-orange-500/10' },
+                    { name: 'Theta', value: results.theta.toFixed(4), color: 'text-[#00C076]', bg: 'bg-amber-500/10' },
                     { name: 'Vega', value: results.vega.toFixed(4), color: 'text-purple-600', bg: 'bg-purple-500/10' },
                   ].map(g => (
                     <div key={g.name} className={`${g.bg} rounded-xl p-4`}>
@@ -259,7 +259,7 @@ export default function CalculatorPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div className="text-center bg-[#00C076]/10 rounded-xl p-4">
                   <div className="text-xs text-[#00C076] font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
-                  <div className="text-2xl font-black text-blue-700">{breakeven.toFixed(0)}</div>
+                  <div className="text-2xl font-black text-[#00C076]">{breakeven.toFixed(0)}</div>
                   <div className="text-xs text-[#00C076] mt-1">{type === 'CE' ? `+${(breakeven - spot).toFixed(0)} from spot` : `${(breakeven - spot).toFixed(0)} from spot`}</div>
                 </div>
                 <div className="text-center bg-red-500/10 rounded-xl p-4">

@@ -324,7 +324,7 @@ export default function IndicatorsPage() {
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Or Buy Individually</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {indicators.map((ind, i) => (
-              <div key={i} className={`bg-[#0D1117] border rounded-2xl p-6 ${ind.highlight ? 'border-blue-300 ring-2 ring-blue-100' : 'border-[#21262D]'}`}>
+              <div key={i} className={`bg-[#0D1117] border rounded-2xl p-6 ${ind.highlight ? 'border-[#00C076]/30 ring-2 ring-blue-100' : 'border-[#21262D]'}`}>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <span className={`text-xs bg-gradient-to-r ${ind.badgeColor} text-white px-2 py-1 rounded-full`}>{ind.badge}</span>
@@ -368,7 +368,7 @@ export default function IndicatorsPage() {
               { icon: Shield, title: 'One-Time Payment', desc: 'Pay once, use forever. No subscriptions, no recurring fees' },
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-[#00C076]/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <item.icon className="w-6 h-6 text-[#00C076]" />
                 </div>
                 <h3 className="font-semibold text-white mb-2">{item.title}</h3>

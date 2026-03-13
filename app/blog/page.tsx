@@ -120,9 +120,9 @@ export default function BlogPage() {
           <div className="grid md:grid-cols-2 gap-6">
             {posts.map((post, i) => (
               <Link key={i} href={`/blog/${post.slug}`} className="group block">
-                <article className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 hover:border-blue-300 hover:shadow-lg hover:shadow-black/30 shadow-black/20 transition-all h-full">
+                <article className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 hover:border-[#00C076]/30 hover:shadow-lg hover:shadow-black/30 shadow-black/20 transition-all h-full">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs bg-blue-100 text-[#00C076] px-2 py-1 rounded">{post.category}</span>
+                    <span className="text-xs bg-[#00C076]/10 text-[#00C076] px-2 py-1 rounded">{post.category}</span>
                     <span className="text-xs text-gray-400 flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
                   </div>
                   <h2 className="text-xl font-bold text-white group-hover:text-[#00C076] transition-colors mb-3">{post.title}</h2>

@@ -144,7 +144,7 @@ export default function SignupPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#00C076] hover:bg-[#00a865] disabled:bg-blue-300 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-[#00C076] hover:bg-[#00a865] disabled:bg-[#00C076]/20 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <><Loader2 className="w-5 h-5 animate-spin" /> Creating account...</>
