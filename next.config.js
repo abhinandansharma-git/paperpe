@@ -29,8 +29,8 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' data: https://fonts.gstatic.com",
               "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.razorpay.com https://lumberjack.razorpay.com https://accounts.google.com",
-              "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://accounts.google.com",
+              "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.razorpay.com https://lumberjack.razorpay.com https://accounts.google.com https://www.googleapis.com",
+              "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://accounts.google.com https://www.google.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self' https://accounts.google.com https://api.razorpay.com",
@@ -45,12 +45,15 @@ const nextConfig = {
           { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
         ],
       },
-      // Extra strict on API routes — no caching secrets
+      // Extra strict on API routes
       {
         source: '/api/(.*)',
         headers: [
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate' },
           { key: 'Pragma', value: 'no-cache' },
+          { key: 'Access-Control-Allow-Origin', value: 'https://paperpe.in' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type, Authorization' },
         ],
       },
     ];
