@@ -3,12 +3,11 @@ import { postTweet } from '../../../../agents/social/twitter';
 import { generateTweet } from '../../../../agents/social/content';
 
 const AGENT_SECRET = process.env.AGENT_SECRET;
-if (!AGENT_SECRET) throw new Error('AGENT_SECRET not configured');
 
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${AGENT_SECRET}`) {
+    if (!AGENT_SECRET || authHeader !== `Bearer ${AGENT_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
@@ -35,7 +34,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${AGENT_SECRET}`) {
+  if (!AGENT_SECRET || authHeader !== `Bearer ${AGENT_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   

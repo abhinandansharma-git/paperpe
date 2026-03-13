@@ -3,12 +3,11 @@ import { runGuruAgent, getAllCategories, getLessonCount } from '../../../../agen
 import { LESSONS, getLessonsByCategory, searchLessons } from '../../../../agents/guru/lessons';
 
 const AGENT_SECRET = process.env.AGENT_SECRET;
-if (!AGENT_SECRET) throw new Error('AGENT_SECRET not configured');
 
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${AGENT_SECRET}`) {
+    if (!AGENT_SECRET || authHeader !== `Bearer ${AGENT_SECRET}`) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     
