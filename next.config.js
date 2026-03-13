@@ -3,6 +3,14 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false, // Hide "X-Powered-By: Next.js"
 
+  async redirects() {
+    return [
+      { source: '/privacy', destination: '/legal/privacy', permanent: true },
+      { source: '/terms', destination: '/legal/terms', permanent: true },
+      { source: '/refund', destination: '/legal/refund', permanent: true },
+    ];
+  },
+
   async headers() {
     return [
       {
