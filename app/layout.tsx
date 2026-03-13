@@ -22,7 +22,19 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        {children}
+        <footer className="bg-gray-950 border-t border-gray-800 py-6 mt-auto">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-gray-500">
+            <p>© {new Date().getFullYear()} PaperPe. All rights reserved.</p>
+            <div className="flex gap-6">
+              <a href="/legal/terms" className="hover:text-gray-300 transition-colors">Terms of Service</a>
+              <a href="/legal/privacy" className="hover:text-gray-300 transition-colors">Privacy Policy</a>
+              <a href="/legal/refund" className="hover:text-gray-300 transition-colors">Refund Policy</a>
+            </div>
+          </div>
+        </footer>
+      </body>
     </html>
   );
 }
