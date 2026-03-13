@@ -129,6 +129,5 @@ export const config = {
     '/admin/:path*',
     '/api/:path*',
     '/dashboard/:path*',
-    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 };
