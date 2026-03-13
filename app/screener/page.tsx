@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { Search, Filter, ArrowUpRight, ArrowDownRight, Star, TrendingUp, TrendingDown, Activity, Zap } from 'lucide-react';
@@ -77,13 +77,13 @@ export default function ScreenerPage() {
               placeholder="Search stocks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#141820] border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-orange-500"
+              className="w-full bg-[#141820] border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]"
             />
           </div>
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500"
+            className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00C076]"
           >
             <option value="All">All Sectors</option>
             <option value="IT">IT</option>
@@ -120,7 +120,7 @@ export default function ScreenerPage() {
                 {filteredData.map((stock, i) => (
                   <tr key={i} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                     <td className="p-4">
-                      <button className="text-slate-500 hover:text-orange-500">
+                      <button className="text-slate-500 hover:text-[#00C076]">
                         <Star className="w-4 h-4" />
                       </button>
                     </td>
@@ -168,7 +168,7 @@ export default function ScreenerPage() {
                       </span>
                     </td>
                     <td className="p-4">
-                      <button className="px-3 py-1.5 rounded bg-orange-500/20 text-orange-400 hover:bg-orange-500/30 text-sm">
+                      <button className="px-3 py-1.5 rounded bg-[#00C076]/20 text-orange-400 hover:bg-[#00C076]/30 text-sm">
                         Trade
                       </button>
                     </td>

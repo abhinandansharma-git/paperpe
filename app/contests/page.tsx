@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -89,10 +89,10 @@ export default function ContestsPage() {
         <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><Calendar className="w-6 h-6 text-blue-400" />Upcoming Contests</h2>
         <div className="grid md:grid-cols-2 gap-4 mb-12">
           {upcomingContests.map((contest) => (
-            <div key={contest.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-blue-500/30 transition-all">
+            <div key={contest.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-[#00C076]/30 transition-all">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-1 rounded text-xs bg-blue-500/20 text-blue-400">{contest.type}</span>
+                  <span className="px-2 py-1 rounded text-xs bg-[#00C076]/20 text-blue-400">{contest.type}</span>
                   <span className="px-2 py-1 rounded text-xs bg-white/10 text-slate-400">{contest.difficulty}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white">{contest.name}</h3>

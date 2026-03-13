@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -52,7 +52,7 @@ export default function NewsPage() {
 
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white flex items-center gap-3"><Newspaper className="w-8 h-8 text-blue-500" />Market News</h1>
+          <h1 className="text-3xl font-bold text-white flex items-center gap-3"><Newspaper className="w-8 h-8 text-[#00C076]" />Market News</h1>
           <p className="text-slate-400 mt-1">Stay updated with market-moving events</p>
         </div>
 
@@ -76,13 +76,13 @@ export default function NewsPage() {
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold text-white flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-500" />Latest News</h2>
               <div className="flex gap-2">
-                <button className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded text-sm">All</button>
+                <button className="px-3 py-1 bg-[#00C076]/20 text-blue-400 rounded text-sm">All</button>
                 <button className="px-3 py-1 bg-white/5 text-slate-400 rounded text-sm">Stocks</button>
                 <button className="px-3 py-1 bg-white/5 text-slate-400 rounded text-sm">Global</button>
               </div>
             </div>
             {topNews.map((news) => (
-              <div key={news.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 hover:border-blue-500/30 transition-colors cursor-pointer">
+              <div key={news.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 hover:border-[#00C076]/30 transition-colors cursor-pointer">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${news.impact === 'positive' ? 'bg-emerald-400' : news.impact === 'negative' ? 'bg-red-400' : 'bg-slate-400'}`}></div>
@@ -130,10 +130,10 @@ export default function NewsPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl p-5 border border-blue-500/30">
+            <div className="bg-gradient-to-br from-[#00C076]/20 to-purple-500/20 rounded-xl p-5 border border-[#00C076]/30">
               <h3 className="font-semibold text-white mb-2">Morning Brief</h3>
               <p className="text-sm text-slate-300 mb-4">Get daily market summary at 8:30 AM</p>
-              <button className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium text-sm">Enable Notifications</button>
+              <button className="w-full py-2 bg-[#00C076] hover:bg-[#00a865] text-white rounded-lg font-medium text-sm">Enable Notifications</button>
             </div>
           </div>
         </div>

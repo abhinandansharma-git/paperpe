@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -68,9 +68,9 @@ export default function AnalyticsPage() {
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           {[{ icon: TrendingUp, label: 'Total P&L', value: '+₹56,000', color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-            { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+            { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-blue-400', bg: 'bg-[#00C076]/10' },
             { icon: Activity, label: 'Total Trades', value: '118', color: 'text-purple-400', bg: 'bg-purple-500/10' },
-            { icon: Zap, label: 'Best Streak', value: '12 days', color: 'text-orange-400', bg: 'bg-orange-500/10' }].map((stat, i) => (
+            { icon: Zap, label: 'Best Streak', value: '12 days', color: 'text-orange-400', bg: 'bg-[#00C076]/10' }].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
               <div className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center mb-3`}><stat.icon className={`w-5 h-5 ${stat.color}`} /></div>
               <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
@@ -104,7 +104,7 @@ export default function AnalyticsPage() {
                     <span className={item.pnl >= 0 ? 'text-emerald-400' : 'text-red-400'}>₹{item.pnl.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-blue-500 rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
+                    <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden"><div className="h-full bg-[#00C076] rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
                     <span className="text-xs text-slate-500">{item.winRate}%</span>
                   </div>
                 </div>
@@ -144,7 +144,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-xl p-6 border border-blue-500/30">
+        <div className="bg-gradient-to-r from-[#00C076]/20 to-purple-500/20 rounded-xl p-6 border border-[#00C076]/30">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-bold text-white mb-1">Export Your Trade Journal</h3>

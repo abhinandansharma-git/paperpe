@@ -45,15 +45,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-[#161B22] flex flex-col">
       {/* Header */}
-      <header className="border-b border-gray-100 bg-white">
+      <header className="border-b border-[#21262D] bg-[#0D1117]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white">P</div>
-            <span className="font-semibold text-xl text-gray-900">PaperPe</span>
+            <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white">P</div>
+            <span className="font-semibold text-xl text-white">PaperPe</span>
           </Link>
-          <Link href="/" className="text-gray-500 hover:text-blue-500 flex items-center gap-1 text-sm">
+          <Link href="/" className="text-gray-500 hover:text-[#00C076] flex items-center gap-1 text-sm">
             <ArrowLeft className="w-4 h-4" /> Back
           </Link>
         </div>
@@ -62,8 +62,8 @@ export default function LoginPage() {
       {/* Login Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h1>
+          <div className="bg-[#0D1117] rounded-2xl shadow-sm border border-[#21262D] p-8">
+            <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
             <p className="text-gray-500 mb-8">Sign in to access your purchases</p>
 
             {error && (
@@ -76,7 +76,7 @@ export default function LoginPage() {
             <button
               onClick={handleGoogleLogin}
               disabled={googleLoading}
-              className="w-full flex items-center justify-center gap-3 border border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-700 py-3 rounded-xl font-medium transition-all mb-6"
+              className="w-full flex items-center justify-center gap-3 border border-[#21262D] hover:border-[#21262D] hover:bg-[#161B22] text-gray-300 py-3 rounded-xl font-medium transition-all mb-6"
             >
               {googleLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -99,7 +99,7 @@ export default function LoginPage() {
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
                 <div className="relative">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
@@ -108,13 +108,13 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full pl-12 pr-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
                 <div className="relative">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
@@ -123,17 +123,17 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
-                    className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+                    className="w-full pl-12 pr-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded border-gray-300" />
-                  <span className="text-gray-600">Remember me</span>
+                  <input type="checkbox" className="rounded border-[#21262D]" />
+                  <span className="text-gray-400">Remember me</span>
                 </label>
-                <Link href="/forgot-password" className="text-blue-500 hover:text-blue-600">
+                <Link href="/forgot-password" className="text-[#00C076] hover:text-[#00C076]">
                   Forgot password?
                 </Link>
               </div>
@@ -141,7 +141,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-[#00C076] hover:bg-[#00a865] disabled:bg-blue-300 text-white py-3 rounded-xl font-semibold transition-colors flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <><Loader2 className="w-5 h-5 animate-spin" /> Signing in...</>
@@ -153,7 +153,7 @@ export default function LoginPage() {
 
             <p className="text-center text-gray-500 text-sm mt-6">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-blue-500 hover:text-blue-600 font-medium">
+              <Link href="/signup" className="text-[#00C076] hover:text-[#00C076] font-medium">
                 Sign up
               </Link>
             </p>

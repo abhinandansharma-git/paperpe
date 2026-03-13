@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import { ArrowUpRight, ArrowDownRight, ChevronDown, Filter, RefreshCw, TrendingUp, TrendingDown } from 'lucide-react';
@@ -48,7 +48,7 @@ export default function OptionsPage() {
             <select
               value={selectedSymbol}
               onChange={(e) => setSelectedSymbol(e.target.value)}
-              className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-orange-500"
+              className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00C076]"
             >
               <option value="NIFTY">NIFTY</option>
               <option value="BANKNIFTY">BANKNIFTY</option>
@@ -71,7 +71,7 @@ export default function OptionsPage() {
                 onClick={() => setSelectedExpiry(exp)}
                 className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                   selectedExpiry === exp
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-[#00C076] text-white'
                     : 'bg-[#141820] text-slate-400 hover:text-white'
                 }`}
               >
@@ -116,7 +116,7 @@ export default function OptionsPage() {
                     <tr
                       key={row.strike}
                       className={`border-b border-white/5 hover:bg-white/5 transition-colors ${
-                        isATM ? 'bg-orange-500/10' : ''
+                        isATM ? 'bg-[#00C076]/10' : ''
                       }`}
                     >
                       {/* CALLS */}
@@ -144,7 +144,7 @@ export default function OptionsPage() {
                       </td>
 
                       {/* STRIKE */}
-                      <td className={`p-3 text-center font-bold ${isATM ? 'text-orange-500 text-lg' : 'text-white'} bg-slate-800/50`}>
+                      <td className={`p-3 text-center font-bold ${isATM ? 'text-[#00C076] text-lg' : 'text-white'} bg-slate-800/50`}>
                         {row.strike}
                         {isATM && <span className="text-xs text-orange-400 block">ATM</span>}
                       </td>

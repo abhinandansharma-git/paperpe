@@ -54,7 +54,7 @@ function Tooltip({ text }: { text: string }) {
   const [show, setShow] = useState(false);
   return (
     <div className="relative inline-block">
-      <button onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-gray-400 hover:text-blue-500 transition-colors ml-1">
+      <button onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-gray-400 hover:text-[#00C076] transition-colors ml-1">
         <Info className="w-3.5 h-3.5" />
       </button>
       {show && (
@@ -70,7 +70,7 @@ function Tooltip({ text }: { text: string }) {
 function InputField({ label, value, onChange, step = 1, tooltip }: { label: string; value: number; onChange: (v: number) => void; step?: number; tooltip?: string }) {
   return (
     <div>
-      <label className="flex items-center text-sm font-medium text-gray-700 mb-1.5">
+      <label className="flex items-center text-sm font-medium text-gray-300 mb-1.5">
         {label} {tooltip && <Tooltip text={tooltip} />}
       </label>
       <input
@@ -78,7 +78,7 @@ function InputField({ label, value, onChange, step = 1, tooltip }: { label: stri
         value={value}
         step={step}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all text-sm"
+        className="w-full px-4 py-2.5 border border-[#21262D] rounded-xl text-white focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/10 transition-all text-sm"
       />
     </div>
   );
@@ -108,7 +108,7 @@ export default function CalculatorPage() {
   const intrinsic = type === 'CE' ? Math.max(0, spot - strike) : Math.max(0, strike - spot);
   const timeValue = Math.max(0, results.price - intrinsic);
   const moneyness = spot === strike ? 'ATM' : (type === 'CE' ? (spot > strike ? 'ITM' : 'OTM') : (spot < strike ? 'ITM' : 'OTM'));
-  const moneynessColor = moneyness === 'ITM' ? 'text-green-600 bg-green-50 border-green-200' : moneyness === 'OTM' ? 'text-red-600 bg-red-50 border-red-200' : 'text-blue-600 bg-blue-50 border-blue-200';
+  const moneynessColor = moneyness === 'ITM' ? 'text-green-600 bg-green-50 border-green-200' : moneyness === 'OTM' ? 'text-red-600 bg-red-50 border-red-200' : 'text-[#00C076] bg-[#00C076]/10 border-blue-200';
 
   const scenarios = useMemo(() => {
     return [-5, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 5].map(pct => {
@@ -122,26 +122,26 @@ export default function CalculatorPage() {
   const maxPnl = Math.max(...scenarios.map(s => Math.abs(s.pnl)));
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#161B22]">
       {/* Nav */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
+      <header className="bg-[#0D1117] border-b border-[#21262D] sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white shadow-md shadow-blue-500/20">P</div>
-              <span className="font-semibold text-lg text-gray-900 hidden sm:block">PaperPe</span>
+              <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white shadow-md shadow-blue-500/20">P</div>
+              <span className="font-semibold text-lg text-white hidden sm:block">PaperPe</span>
             </Link>
             <span className="text-gray-300">|</span>
-            <div className="flex items-center gap-1.5 text-gray-600 text-sm font-medium">
-              <Calculator className="w-4 h-4 text-blue-500" />
+            <div className="flex items-center gap-1.5 text-gray-400 text-sm font-medium">
+              <Calculator className="w-4 h-4 text-[#00C076]" />
               Option Calculator
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Link href="/tools" className="text-gray-500 hover:text-gray-700 text-sm hidden sm:flex items-center gap-1">
+            <Link href="/tools" className="text-gray-500 hover:text-gray-300 text-sm hidden sm:flex items-center gap-1">
               <ArrowLeft className="w-4 h-4" /> All Tools
             </Link>
-            <Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <Link href="/" className="bg-[#00C076] hover:bg-[#00a865] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
               Start Trading Free
             </Link>
           </div>
@@ -151,7 +151,7 @@ export default function CalculatorPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Page header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-1">Free Option Calculator</h1>
+          <h1 className="text-2xl font-bold text-white mb-1">Free Option Calculator</h1>
           <p className="text-gray-500 text-sm">Black-Scholes model · NIFTY, BANKNIFTY & MCX options · Greeks + P&L scenarios</p>
         </div>
 
@@ -159,7 +159,7 @@ export default function CalculatorPage() {
         <div className="flex flex-wrap gap-2 mb-6">
           {PRESETS.map(p => (
             <button key={p.name} onClick={() => applyPreset(p)}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-500/20' : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-[#00C076] text-white border-[#00C076] shadow-md shadow-blue-500/20' : 'bg-[#0D1117] text-gray-400 border-[#21262D] hover:border-blue-300'}`}>
               {p.name}
             </button>
           ))}
@@ -168,13 +168,13 @@ export default function CalculatorPage() {
         <div className="grid xl:grid-cols-12 gap-5">
           {/* LEFT: Inputs */}
           <div className="xl:col-span-3">
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm sticky top-24">
+            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm sticky top-24">
               {/* CE/PE toggle */}
-              <div className="flex rounded-xl overflow-hidden border border-gray-200 mb-5">
-                <button onClick={() => setType('CE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'CE' ? 'bg-green-500 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+              <div className="flex rounded-xl overflow-hidden border border-[#21262D] mb-5">
+                <button onClick={() => setType('CE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'CE' ? 'bg-green-500 text-white' : 'bg-[#0D1117] text-gray-500 hover:bg-[#161B22]'}`}>
                   CALL (CE)
                 </button>
-                <button onClick={() => setType('PE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'PE' ? 'bg-red-500 text-white' : 'bg-white text-gray-500 hover:bg-gray-50'}`}>
+                <button onClick={() => setType('PE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'PE' ? 'bg-red-500 text-white' : 'bg-[#0D1117] text-gray-500 hover:bg-[#161B22]'}`}>
                   PUT (PE)
                 </button>
               </div>
@@ -186,7 +186,7 @@ export default function CalculatorPage() {
                 <InputField label="IV (%)" value={iv} onChange={setIv} step={0.5} tooltip="Implied Volatility. Check NSE India VIX or option chain for current IV." />
                 <InputField label="Risk-Free Rate (%)" value={rfr} onChange={setRfr} step={0.1} tooltip="RBI repo rate (~6.5%). Rarely needs to change." />
 
-                <div className="border-t border-gray-100 pt-4">
+                <div className="border-t border-[#21262D] pt-4">
                   <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">P&L Settings</p>
                   <div className="space-y-3">
                     <InputField label="Premium Paid (₹)" value={premium} onChange={setPremium} tooltip="The price you paid / received for the option" />
@@ -203,43 +203,43 @@ export default function CalculatorPage() {
           {/* MIDDLE: Results */}
           <div className="xl:col-span-5 space-y-4">
             {/* Premium card */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
+            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-gray-900">Theoretical Premium</h2>
+                <h2 className="font-bold text-white">Theoretical Premium</h2>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${moneynessColor}`}>{moneyness}</span>
               </div>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-black text-gray-900">₹{results.price.toFixed(2)}</span>
+                <span className="text-5xl font-black text-white">₹{results.price.toFixed(2)}</span>
                 <span className="text-gray-400 text-sm">/ unit</span>
               </div>
               <div className="grid grid-cols-3 gap-3 text-center">
-                <div className="bg-gray-50 rounded-xl p-3">
+                <div className="bg-[#161B22] rounded-xl p-3">
                   <div className="text-xs text-gray-500 mb-1">Intrinsic</div>
-                  <div className="font-bold text-gray-900">₹{intrinsic.toFixed(2)}</div>
+                  <div className="font-bold text-white">₹{intrinsic.toFixed(2)}</div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-3">
+                <div className="bg-[#161B22] rounded-xl p-3">
                   <div className="text-xs text-gray-500 mb-1">Time Value</div>
-                  <div className="font-bold text-blue-600">₹{timeValue.toFixed(2)}</div>
+                  <div className="font-bold text-[#00C076]">₹{timeValue.toFixed(2)}</div>
                 </div>
-                <div className="bg-gray-50 rounded-xl p-3">
+                <div className="bg-[#161B22] rounded-xl p-3">
                   <div className="text-xs text-gray-500 mb-1">Total Cost</div>
-                  <div className="font-bold text-gray-900">₹{(results.price * lotSize * qty).toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
+                  <div className="font-bold text-white">₹{(results.price * lotSize * qty).toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
                 </div>
               </div>
             </div>
 
             {/* Greeks */}
-            <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl shadow-sm overflow-hidden">
               <button onClick={() => setShowGreeks(!showGreeks)} className="w-full flex items-center justify-between p-5 text-left">
-                <h2 className="font-bold text-gray-900">Option Greeks</h2>
+                <h2 className="font-bold text-white">Option Greeks</h2>
                 <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showGreeks ? 'rotate-180' : ''}`} />
               </button>
               {showGreeks && (
                 <div className="px-5 pb-5 grid grid-cols-2 gap-3">
                   {[
                     { name: 'Delta', value: results.delta.toFixed(4), color: results.delta >= 0 ? 'text-green-600' : 'text-red-600', bg: results.delta >= 0 ? 'bg-green-50' : 'bg-red-50' },
-                    { name: 'Gamma', value: results.gamma.toFixed(6), color: 'text-blue-600', bg: 'bg-blue-50' },
-                    { name: 'Theta', value: results.theta.toFixed(4), color: 'text-orange-600', bg: 'bg-orange-50' },
+                    { name: 'Gamma', value: results.gamma.toFixed(6), color: 'text-[#00C076]', bg: 'bg-[#00C076]/10' },
+                    { name: 'Theta', value: results.theta.toFixed(4), color: 'text-[#00C076]', bg: 'bg-orange-50' },
                     { name: 'Vega', value: results.vega.toFixed(4), color: 'text-purple-600', bg: 'bg-purple-50' },
                   ].map(g => (
                     <div key={g.name} className={`${g.bg} rounded-xl p-4`}>
@@ -254,13 +254,13 @@ export default function CalculatorPage() {
             </div>
 
             {/* Breakeven */}
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
-              <h2 className="font-bold text-gray-900 mb-4">Breakeven & Risk</h2>
+            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm">
+              <h2 className="font-bold text-white mb-4">Breakeven & Risk</h2>
               <div className="grid grid-cols-2 gap-4 mb-4">
-                <div className="text-center bg-blue-50 rounded-xl p-4">
-                  <div className="text-xs text-blue-600 font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
+                <div className="text-center bg-[#00C076]/10 rounded-xl p-4">
+                  <div className="text-xs text-[#00C076] font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
                   <div className="text-2xl font-black text-blue-700">{breakeven.toFixed(0)}</div>
-                  <div className="text-xs text-blue-500 mt-1">{type === 'CE' ? `+${(breakeven - spot).toFixed(0)} from spot` : `${(breakeven - spot).toFixed(0)} from spot`}</div>
+                  <div className="text-xs text-[#00C076] mt-1">{type === 'CE' ? `+${(breakeven - spot).toFixed(0)} from spot` : `${(breakeven - spot).toFixed(0)} from spot`}</div>
                 </div>
                 <div className="text-center bg-red-50 rounded-xl p-4">
                   <div className="text-xs text-red-600 font-semibold mb-1 uppercase tracking-wide">Max Loss</div>
@@ -268,7 +268,7 @@ export default function CalculatorPage() {
                   <div className="text-xs text-red-500 mt-1">{qty} lot{qty > 1 ? 's' : ''} × {lotSize}</div>
                 </div>
               </div>
-              <p className="text-xs text-gray-500 bg-gray-50 rounded-lg p-3 leading-relaxed">
+              <p className="text-xs text-gray-500 bg-[#161B22] rounded-lg p-3 leading-relaxed">
                 {type === 'CE'
                   ? `${activePreset} must close above ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot > breakeven ? '✅ profitable' : '❌ not profitable'}.`
                   : `${activePreset} must close below ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot < breakeven ? '✅ profitable' : '❌ not profitable'}.`}
@@ -278,9 +278,9 @@ export default function CalculatorPage() {
 
           {/* RIGHT: P&L scenarios */}
           <div className="xl:col-span-4">
-            <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm h-full">
+            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm h-full">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-gray-900">P&L Scenarios</h2>
+                <h2 className="font-bold text-white">P&L Scenarios</h2>
                 <span className="text-xs text-gray-400">Tomorrow, same IV</span>
               </div>
               <div className="space-y-1.5">
@@ -292,7 +292,7 @@ export default function CalculatorPage() {
                       <div className={`flex items-center justify-between px-3 py-2 ${s.pnl >= 0 ? 'bg-green-50' : 'bg-red-50'}`}>
                         <div className="flex items-center gap-2 min-w-0">
                           {s.pct > 0 ? <TrendingUp className="w-3.5 h-3.5 text-green-500 shrink-0" /> : s.pct < 0 ? <TrendingDown className="w-3.5 h-3.5 text-red-500 shrink-0" /> : <div className="w-3.5 h-3.5 shrink-0" />}
-                          <span className={`text-sm font-bold ${s.pct > 0 ? 'text-green-700' : s.pct < 0 ? 'text-red-700' : 'text-gray-700'}`}>
+                          <span className={`text-sm font-bold ${s.pct > 0 ? 'text-green-700' : s.pct < 0 ? 'text-red-700' : 'text-gray-300'}`}>
                             {s.pct === 0 ? 'Flat' : `${s.pct > 0 ? '+' : ''}${s.pct}%`}
                           </span>
                           <span className="text-xs text-gray-400 hidden sm:block">{s.newSpot.toLocaleString('en-IN')}</span>
@@ -316,33 +316,33 @@ export default function CalculatorPage() {
         </div>
 
         {/* How to use */}
-        <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">How to Use This Calculator</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-gray-600">
+        <div className="mt-8 bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-white mb-4">How to Use This Calculator</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-gray-400">
             <div>
-              <div className="font-semibold text-gray-800 mb-2">1. Select Instrument</div>
+              <div className="font-semibold text-gray-100 mb-2">1. Select Instrument</div>
               <p>Click NIFTY, BANKNIFTY, etc. to load default lot sizes. Adjust spot & strike to your target levels.</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-800 mb-2">2. Enter IV</div>
+              <div className="font-semibold text-gray-100 mb-2">2. Enter IV</div>
               <p>Get current IV from NSE option chain or check India VIX. Higher IV = more expensive options.</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-800 mb-2">3. Check Greeks</div>
+              <div className="font-semibold text-gray-100 mb-2">3. Check Greeks</div>
               <p>Delta tells position sensitivity. Theta shows daily decay cost. Don't ignore Theta on long options!</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-800 mb-2">4. Analyze P&L</div>
+              <div className="font-semibold text-gray-100 mb-2">4. Analyze P&L</div>
               <p>Enter your actual premium paid to see real P&L at different price levels tomorrow.</p>
             </div>
           </div>
         </div>
 
         {/* CTA */}
-        <div className="mt-6 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white text-center">
+        <div className="mt-6 bg-gradient-to-r from-[#00C076] to-[#00a865] rounded-2xl p-6 text-white text-center">
           <h3 className="text-lg font-bold mb-2">Practice options trading without risk</h3>
-          <p className="text-blue-100 text-sm mb-4">Get ₹10 Lakh virtual capital. Trade NIFTY & BANKNIFTY options risk-free.</p>
-          <Link href="/" className="inline-block bg-white text-blue-600 font-bold px-8 py-3 rounded-xl hover:bg-blue-50 transition-colors shadow-lg">
+          <p className="text-[#00C076]/40 text-sm mb-4">Get ₹10 Lakh virtual capital. Trade NIFTY & BANKNIFTY options risk-free.</p>
+          <Link href="/" className="inline-block bg-[#0D1117] text-[#00C076] font-bold px-8 py-3 rounded-xl hover:bg-[#161B22] transition-colors shadow-lg">
             Join Waitlist — It's Free
           </Link>
         </div>

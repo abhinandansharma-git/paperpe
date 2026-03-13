@@ -4,10 +4,10 @@ export default function About() {
   return (
     <main className="min-h-screen">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 border-b border-gray-100">
+      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 border-b border-[#21262D]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-amber-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-gradient-to-br from-emerald-500 to-[#00C076] rounded-lg flex items-center justify-center">
               <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
               </svg>
@@ -28,19 +28,19 @@ export default function About() {
           <h1 className="text-4xl font-bold mb-8">About PaperPe</h1>
           
           <div className="prose prose-lg">
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-400 mb-8">
               We're building India's best paper trading platform because we believe everyone deserves to learn trading without risking their savings.
             </p>
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Why we built this</h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-400 mb-6">
               Too many first-time traders lose money in their first month. Not because they're bad at trading, 
               but because they never had a safe place to practice. Real market data, real strategies, zero risk — 
               that's what PaperPe offers.
             </p>
 
             <h2 className="text-2xl font-bold mt-12 mb-4">What makes us different</h2>
-            <ul className="space-y-4 text-gray-600">
+            <ul className="space-y-4 text-gray-400">
               <li className="flex gap-3">
                 <span className="text-emerald-500 font-bold">✓</span>
                 <span><strong>Real-time MCX & F&O data</strong> — Same prices your broker sees</span>
@@ -60,7 +60,7 @@ export default function About() {
             </ul>
 
             <h2 className="text-2xl font-bold mt-12 mb-4">Made in India 🇮🇳</h2>
-            <p className="text-gray-600">
+            <p className="text-gray-400">
               PaperPe is proudly built in India, for Indian traders. We understand the nuances of MCX 
               trading hours, F&O expiries, and what Indian retail traders actually need.
             </p>

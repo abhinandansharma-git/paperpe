@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { ArrowLeft, Clock, User, ChevronRight, BookOpen } from 'lucide-react';
@@ -74,15 +74,15 @@ const categories = ['All', 'Options', 'Commodities', 'Risk Management', 'Market 
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0D1117]">
       {/* Header */}
-      <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
+      <header className="border-b border-[#21262D] bg-[#0D1117] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white">P</div>
+            <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white">P</div>
             <span className="font-semibold text-xl">PaperPe</span>
           </Link>
-          <Link href="/" className="text-gray-500 hover:text-blue-500 flex items-center gap-1 text-sm">
+          <Link href="/" className="text-gray-500 hover:text-[#00C076] flex items-center gap-1 text-sm">
             <ArrowLeft className="w-4 h-4" /> Back
           </Link>
         </div>
@@ -91,10 +91,10 @@ export default function BlogPage() {
       {/* Hero */}
       <section className="py-16 px-6 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-blue-600 text-sm font-medium mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6">
             <BookOpen className="w-4 h-4" /> Free Learning Resources
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Trading Guides & Tutorials</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">Trading Guides & Tutorials</h1>
           <p className="text-xl text-gray-500 max-w-2xl mx-auto">
             Learn trading from scratch. Free guides on options, commodities, risk management, and strategies - written for Indian traders.
           </p>
@@ -102,11 +102,11 @@ export default function BlogPage() {
       </section>
 
       {/* Categories */}
-      <section className="py-6 px-6 border-b border-gray-100">
+      <section className="py-6 px-6 border-b border-[#21262D]">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
             {categories.map((cat, i) => (
-              <button key={i} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0 ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}>
+              <button key={i} className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${i === 0 ? 'bg-[#00C076] text-white' : 'bg-[#161B22] text-gray-400 hover:bg-gray-200'}`}>
                 {cat}
               </button>
             ))}
@@ -120,16 +120,16 @@ export default function BlogPage() {
           <div className="grid md:grid-cols-2 gap-6">
             {posts.map((post, i) => (
               <Link key={i} href={`/blog/${post.slug}`} className="group block">
-                <article className="bg-white border border-gray-200 rounded-2xl p-6 hover:border-blue-300 hover:shadow-lg transition-all h-full">
+                <article className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 hover:border-blue-300 hover:shadow-lg transition-all h-full">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">{post.category}</span>
+                    <span className="text-xs bg-blue-100 text-[#00C076] px-2 py-1 rounded">{post.category}</span>
                     <span className="text-xs text-gray-400 flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-3">{post.title}</h2>
+                  <h2 className="text-xl font-bold text-white group-hover:text-[#00C076] transition-colors mb-3">{post.title}</h2>
                   <p className="text-gray-500 text-sm leading-relaxed mb-4">{post.excerpt}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-gray-400">{post.date}</span>
-                    <span className="text-blue-500 text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[#00C076] text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       Read more <ChevronRight className="w-4 h-4" />
                     </span>
                   </div>
@@ -141,15 +141,15 @@ export default function BlogPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-16 px-6 bg-[#161B22]">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to practice what you learned?</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Ready to practice what you learned?</h2>
           <p className="text-gray-500 mb-6">Apply your knowledge with Rs 10 Lakh virtual capital. Zero risk.</p>
           <div className="flex items-center justify-center gap-4">
-            <Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+            <Link href="/" className="bg-[#00C076] hover:bg-[#00a865] text-white px-6 py-3 rounded-lg font-medium transition-colors">
               Join Waitlist
             </Link>
-            <Link href="/tools" className="text-gray-600 hover:text-blue-600 font-medium transition-colors">
+            <Link href="/tools" className="text-gray-400 hover:text-[#00C076] font-medium transition-colors">
               Try Free Tools
             </Link>
           </div>

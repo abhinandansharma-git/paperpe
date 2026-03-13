@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -105,8 +105,8 @@ const brokers = [
 
 const colorMap: Record<string, string> = {
   emerald: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  orange: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  blue: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  orange: 'bg-[#00C076]/20 text-orange-400 border-[#00C076]/30',
+  blue: 'bg-[#00C076]/20 text-blue-400 border-[#00C076]/30',
   purple: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   slate: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
   red: 'bg-red-500/20 text-red-400 border-red-500/30',
@@ -120,7 +120,7 @@ export default function BrokersPage() {
       {/* Header */}
       <header className="border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-orange-500">PaperPe</Link>
+          <Link href="/" className="text-2xl font-bold text-[#00C076]">PaperPe</Link>
           <Link href="/dashboard" className="px-4 py-2 bg-[#2962ff] hover:bg-[#1e53e4] text-sm font-medium rounded">Back to Dashboard</Link>
         </div>
       </header>
@@ -236,10 +236,10 @@ export default function BrokersPage() {
       {/* CTA */}
       <section className="py-16 px-6 border-t border-white/10 bg-gradient-to-b from-[#1e222d] to-[#131722]">
         <div className="max-w-3xl mx-auto text-center">
-          <Gift className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+          <Gift className="w-12 h-12 text-[#00C076] mx-auto mb-4" />
           <h2 className="text-3xl font-bold mb-4">Not Ready Yet?</h2>
           <p className="text-slate-400 mb-8">Keep practicing on PaperPe until you are confident. There is no rush!</p>
-          <Link href="/dashboard" className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 rounded-lg font-semibold">Continue Practicing <ArrowRight className="w-5 h-5" /></Link>
+          <Link href="/dashboard" className="inline-flex items-center gap-2 px-6 py-3 bg-[#00C076] hover:bg-[#00a865] rounded-lg font-semibold">Continue Practicing <ArrowRight className="w-5 h-5" /></Link>
         </div>
       </section>
 

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const indicators = [
 
 const getMoodLabel = (score: number) => {
   if (score <= 20) return { label: 'Extreme Fear', color: 'text-red-500', bg: 'bg-red-500' };
-  if (score <= 40) return { label: 'Fear', color: 'text-orange-500', bg: 'bg-orange-500' };
+  if (score <= 40) return { label: 'Fear', color: 'text-[#00C076]', bg: 'bg-[#00C076]' };
   if (score <= 60) return { label: 'Neutral', color: 'text-yellow-500', bg: 'bg-yellow-500' };
   if (score <= 80) return { label: 'Greed', color: 'text-lime-500', bg: 'bg-lime-500' };
   return { label: 'Extreme Greed', color: 'text-emerald-500', bg: 'bg-emerald-500' };
@@ -52,7 +52,7 @@ export default function MoodPage() {
 
       <main className="max-w-5xl mx-auto px-6 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-3"><Gauge className="w-8 h-8 text-orange-500" />Market Mood Meter</h1>
+          <h1 className="text-3xl font-bold text-white flex items-center justify-center gap-3"><Gauge className="w-8 h-8 text-[#00C076]" />Market Mood Meter</h1>
           <p className="text-slate-400 mt-1">Real-time sentiment analysis of Indian markets</p>
         </div>
 
@@ -90,7 +90,7 @@ export default function MoodPage() {
           <div className="grid grid-cols-5 gap-4 mt-8 text-center text-xs">
             {['Extreme Fear', 'Fear', 'Neutral', 'Greed', 'Extreme Greed'].map((label, i) => (
               <div key={i}>
-                <div className={`h-2 rounded-full mb-1 ${['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-lime-500', 'bg-emerald-500'][i]}`}></div>
+                <div className={`h-2 rounded-full mb-1 ${['bg-red-500', 'bg-[#00C076]', 'bg-yellow-500', 'bg-lime-500', 'bg-emerald-500'][i]}`}></div>
                 <span className="text-slate-500">{label}</span>
               </div>
             ))}

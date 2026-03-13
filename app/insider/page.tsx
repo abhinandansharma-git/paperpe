@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -51,7 +51,7 @@ export default function InsiderPage() {
               <Link href="/insider" className="text-white font-medium flex items-center gap-1"><Crown className="w-4 h-4 text-yellow-500" />Insider</Link>
             </nav>
           </div>
-          {!isPro && <Link href="/#pricing" className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black rounded-lg font-semibold text-sm flex items-center gap-1"><Sparkles className="w-4 h-4" />Upgrade to Pro</Link>}
+          {!isPro && <Link href="/#pricing" className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-[#00C076] text-black rounded-lg font-semibold text-sm flex items-center gap-1"><Sparkles className="w-4 h-4" />Upgrade to Pro</Link>}
         </div>
       </header>
 
@@ -75,7 +75,7 @@ export default function InsiderPage() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Unlock Insider Data</h3>
               <p className="text-slate-400 mb-6">Get access to bulk deals, insider trades, FII/DII flows and more with PaperPe Pro.</p>
-              <Link href="/#pricing" className="inline-block w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black rounded-xl font-bold text-lg hover:opacity-90 transition-opacity">Upgrade for ₹499</Link>
+              <Link href="/#pricing" className="inline-block w-full py-4 bg-gradient-to-r from-yellow-500 to-[#00C076] text-black rounded-xl font-bold text-lg hover:opacity-90 transition-opacity">Upgrade for ₹499</Link>
               <p className="text-sm text-slate-500 mt-3">One-time payment. Lifetime access.</p>
             </div>
           </div>

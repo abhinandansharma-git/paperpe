@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
 import { Calendar, Sun, Cloud, CloudRain, Zap, AlertTriangle, CheckCircle, XCircle, Clock, TrendingUp, BarChart2, Shield } from 'lucide-react';
@@ -36,7 +36,7 @@ const getVerdictStyle = (verdict: string) => {
     case 'Great': return { bg: 'bg-emerald-500', text: 'text-emerald-500', icon: '☀️' };
     case 'Good': return { bg: 'bg-lime-500', text: 'text-lime-500', icon: '🌤️' };
     case 'Okay': return { bg: 'bg-yellow-500', text: 'text-yellow-500', icon: '⛅' };
-    case 'Risky': return { bg: 'bg-orange-500', text: 'text-orange-500', icon: '🌧️' };
+    case 'Risky': return { bg: 'bg-[#00C076]', text: 'text-[#00C076]', icon: '🌧️' };
     case 'Avoid': return { bg: 'bg-red-500', text: 'text-red-500', icon: '⛈️' };
     default: return { bg: 'bg-slate-500', text: 'text-slate-500', icon: '❓' };
   }

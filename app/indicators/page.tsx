@@ -19,7 +19,7 @@ const indicators = [
     price: 2999,
     originalPrice: 5999,
     badge: 'FLAGSHIP',
-    badgeColor: 'from-blue-500 to-purple-500',
+    badgeColor: 'from-[#00C076] to-purple-500',
     description: 'Our most powerful indicator combining 7 professional modules into one. Get clear buy/sell signals, trend detection, smart money tracking, and regime identification - all calibrated for Indian markets.',
     features: [
       'Score-based signals (0-100) for clear decisions',
@@ -57,7 +57,7 @@ const indicators = [
     price: 499,
     originalPrice: 999,
     badge: 'STARTER',
-    badgeColor: 'from-orange-500 to-amber-500',
+    badgeColor: 'from-[#00C076] to-[#00C076]',
     description: 'Visual fear and greed indicator for timing entries. Buy when others are fearful, sell when greedy.',
     features: [
       'Real-time sentiment scoring',
@@ -241,15 +241,15 @@ export default function IndicatorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0D1117]">
       {/* Header */}
-      <header className="border-b border-gray-100 bg-white sticky top-0 z-50">
+      <header className="border-b border-[#21262D] bg-[#0D1117] sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center font-bold text-white">P</div>
+            <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white">P</div>
             <span className="font-semibold text-xl">PaperPe</span>
           </Link>
-          <Link href="/" className="text-gray-500 hover:text-blue-500 flex items-center gap-1 text-sm">
+          <Link href="/" className="text-gray-500 hover:text-[#00C076] flex items-center gap-1 text-sm">
             <ArrowLeft className="w-4 h-4" /> Back
           </Link>
         </div>
@@ -258,7 +258,7 @@ export default function IndicatorsPage() {
       {/* Hero */}
       <section className="py-16 px-6 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">TradingView Indicators</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">TradingView Indicators</h1>
           <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-8">
             Professional-grade indicators built specifically for Indian markets. Clear signals. No confusion. One-time payment, lifetime access.
           </p>
@@ -273,12 +273,12 @@ export default function IndicatorsPage() {
       {/* Bundle Offer */}
       <section className="py-8 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-r from-[#00C076] to-[#007a4f] rounded-2xl p-8 text-white">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               <div>
-                <span className="text-blue-200 text-sm font-medium">BEST VALUE</span>
+                <span className="text-[#00C076]/60 text-sm font-medium">BEST VALUE</span>
                 <h2 className="text-2xl font-bold mt-1 mb-2">Complete Bundle - All 4 Indicators</h2>
-                <p className="text-blue-100">Get everything for one low price. Save ₹{bundle.savings.toLocaleString()}</p>
+                <p className="text-[#00C076]/40">Get everything for one low price. Save ₹{bundle.savings.toLocaleString()}</p>
                 <div className="flex items-center gap-2 mt-3 flex-wrap">
                   {bundle.includes.map((name, i) => (
                     <span key={i} className="text-xs bg-white/20 px-2 py-1 rounded">{name}</span>
@@ -290,7 +290,7 @@ export default function IndicatorsPage() {
                 <div className="text-4xl font-bold">₹{bundle.price.toLocaleString()}</div>
                 <button 
                   onClick={() => handleBuyClick({ id: bundle.id, name: bundle.name, price: bundle.price })}
-                  className="mt-4 bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors"
+                  className="mt-4 bg-[#0D1117] text-[#00C076] px-8 py-3 rounded-xl font-semibold hover:bg-[#161B22] transition-colors"
                 >
                   Buy Bundle
                 </button>
@@ -303,25 +303,25 @@ export default function IndicatorsPage() {
       {/* Individual Indicators */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Or Buy Individually</h2>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Or Buy Individually</h2>
           <div className="grid md:grid-cols-2 gap-6">
             {indicators.map((ind, i) => (
-              <div key={i} className={`bg-white border rounded-2xl p-6 ${ind.highlight ? 'border-blue-300 ring-2 ring-blue-100' : 'border-gray-200'}`}>
+              <div key={i} className={`bg-[#0D1117] border rounded-2xl p-6 ${ind.highlight ? 'border-blue-300 ring-2 ring-blue-100' : 'border-[#21262D]'}`}>
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <span className={`text-xs bg-gradient-to-r ${ind.badgeColor} text-white px-2 py-1 rounded-full`}>{ind.badge}</span>
-                    <h3 className="text-xl font-bold text-gray-900 mt-2">{ind.name}</h3>
+                    <h3 className="text-xl font-bold text-white mt-2">{ind.name}</h3>
                     <p className="text-gray-500 text-sm">{ind.tagline}</p>
                   </div>
                   <div className="text-right">
                     <div className="text-gray-400 line-through text-sm">₹{ind.originalPrice.toLocaleString()}</div>
-                    <div className="text-2xl font-bold text-gray-900">₹{ind.price.toLocaleString()}</div>
+                    <div className="text-2xl font-bold text-white">₹{ind.price.toLocaleString()}</div>
                   </div>
                 </div>
-                <p className="text-gray-600 text-sm mb-4 leading-relaxed">{ind.description}</p>
+                <p className="text-gray-400 text-sm mb-4 leading-relaxed">{ind.description}</p>
                 <ul className="space-y-2 mb-6">
                   {ind.features.map((f, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-gray-600">
+                    <li key={j} className="flex items-start gap-2 text-sm text-gray-400">
                       <Check className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
                       {f}
                     </li>
@@ -340,9 +340,9 @@ export default function IndicatorsPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-16 px-6 bg-[#161B22]">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Why Traders Choose PaperPe Indicators</h2>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Why Traders Choose PaperPe Indicators</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: Target, title: 'India-Focused', desc: 'Calibrated for NSE, MCX timings and volatility patterns' },
@@ -351,9 +351,9 @@ export default function IndicatorsPage() {
             ].map((item, i) => (
               <div key={i} className="text-center">
                 <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                  <item.icon className="w-6 h-6 text-blue-600" />
+                  <item.icon className="w-6 h-6 text-[#00C076]" />
                 </div>
-                <h3 className="font-semibold text-gray-900 mb-2">{item.title}</h3>
+                <h3 className="font-semibold text-white mb-2">{item.title}</h3>
                 <p className="text-gray-500 text-sm">{item.desc}</p>
               </div>
             ))}
@@ -364,7 +364,7 @@ export default function IndicatorsPage() {
       {/* FAQ */}
       <section className="py-16 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
               { q: 'How do I use these indicators?', a: 'After purchase, you will receive a Pine Script file. Add it to TradingView via the Pine Editor. Works on free TradingView accounts.' },
@@ -372,8 +372,8 @@ export default function IndicatorsPage() {
               { q: 'Can I use on multiple devices?', a: 'Yes, once added to your TradingView account, it works everywhere you log in.' },
               { q: 'Is there a refund policy?', a: 'Due to the digital nature of the product, we do not offer refunds. Please review the features carefully before purchasing.' },
             ].map((faq, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-xl p-6">
-                <h3 className="font-semibold text-gray-900 mb-2">{faq.q}</h3>
+              <div key={i} className="bg-[#0D1117] border border-[#21262D] rounded-xl p-6">
+                <h3 className="font-semibold text-white mb-2">{faq.q}</h3>
                 <p className="text-gray-500 text-sm">{faq.a}</p>
               </div>
             ))}
@@ -384,9 +384,9 @@ export default function IndicatorsPage() {
       {/* Payment Modal */}
       {showModal && selectedProduct && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Buy {selectedProduct.name}</h3>
-            <p className="text-gray-500 mb-4">Amount: <span className="font-bold text-gray-900">₹{selectedProduct.price.toLocaleString()}</span></p>
+          <div className="bg-[#0D1117] rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold text-white mb-2">Buy {selectedProduct.name}</h3>
+            <p className="text-gray-500 mb-4">Amount: <span className="font-bold text-white">₹{selectedProduct.price.toLocaleString()}</span></p>
             
             <div className="space-y-3 mb-6">
               <input
@@ -394,35 +394,35 @@ export default function IndicatorsPage() {
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:outline-none"
               />
               <input
                 type="email"
                 placeholder="Email Address"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:outline-none"
               />
               <input
                 type="tel"
                 placeholder="WhatsApp Number"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:outline-none"
               />
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={() => setShowModal(false)}
-                className="flex-1 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-3 border border-[#21262D] rounded-xl text-gray-400 hover:bg-[#161B22]"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePayment}
                 disabled={loading}
-                className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50"
+                className="flex-1 py-3 bg-[#00a865] text-white rounded-xl font-semibold hover:bg-[#00a865] disabled:opacity-50"
               >
                 {loading ? 'Processing...' : `Pay ₹${selectedProduct.price.toLocaleString()}`}
               </button>
@@ -460,7 +460,7 @@ export default function IndicatorsPage() {
             <button
               onClick={handleGoogleLogin}
               disabled={authLoading}
-              className="w-full flex items-center justify-center gap-3 bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 px-4 rounded-xl transition-colors mb-3 disabled:opacity-60"
+              className="w-full flex items-center justify-center gap-3 bg-[#0D1117] hover:bg-[#161B22] text-white font-semibold py-3 px-4 rounded-xl transition-colors mb-3 disabled:opacity-60"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>

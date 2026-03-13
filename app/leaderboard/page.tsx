@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -28,9 +28,9 @@ export default function LeaderboardPage() {
     switch(badge) {
       case 'Diamond': return 'from-cyan-400 to-blue-500';
       case 'Platinum': return 'from-slate-300 to-slate-500';
-      case 'Gold': return 'from-yellow-400 to-amber-500';
+      case 'Gold': return 'from-yellow-400 to-[#00C076]';
       case 'Silver': return 'from-slate-400 to-slate-600';
-      default: return 'from-orange-600 to-orange-800';
+      default: return 'from-[#00C076] to-[#007a4f]';
     }
   };
 
@@ -76,8 +76,8 @@ export default function LeaderboardPage() {
 
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
           {leaderboardData.slice(0, 3).map((trader, i) => (
-            <div key={trader.rank} className={`relative rounded-2xl p-6 ${i === 0 ? 'bg-gradient-to-br from-yellow-500/20 to-amber-600/10 border-yellow-500/30' : i === 1 ? 'bg-gradient-to-br from-slate-400/20 to-slate-600/10 border-slate-400/30' : 'bg-gradient-to-br from-orange-600/20 to-orange-800/10 border-orange-600/30'} border`}>
-              <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-br ${i === 0 ? 'from-yellow-400 to-amber-500' : i === 1 ? 'from-slate-300 to-slate-500' : 'from-orange-500 to-orange-700'} flex items-center justify-center text-xl font-bold text-black">
+            <div key={trader.rank} className={`relative rounded-2xl p-6 ${i === 0 ? 'bg-gradient-to-br from-yellow-500/20 to-amber-600/10 border-yellow-500/30' : i === 1 ? 'bg-gradient-to-br from-slate-400/20 to-slate-600/10 border-slate-400/30' : 'bg-gradient-to-br from-[#00C076]/20 to-[#007a4f]/10 border-orange-600/30'} border`}>
+              <div className="absolute -top-3 -right-3 w-12 h-12 rounded-full bg-gradient-to-br ${i === 0 ? 'from-yellow-400 to-[#00C076]' : i === 1 ? 'from-slate-300 to-slate-500' : 'from-[#00C076] to-orange-700'} flex items-center justify-center text-xl font-bold text-black">
                 {i === 0 ? <Crown className="w-6 h-6" /> : i + 1}
               </div>
               <div className="text-4xl mb-4">{trader.avatar}</div>
@@ -87,7 +87,7 @@ export default function LeaderboardPage() {
                 <div><div className="text-2xl font-bold text-emerald-400">+{trader.returns}%</div><div className="text-xs text-slate-500">Returns</div></div>
                 <div><div className="text-2xl font-bold text-white">{trader.winRate}%</div><div className="text-xs text-slate-500">Win Rate</div></div>
                 <div><div className="text-lg font-semibold text-white">{trader.trades}</div><div className="text-xs text-slate-500">Trades</div></div>
-                <div><div className="text-lg font-semibold text-orange-400 flex items-center gap-1"><Flame className="w-4 h-4" />{trader.streak}</div><div className="text-xs text-slate-500">Streak</div></div>
+                <div><div className="text-lg font-semibold text-[#00C076] flex items-center gap-1"><Flame className="w-4 h-4" />{trader.streak}</div><div className="text-xs text-slate-500">Streak</div></div>
               </div>
             </div>
           ))}
@@ -104,17 +104,17 @@ export default function LeaderboardPage() {
                   <td className="px-6 py-4 text-right text-emerald-400 font-semibold">+{trader.returns}%</td>
                   <td className="px-6 py-4 text-right text-white hidden md:table-cell">{trader.winRate}%</td>
                   <td className="px-6 py-4 text-right text-slate-400 hidden md:table-cell">{trader.trades}</td>
-                  <td className="px-6 py-4 text-right"><span className="flex items-center justify-end gap-1 text-orange-400"><Flame className="w-4 h-4" />{trader.streak}</span></td>
+                  <td className="px-6 py-4 text-right"><span className="flex items-center justify-end gap-1 text-[#00C076]"><Flame className="w-4 h-4" />{trader.streak}</span></td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className="mt-8 p-6 bg-gradient-to-r from-orange-500/20 to-yellow-500/20 rounded-xl border border-orange-500/30 text-center">
+        <div className="mt-8 p-6 bg-gradient-to-r from-[#00C076]/20 to-yellow-500/20 rounded-xl border border-[#00C076]/30 text-center">
           <h3 className="text-xl font-bold text-white mb-2">Want to be on the leaderboard?</h3>
           <p className="text-slate-300 mb-4">Start paper trading and climb the ranks!</p>
-          <Link href="/dashboard" className="inline-block px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-semibold transition-colors">Start Trading</Link>
+          <Link href="/dashboard" className="inline-block px-6 py-3 bg-[#00C076] hover:bg-[#00a865] text-white rounded-xl font-semibold transition-colors">Start Trading</Link>
         </div>
       </main>
     </div>

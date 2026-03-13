@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -99,9 +99,9 @@ export default function LearnPage() {
       </header>
 
       {/* Hero */}
-      <div className="bg-gradient-to-b from-orange-500/10 to-transparent py-16 px-6">
+      <div className="bg-gradient-to-b from-[#00C076]/10 to-transparent py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 text-orange-500 text-sm mb-4">
+          <div className="flex items-center gap-2 text-[#00C076] text-sm mb-4">
             <BookOpen className="w-4 h-4" />
             Learning Center
           </div>
@@ -124,7 +124,7 @@ export default function LearnPage() {
             { icon: Star, label: 'Avg Rating', value: '4.8' },
           ].map((stat, i) => (
             <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
-              <stat.icon className="w-5 h-5 text-orange-500 mb-3" />
+              <stat.icon className="w-5 h-5 text-[#00C076] mb-3" />
               <div className="text-2xl font-bold text-white">{stat.value}</div>
               <div className="text-sm text-slate-500">{stat.label}</div>
             </div>
@@ -142,7 +142,7 @@ export default function LearnPage() {
                   onClick={() => setSelectedLevel(level)}
                   className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                     selectedLevel === level
-                      ? 'bg-orange-500 text-white'
+                      ? 'bg-[#00C076] text-white'
                       : 'bg-white/5 text-slate-400 hover:text-white'
                   }`}
                 >
@@ -156,9 +156,9 @@ export default function LearnPage() {
             {filteredCourses.map((course) => (
               <div
                 key={course.id}
-                className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden group hover:border-orange-500/50 transition-all cursor-pointer"
+                className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden group hover:border-[#00C076]/50 transition-all cursor-pointer"
               >
-                <div className="h-32 bg-gradient-to-br from-orange-500/20 to-blue-500/20 flex items-center justify-center text-5xl">
+                <div className="h-32 bg-gradient-to-br from-[#00C076]/20 to-blue-500/20 flex items-center justify-center text-5xl">
                   {course.image}
                 </div>
                 <div className="p-5">
@@ -175,7 +175,7 @@ export default function LearnPage() {
                       {course.duration}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#00C076] transition-colors">
                     {course.title}
                   </h3>
                   <p className="text-slate-400 text-sm mb-4 line-clamp-2">
@@ -189,7 +189,7 @@ export default function LearnPage() {
                         {course.enrolled.toLocaleString()}
                       </span>
                     </div>
-                    <button className="p-2 rounded-full bg-orange-500/20 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-all">
+                    <button className="p-2 rounded-full bg-[#00C076]/20 text-[#00C076] group-hover:bg-[#00C076] group-hover:text-white transition-all">
                       <Play className="w-4 h-4" />
                     </button>
                   </div>
@@ -206,11 +206,11 @@ export default function LearnPage() {
             {articles.map((article, i) => (
               <div
                 key={i}
-                className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between group hover:border-orange-500/50 transition-all cursor-pointer"
+                className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between group hover:border-[#00C076]/50 transition-all cursor-pointer"
               >
                 <div>
-                  <span className="text-xs text-orange-500 mb-1 block">{article.category}</span>
-                  <h3 className="text-white font-medium group-hover:text-orange-500 transition-colors">
+                  <span className="text-xs text-[#00C076] mb-1 block">{article.category}</span>
+                  <h3 className="text-white font-medium group-hover:text-[#00C076] transition-colors">
                     {article.title}
                   </h3>
                   <span className="text-sm text-slate-500 flex items-center gap-1 mt-2">
@@ -218,7 +218,7 @@ export default function LearnPage() {
                     {article.readTime} read
                   </span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-orange-500 transition-colors" />
+                <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-[#00C076] transition-colors" />
               </div>
             ))}
           </div>

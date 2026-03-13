@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Search, Settings, Maximize2, Plus, ChevronDown, ArrowUpRight, ArrowDownRight, Minus, BarChart2, TrendingUp } from 'lucide-react';
@@ -102,7 +102,7 @@ export default function ChartsPage() {
               key={tf}
               onClick={() => setTimeframe(tf)}
               className={`px-3 py-1 rounded text-sm ${
-                timeframe === tf ? 'bg-orange-500 text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
+                timeframe === tf ? 'bg-[#00C076] text-white' : 'text-slate-400 hover:text-white hover:bg-white/5'
               }`}
             >
               {tf}
@@ -220,7 +220,7 @@ export default function ChartsPage() {
               <input
                 type="number"
                 defaultValue="50"
-                className="w-full bg-[#0a0e17] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-orange-500"
+                className="w-full bg-[#0a0e17] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00C076]"
               />
             </div>
 
@@ -238,7 +238,7 @@ export default function ChartsPage() {
                   <span className="w-16 text-right text-slate-400">{22450 + i * 5}</span>
                 </div>
               ))}
-              <div className="h-px bg-orange-500 my-2" />
+              <div className="h-px bg-[#00C076] my-2" />
               {[1, 2, 3, 4, 5].map(i => (
                 <div key={`ask-${i}`} className="flex items-center">
                   <div className="flex-1 h-4 bg-red-500/20 rounded-l" style={{ width: `${70 - i * 6}%` }} />
