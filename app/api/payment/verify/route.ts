@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error('Payment verify error:', error);
-    return NextResponse.json({ error: 'Verification failed' }, { status: 500 });
+    // Never leak internal errors to client
+    return NextResponse.json({ error: 'Payment verification failed. Contact support@paperpe.in' }, { status: 500 });
   }
 }

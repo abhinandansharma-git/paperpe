@@ -1,0 +1,4 @@
+Contact: mailto:security@paperpe.in
+Preferred-Languages: en
+Canonical: https://paperpe.in/.well-known/security.txt
+Policy: https://paperpe.in/legal/terms

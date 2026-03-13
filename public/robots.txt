@@ -1,7 +1,9 @@
-﻿User-agent: *
+User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /dashboard/
+Disallow: /auth/
+Disallow: /.well-known/
 
 Sitemap: https://paperpe.in/sitemap.xml
-
-# Disallow API routes from indexing
-Disallow: /api/
