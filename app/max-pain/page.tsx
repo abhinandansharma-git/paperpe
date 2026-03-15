@@ -107,7 +107,17 @@ export default function MaxPainPage() {
           </div>
         )}
 
-        {data && !loading && (
+        {data && data.underlyingValue === 0 && !loading && (
+          <div style={{ background: 'rgba(248,81,73,0.08)', border: '1px solid rgba(248,81,73,0.3)', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+            <div style={{ color: '#f85149', fontWeight: 600, fontSize: 15, marginBottom: 8 }}>⚠ NSE returned empty data</div>
+            <div style={{ color: '#8b949e', fontSize: 14, lineHeight: 1.7 }}>
+              NSE often restricts API access outside trading hours (9:15 AM – 3:30 PM IST, Mon–Fri) and sometimes blocks server IPs.
+              <br />Try refreshing during market hours, or check the <a href="https://www.nseindia.com/option-chain" target="_blank" rel="noreferrer" style={{ color: '#00C076' }}>NSE option chain directly</a>.
+            </div>
+          </div>
+        )}
+
+        {data && data.underlyingValue > 0 && !loading && (
           <>
             {/* Key metrics */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 24 }}>
