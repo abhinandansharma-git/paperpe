@@ -29,6 +29,10 @@ export default function PositionSizingCalculator() {
   const remainingCapital = account - actualRisk;
   const marginUsedPct = account > 0 ? (actualRisk / account) * 100 : 0;
 
+  // Helper info when maxLots = 0
+  const minAccountFor1Lot = costPerLot > 0 && risk > 0 ? (costPerLot / (risk / 100)) : 0;
+  const maxAffordablePremium = lotSize > 0 && risk > 0 ? (maxLossRupees / lotSize) : 0;
+
   // Risk levels
   const levels = [
     { label: 'Conservative (1%)', lots: Math.floor((account * 0.01) / costPerLot) },
@@ -111,14 +115,40 @@ export default function PositionSizingCalculator() {
           {/* Results */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* Main result */}
-            <div style={{
-              background: 'rgba(0,192,118,0.08)', border: '1px solid rgba(0,192,118,0.3)',
-              borderRadius: 12, padding: 24, textAlign: 'center',
-            }}>
-              <div style={{ fontSize: 13, color: '#8b949e', marginBottom: 8 }}>Maximum Lots to Trade</div>
-              <div style={{ fontSize: 56, fontWeight: 800, color: '#00C076', lineHeight: 1 }}>{maxLots}</div>
-              <div style={{ fontSize: 13, color: '#8b949e', marginTop: 8 }}>lots of {instrument}</div>
-            </div>
+            {maxLots === 0 ? (
+              <div style={{
+                background: 'rgba(248,81,73,0.08)', border: '1px solid rgba(248,81,73,0.3)',
+                borderRadius: 12, padding: 24,
+              }}>
+                <div style={{ fontSize: 13, color: '#f85149', fontWeight: 600, marginBottom: 8 }}>⚠ Cannot trade 1 lot safely</div>
+                <div style={{ fontSize: 14, color: '#8b949e', lineHeight: 1.7 }}>
+                  Your {risk}% risk budget is <strong style={{ color: '#e6edf3' }}>₹{Math.round(maxLossRupees).toLocaleString('en-IN')}</strong>,
+                  but 1 lot of {instrument} at ₹{prem} costs <strong style={{ color: '#e6edf3' }}>₹{Math.round(costPerLot).toLocaleString('en-IN')}</strong>.
+                </div>
+                <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
+                    📈 <strong style={{ color: '#e6edf3' }}>Option A:</strong> You need a{' '}
+                    <strong style={{ color: '#00C076' }}>₹{Math.round(minAccountFor1Lot).toLocaleString('en-IN')}</strong> account for 1 lot at this premium
+                  </div>
+                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
+                    💡 <strong style={{ color: '#e6edf3' }}>Option B:</strong> Trade options priced at{' '}
+                    <strong style={{ color: '#00C076' }}>₹{Math.floor(maxAffordablePremium)} or less</strong> per unit (OTM options)
+                  </div>
+                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
+                    ⚡ <strong style={{ color: '#e6edf3' }}>Option C:</strong> Increase risk % — but stay below 5% per trade
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div style={{
+                background: 'rgba(0,192,118,0.08)', border: '1px solid rgba(0,192,118,0.3)',
+                borderRadius: 12, padding: 24, textAlign: 'center',
+              }}>
+                <div style={{ fontSize: 13, color: '#8b949e', marginBottom: 8 }}>Maximum Lots to Trade</div>
+                <div style={{ fontSize: 56, fontWeight: 800, color: '#00C076', lineHeight: 1 }}>{maxLots}</div>
+                <div style={{ fontSize: 13, color: '#8b949e', marginTop: 8 }}>lots of {instrument}</div>
+              </div>
+            )}
 
             {/* Stats */}
             <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 20 }}>
@@ -159,12 +189,21 @@ export default function PositionSizingCalculator() {
             {levels.map(({ label, lots: l }) => (
               <div key={label} style={{
                 background: '#0D1117', borderRadius: 8, padding: 16, textAlign: 'center',
-                border: `1px solid ${l === maxLots ? '#00C076' : '#21262d'}`,
+                border: `1px solid ${l > 0 && l === maxLots ? '#00C076' : '#21262d'}`,
               }}>
                 <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 6 }}>{label}</div>
-                <div style={{ fontSize: 24, fontWeight: 700, color: l === maxLots ? '#00C076' : '#e6edf3' }}>{l > 0 ? l : 0}</div>
-                <div style={{ fontSize: 12, color: '#8b949e' }}>lots</div>
-                <div style={{ fontSize: 11, color: '#8b949e', marginTop: 4 }}>{l > 0 ? fmt(l * costPerLot) : '—'} max loss</div>
+                {l > 0 ? (
+                  <>
+                    <div style={{ fontSize: 24, fontWeight: 700, color: l === maxLots ? '#00C076' : '#e6edf3' }}>{l}</div>
+                    <div style={{ fontSize: 12, color: '#8b949e' }}>lots</div>
+                    <div style={{ fontSize: 11, color: '#8b949e', marginTop: 4 }}>{fmt(l * costPerLot)} max loss</div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: '#f85149' }}>—</div>
+                    <div style={{ fontSize: 11, color: '#8b949e', marginTop: 4 }}>Underfunded</div>
+                  </>
+                )}
               </div>
             ))}
           </div>
