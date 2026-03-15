@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ArrowLeft, Clock, Tag, ArrowRight, ChevronRight, TrendingUp } from 'lucide-react';
-import { getPostBySlug, posts } from '../posts';
+import { getPostBySlug, allPosts } from '../posts';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
@@ -161,8 +161,8 @@ export default function BlogPostPage({ params }: PageProps) {
   const post = getPostBySlug(params.slug);
   if (!post) notFound();
 
-  const related = posts.filter(p => p.slug !== post.slug && p.category === post.category).slice(0, 2);
-  const others = posts.filter(p => p.slug !== post.slug && p.category !== post.category).slice(0, 2 - related.length);
+  const related = allPosts.filter(p => p.slug !== post!.slug && p.category === post!.category).slice(0, 2);
+  const others = allPosts.filter(p => p.slug !== post!.slug && p.category !== post!.category).slice(0, 2 - related.length);
   const relatedPosts = [...related, ...others].slice(0, 2);
 
   return (

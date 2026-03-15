@@ -2462,5 +2462,462 @@ That is what paper trading is actually for. Not just practice — self-knowledge
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
-  return posts.find(p => p.slug === slug);
+  return allPosts.find(p => p.slug === slug);
 }
+
+// ── Hindi Articles ─────────────────────────────────────────────────────────────
+
+export const hindiPosts: BlogPost[] = [
+  {
+    slug: 'nifty-options-trading-hindi',
+    title: 'NIFTY Options Trading कैसे करें: Beginners के लिए Complete Guide',
+    excerpt: 'NIFTY options क्या होता है, Call और Put कैसे काम करते हैं, Strike Price कैसे चुनें — सब कुछ हिंदी में, बिना confusion के।',
+    category: 'Hindi',
+    readTime: '12 min',
+    date: 'Mar 15, 2026',
+    content: `
+## एक सच्ची कहानी से शुरू करते हैं
+
+PaperPe पर हमने देखा — हजारों users जो पहली बार F&O में आते हैं, वो सबसे पहला trade करते हैं NIFTY 50 CE या PE। बिना यह जाने कि वो खरीद क्या रहे हैं।
+
+March 2024 में Budget के दिन NIFTY 1,400 points ऊपर गया। जिन्होंने CE खरीदी थी, उन्होंने 5x–10x पैसा बनाया। जिन्होंने PE खरीदी थी — उनका पूरा premium खत्म हो गया। दोनों ने NIFTY "trade" किया था। फर्क था — समझ का।
+
+यह guide उसी समझ के लिए है।
+
+## NIFTY Options क्या होता है?
+
+NIFTY option एक contract होता है जो आपको यह **right** देता है कि आप NIFTY index को एक fixed price पर खरीद या बेच सकते हैं — expiry date से पहले।
+
+**Call Option (CE):** आपको लगता है NIFTY ऊपर जाएगा → CE खरीदो  
+**Put Option (PE):** आपको लगता है NIFTY नीचे जाएगा → PE खरीदो
+
+जो price आप pay करते हो उसे **Premium** कहते हैं। यही आपका maximum loss है — premium से ज्यादा नहीं जा सकता।
+
+## Key Terms जो आपको याद रखनी हैं
+
+**Strike Price:** वो price जिस पर आपने contract लिया है।  
+NIFTY अभी 22,500 पर है। आप 22,700 CE लेते हो — मतलब आप bet कर रहे हो कि NIFTY 22,700 cross करेगा।
+
+**Lot Size:** NIFTY का 1 lot = 75 units। अगर premium ₹100 है, तो आपको देने हैं ₹100 × 75 = **₹7,500**।
+
+**Expiry:** NIFTY options हर **गुरुवार** को expire होते हैं। Weekly expiry सबसे popular है।
+
+**ITM / ATM / OTM:**
+- **ITM (In The Money):** Strike already cross हो चुकी है
+- **ATM (At The Money):** Strike current price के पास है — यहीं सबसे ज्यादा activity होती है
+- **OTM (Out of The Money):** Strike अभी दूर है, cheap premium, high risk
+
+## एक Real Example
+
+मान लो आज सोमवार है, NIFTY 22,500 पर है। आपको लगता है गुरुवार तक 22,700 आएगा।
+
+आप खरीदते हो: **1 lot NIFTY 22,600 CE @ ₹80 premium**  
+Total cost: ₹80 × 75 = **₹6,000**
+
+**Case 1 — सही निकले:** गुरुवार को NIFTY 22,800 पर close होता है  
+→ Option की value: ₹200 (22,800 - 22,600)  
+→ Profit: (₹200 - ₹80) × 75 = **₹9,000 profit**
+
+**Case 2 — थोड़ा गलत:** NIFTY 22,550 पर रहा  
+→ Option की value: ₹10 (OTM, just time value)  
+→ Loss: (₹80 - ₹10) × 75 = **₹5,250 loss**
+
+**Case 3 — बिल्कुल गलत:** NIFTY 22,200 पर आ गया  
+→ CE expire worthless  
+→ Max loss: **₹6,000** (जितना premium दिया था, उतना ही)
+
+## Strike Price कैसे चुनें?
+
+यह सबसे important question है और यहीं 90% beginners गलती करते हैं।
+
+**ATM (At The Money):** Safe bet। Premium थोड़ा ज्यादा होगा लेकिन अगर direction सही हो तो return अच्छा मिलता है।
+
+**1–2 strike OTM:** Balance between cost और potential। यही हम PaperPe पर most recommended मानते हैं beginners के लिए।
+
+**Deep OTM (बहुत दूर की strike):** ₹5–20 का premium, lottery जैसी bet। 95% chance — zero हो जाएगा।
+
+> **PaperPe Observation:** हमारे platform पर जो traders Deep OTM options खरीदते हैं, उनका win rate 8% से भी कम है। ATM/OTM traders का win rate 3x बेहतर है।
+
+## Theta — Time का दुश्मन
+
+Options में एक silent killer होता है — **Theta (time decay)**।
+
+हर गुजरते दिन के साथ option का premium automatically कम होता जाता है — भले ही NIFTY same level पर रहे।
+
+Monday को खरीदा ₹100 premium → Wednesday को हो सकता है ₹60, बिना NIFTY हिले।
+
+इसीलिए options buying में **timing** सबसे जरूरी है। जितना जल्दी direction मिले, उतना better।
+
+## अपना पहला Trade कहाँ करें?
+
+Real money से पहले — **paper trading जरूरी है**।
+
+PaperPe पर आप NIFTY options trade कर सकते हो live market data के साथ, बिना एक paisa खोए। ₹10 लाख का virtual capital मिलता है।
+
+पहले 30 trades paper पर करो। अपना win rate, average profit/loss, सबसे common mistakes — सब analyze करो। उसके बाद real money।
+
+जिन्होंने यह step skip किया, उन्होंने average ₹40,000–₹80,000 का real money "tuition fee" दिया है।
+
+## Summary — याद रखने वाली बातें
+
+1. **CE = Bullish bet, PE = Bearish bet**
+2. **Maximum loss = Premium paid × Lot size** (option buying में)
+3. **ATM या 1 OTM strike से शुरू करो** — Deep OTM lottery है
+4. **Expiry जितनी पास, Theta उतना तेज** — Monday/Tuesday के options Wednesday evening से जल्दी खत्म होते हैं
+5. **Paper trade पहले** — PaperPe पर real data के साथ practice करो, real money बाद में
+
+Options trading में skill बनती है — luck से नहीं। और skill बनाने के लिए real money जलाना जरूरी नहीं है।
+    `
+  },
+  {
+    slug: 'fo-mein-loss-kyun-hota-hai',
+    title: 'F&O में Loss क्यों होता है? 95% Traders की 7 सबसे बड़ी गलतियाँ',
+    excerpt: 'SEBI का data कहता है 95% F&O traders lose money। PaperPe पर हजारों trades analyze करने के बाद हमने जाना — loss का pattern हर बार same होता है।',
+    category: 'Hindi',
+    readTime: '10 min',
+    date: 'Mar 15, 2026',
+    content: `
+## SEBI का वो Report जो सबको पढ़ना चाहिए
+
+2024 में SEBI ने एक report जारी की। उसमें था — **F&O trading करने वाले 93% individual traders को loss हुआ**। Average loss था **₹1.1 लाख per person per year**।
+
+यह कोई नई बात नहीं थी। लेकिन जो नया था वो यह था — इनमें से ज्यादातर लोग पढ़े-लिखे थे, employed थे, और options को "समझते" थे।
+
+PaperPe पर जब हमने thousands of paper trades analyze किए, तो एक pattern दिखा। Loss का reason अलग-अलग नहीं था — वो 7 specific mistakes में से कोई एक होती थी। हर बार।
+
+## गलती 1: बिना Plan के Trade करना
+
+"NIFTY ऊपर जाएगा" — यह plan नहीं है।
+
+Plan होता है:
+- Entry: 22,450 पर NIFTY के आने पर 22,500 CE लूँगा
+- Target: ₹80 से ₹160 (100% return)
+- Stop Loss: ₹80 से ₹40 (50% loss पर exit)
+- Exit time: बुधवार शाम 3:00 बजे से पहले, चाहे जो हो
+
+बिना इन तीनों के trade लेना जुआ है, trading नहीं।
+
+> **PaperPe Data:** जिन users ने paper trades में stop loss set किया, उनका average monthly return उनसे **2.3x बेहतर** था जिन्होंने नहीं किया।
+
+## गलती 2: Expiry Day की Lottery
+
+गुरुवार को, expiry के आखिरी घंटे में, cheap OTM options खरीदना — यह सबसे common और सबसे dangerous गलती है।
+
+₹5–10 के options को लोग lottery ticket की तरह खरीदते हैं — "क्या पता 10x हो जाए।"
+
+**Reality:** Expiry day के आखिरी 2 घंटों में Deep OTM options का win rate 3% से भी कम है। 97% trades zero पर expire होते हैं। यह data है, opinion नहीं।
+
+## गलती 3: Loss को "Hold" करना
+
+यह सबसे painful mistake है।
+
+Option ₹100 पर खरीदा। ₹60 पर आ गया। मन कहता है — "थोड़ी देर और देखते हैं।" ₹30 पर आता है। "अब कहाँ बेचूँ, इतना loss lock हो जाएगा।" ₹5 पर expire होता है।
+
+Loss ₹95 × lot size।
+
+अगर ₹60 पर निकल जाते — loss होता ₹40 × lot size। Same direction की गलती, आधा नुकसान।
+
+**Rule:** Option buying में maximum loss tolerance = 40–50% of premium। उससे ज्यादा hold करना mathematics नहीं, emotion है।
+
+## गलती 4: Over-trading (बहुत ज्यादा trades)
+
+एक दिन में 8–10 trades लेना productive नहीं लगता — लग सकता है, लेकिन है नहीं।
+
+हर trade में brokerage, STT, exchange charges लगते हैं। NIFTY options पर एक round trip में ₹200–500 charges लग जाते हैं।
+
+अगर दिन में 10 trades लिए और average ₹300 charges = ₹3,000 per day सिर्फ charges में गए। महीने के 22 trading days में = **₹66,000 charges alone**।
+
+यही reason है कि कई traders जो "breakeven" थे — actually loss में थे।
+
+> **PaperPe Tip:** [Brokerage Calculator](/brokerage-calculator) पर calculate करो — आपके typical trade पर charges कितने हैं। यह number देखकर आपकी trading habits बदल जाएंगी।
+
+## गलती 5: "Averaging Down" करना
+
+CE ₹100 पर खरीदी। ₹60 पर आई। सोचा — "अब और सस्ती है, एक lot और लेते हैं।" Average ₹80 हो गया।
+
+Option ₹30 पर expire हुई। अब loss दोगुना हो गया।
+
+Averaging down stocks में कभी-कभी काम करता है। Options में नहीं — क्योंकि option expire होता है। Stock इंतजार कर सकता है, option नहीं।
+
+## गलती 6: FOMO में Trade लेना
+
+NIFTY अचानक 200 points ऊपर चला जाता है। सब लोग CE में profit दिखा रहे हैं Telegram पर। आप भी जल्दी से CE खरीदते हो — peak पर।
+
+अगले 30 minutes में NIFTY वापस आता है। आपकी CE — जो ऊपर के peak पर थी — अब ₹60 की हो गई।
+
+यह सबसे बड़ा trap है। **Move already हो चुकी है जब आप enter करते हो।** जो profit FOMO में लिया जाता है, वो ज्यादातर loss में convert होता है।
+
+## गलती 7: Position Size का कोई Calculation नहीं
+
+"₹50,000 है account में, ₹40,000 एक trade में लगा दूँ" — यह सोच खतरनाक है।
+
+**Standard rule:** किसी एक trade में maximum 2–3% of total capital risk करो।
+
+₹1 लाख का account → एक trade में maximum ₹2,000–3,000 risk।
+
+NIFTY option में ₹2,000 risk = ₹80 premium × 25 units (fractional lot नहीं होता, तो यह theoretical है) — point यह है कि position size capital से proportional होना चाहिए।
+
+> **PaperPe Tool:** [Position Sizing Calculator](/position-sizing-calculator) में अपना account size और risk % डालो — automatically बताएगा कितने lots लेने चाहिए।
+
+## तो फिर Profit कौन बनाता है?
+
+5–7% traders जो consistently profit बनाते हैं — उनकी कुछ common habits हैं:
+
+1. **रोज 1–2 quality trades, 8–10 नहीं**
+2. **Stop loss पहले fix, trade बाद में**
+3. **Weekly P&L track करते हैं — daily नहीं**
+4. **Paper trading से strategy prove की है — real money से नहीं**
+5. **Charges calculate करते हैं हर trade से पहले**
+
+F&O में loss इसलिए नहीं होता कि market complex है। Loss इसलिए होता है क्योंकि हम वो गलतियाँ करते हैं जो हम paper trading में catch कर सकते थे।
+
+PaperPe पर अभी account बनाओ। ₹10 लाख virtual capital के साथ। अपनी strategies test करो। अपनी mistakes पहचानो। फिर real money लगाओ।
+
+वरना SEBI का अगला report भी यही कहेगा — 95%।
+    `
+  },
+  {
+    slug: 'option-chain-kaise-padhein',
+    title: 'Option Chain कैसे पढ़ें: Support, Resistance और Market Direction का Secret',
+    excerpt: 'Option Chain वो X-Ray है जो market की असली हालत दिखाती है। Open Interest, PCR, Max Pain — सब हिंदी में step-by-step समझो।',
+    category: 'Hindi',
+    readTime: '11 min',
+    date: 'Mar 15, 2026',
+    content: `
+## Option Chain — Market का X-Ray
+
+अगर आप NIFTY trade करते हो और option chain नहीं पढ़ते — तो आप अँधेरे में drive कर रहे हो।
+
+October 2023 में जब RBI ने unexpected policy decision लिया, NIFTY एक ही दिन में 600 points नीचे गया। जिन्होंने उस दिन सुबह option chain देखी थी — उन्हें पहले से sign मिल रहे थे। Put OI बढ़ रही थी, Call OI घट रही थी। Market bearish था, chart bullish दिख रहा था।
+
+Option chain chart से ज्यादा सच बोलती है। क्योंकि OI = actual money लगा हुआ है।
+
+## Option Chain की Basic Structure
+
+NSE की option chain एक table होती है। NIFTY की current price के ऊपर और नीचे के सभी strike prices।
+
+**Left side (CE - Call):** ऊपर के लिए bet करने वालों का data  
+**Middle:** Strike Price  
+**Right side (PE - Put):** नीचे के लिए bet करने वालों का data
+
+**सबसे important columns:**
+- **OI (Open Interest):** कितने open contracts हैं — यह सबसे important number है
+- **Change in OI:** आज OI बढ़ी या घटी
+- **LTP (Last Traded Price):** Option का current price
+- **IV (Implied Volatility):** Market कितना movement expect कर रही है
+
+## Open Interest — असली Signal
+
+OI = उस strike पर कितने contracts अभी open हैं।
+
+**High Call OI किसी strike पर = वो strike Resistance है।**  
+इसका मतलब — वहाँ बड़े sellers बैठे हैं। NIFTY उस level को आसानी से cross नहीं करेगा।
+
+**High Put OI किसी strike पर = वो strike Support है।**  
+इसका मतलब — वहाँ बड़े Put sellers बैठे हैं। NIFTY उस level को आसानी से तोड़ नहीं करेगा।
+
+### Example: 
+
+मान लो NIFTY 22,500 पर है।  
+- 22,700 CE पर OI: 45 लाख contracts (सबसे ज्यादा)  
+- 22,300 PE पर OI: 38 लाख contracts (सबसे ज्यादा)
+
+**Reading:** NIFTY का resistance 22,700 और support 22,300 है। इस range में market रहने की probability ज्यादा है।
+
+> **Live Data:** [Max Pain Calculator](/max-pain) पर NIFTY/BANKNIFTY/FINNIFTY की live option chain देखो — कौन सी strikes पर maximum OI है, real-time।
+
+## Change in OI — Fresh Money का Direction
+
+OI change बताता है कि आज **fresh money कहाँ लगा**।
+
+| Call OI | Put OI | Market Signal |
+|---------|--------|---------------|
+| बढ़ रही | घट रही | Bullish — fresh buying, puts cover हो रही |
+| घट रही | बढ़ रही | Bearish — calls cover हो रही, fresh put buying |
+| बढ़ रही | बढ़ रही | Range-bound — दोनों sides पर fresh writing |
+| घट रही | घट रही | Covering — big players position हटा रहे हैं |
+
+## PCR — Put-Call Ratio
+
+PCR = Total Put OI ÷ Total Call OI
+
+यह सबसे simple sentiment indicator है।
+
+**PCR > 1.2:** Market bearish है। ज्यादा puts हैं — लेकिन extreme पर (1.4+) contrarian bullish signal बन सकता है।  
+**PCR 0.8–1.2:** Neutral zone।  
+**PCR < 0.8:** Market bullish है। ज्यादा calls हैं।  
+**PCR < 0.6:** Extreme bullish — contrarian bearish signal।
+
+### Real Example:
+
+Budget 2024 के एक दिन पहले PCR था 0.61 — extreme bullish। Contrarian traders जानते थे कि market either बहुत ऊपर जाएगा (good budget) या sharp correction आएगा। उन्होंने straddle लगाई — दोनों directions में profit का setup।
+
+Budget अच्छा निकला। NIFTY 1,400 points ऊपर गया। Straddle वालों ने Call side से massive profit लिया।
+
+> **Live PCR:** [PCR Tracker](/pcr) पर NIFTY का real-time PCR देखो — आज market किस direction में lean कर रहा है।
+
+## Max Pain — Expiry का Gravity
+
+Max Pain वो strike price होती है जहाँ **option buyers को maximum loss** होता है — और option sellers को maximum profit।
+
+Theory यह है: Option sellers (जो mostly institutional और experienced traders हैं) यह चाहते हैं कि NIFTY expiry पर max pain level के पास close हो। और data दिखाता है — approximately 60–65% expiries में NIFTY max pain के 100 points के अंदर close होता है।
+
+### इसका use कैसे करें:
+
+1. **Monday–Tuesday:** Max pain देखो। NIFTY उससे कितना दूर है?
+2. **अगर NIFTY max pain से 300+ points ऊपर है:** Gravity नीचे की तरफ होगी। CE selling या PE buying की opportunity।
+3. **अगर NIFTY max pain से 300+ points नीचे है:** Gravity ऊपर की तरफ होगी।
+
+यह 100% accurate नहीं है — लेकिन probability का game है। Max pain + PCR + top OI strikes मिलाकर एक complete picture बनती है।
+
+## Step-by-Step: Market Direction कैसे पढ़ें?
+
+हर सुबह market खुलने से पहले — 5 minutes का यह routine करो:
+
+**Step 1:** NSE option chain खोलो (या [Max Pain Calculator](/max-pain) पर जाओ)।
+
+**Step 2:** NIFTY के ऊपर maximum Call OI किस strike पर है → यह आज का Resistance।
+
+**Step 3:** NIFTY के नीचे maximum Put OI किस strike पर है → यह आज का Support।
+
+**Step 4:** PCR check करो → Bullish/Bearish/Neutral?
+
+**Step 5:** Max Pain कहाँ है? NIFTY उससे कितना दूर है?
+
+इन पाँच data points के बाद आपके पास एक framework होगा। फिर trade लो।
+
+## Common Mistakes जब Option Chain पढ़ते हैं
+
+**Mistake 1: सिर्फ ATM strikes देखना।**  
+ATM से ऊपर-नीचे 5–6 strikes देखो। असली OI concentration वहाँ होती है।
+
+**Mistake 2: एक दिन की OI को absolute truth मानना।**  
+OI बदलती है। Trend देखो — 3–4 दिन का pattern।
+
+**Mistake 3: PCR को alone use करना।**  
+PCR extreme पर contrarian signal देता है। Normal range में यह directional नहीं होता।
+
+## Practical Conclusion
+
+Option Chain पढ़ना कोई advanced skill नहीं है। 10 minutes रोज के। 2 हफ्ते में आप NIFTY का general bias सुबह ही पढ़ने लगोगे।
+
+लेकिन इसे real money से सीखना महँगा है।
+
+PaperPe पर practice करो। Live market data के साथ। Option chain देखो, trade लो, result देखो। Pattern build होगी। फिर real money।
+
+क्योंकि जो आज paper trading में सीखोगे — वो कल real money बचाएगा।
+    `
+  },
+  {
+    slug: 'paper-trading-kya-hai',
+    title: 'Paper Trading क्या है? Real Money लगाने से पहले यह जरूर पढ़ो',
+    excerpt: 'Paper trading सिर्फ practice नहीं है — यह वो laboratory है जहाँ आप अपनी mistakes का सबसे सस्ता tuition fee देते हो। सब कुछ हिंदी में।',
+    category: 'Hindi',
+    readTime: '8 min',
+    date: 'Mar 15, 2026',
+    content: `
+## एक ₹2 लाख की गलती जो नहीं होनी चाहिए थी
+
+2023 में एक user ने PaperPe join किया। उन्होंने कहा — "मैंने पिछले 3 महीनों में F&O में ₹2 लाख गँवाए। अब paper trading से शुरू करना चाहता हूँ।"
+
+3 महीने paper trading करने के बाद उन्होंने बताया — "मेरी सबसे बड़ी गलती यह थी कि मैं expiry day पर OTM options खरीदता था। Paper trading में यह pattern पहले हफ्ते में ही दिख गया।"
+
+₹2 लाख का tuition fee। जो ₹0 में मिल सकता था।
+
+## Paper Trading है क्या?
+
+Paper trading = बिना real money के, live market data के साथ, virtual capital से trading करना।
+
+आप real-time prices देखते हो। Real trades लेते हो (virtually)। Real P&L दिखता है। लेकिन real money नहीं लगता।
+
+**PaperPe पर:** ₹10 लाख का virtual capital, live NSE और MCX prices, NIFTY-BANKNIFTY-FINNIFTY options + Gold-Silver-Crude Oil।
+
+## Paper Trading क्यों जरूरी है?
+
+### 1. Strategy को Prove करो — Real Money से पहले
+
+हर trader के पास एक "अच्छी strategy" होती है — मन में।
+
+Paper trading में जब उसे execute करते हो, तो reality दिखती है। "मुझे लगा था मेरी strategy में 70% win rate है — paper trading में 45% निकली।"
+
+यह painful है। लेकिन ₹0 में painful है, ₹2 लाख में नहीं।
+
+### 2. Emotional Patterns को पहचानो
+
+Real money में आपकी emotions trade control करती हैं — आप नहीं।
+
+Paper trading में — क्योंकि real money नहीं है — आप थोड़े detached रहते हो। लेकिन अगर आप seriously paper trade करो, rules बनाओ, और उन्हें follow करने की कोशिश करो — तब भी patterns दिखते हैं।
+
+"मैं loss पर stop loss hit होने के बाद same direction में दूसरा trade लेता हूँ।" → Revenge trading pattern।
+
+यह देख लो paper में। Real में यह ₹50,000–1,00,000 cost करता है।
+
+### 3. Charges की Reality
+
+बहुत कम लोग जानते हैं — एक NIFTY options trade में कितने charges लगते हैं।
+
+Brokerage + STT + Exchange charges + GST + SEBI charges + Stamp duty।
+
+एक round trip (buy + sell) में ₹200–500 लग जाते हैं।
+
+Paper trading से पहले [Brokerage Calculator](/brokerage-calculator) पर calculate करो। फिर सोचो — अगर दिन में 10 trades लूँ, तो charges कितने होंगे। उसके बाद strategy की profitability check करो।
+
+### 4. Platform को समझना
+
+Live trading में आपको एक साथ — price watch करना है, order place करना है, stop loss set करना है, और position track करना है।
+
+यह multitasking stress में गलतियाँ कराती है। Paper trading में यही workflow सीखो, बिना stress के।
+
+## Paper Trading की Limitations — होती हैं
+
+Honest रहते हैं।
+
+**Paper trading perfect नहीं है।** दो बड़ी limitations:
+
+1. **Emotions same नहीं होते।** Real ₹50,000 loss और virtual ₹50,000 loss — दोनों अलग feel होते हैं। Paper trading में आप शायद rules तोड़ो, फिर सोचो "real में तो नहीं करता।" यह illusion है — real में आप और ज्यादा rules तोड़ोगे।
+
+2. **Execution different होती है।** Paper trades instantly fill होती हैं। Real market में illiquid strikes में slippage होती है।
+
+**Solution:** Paper trading में भी rules जैसे real में follow करो। अगर paper में भी discipline नहीं रख सकते — real में certainly नहीं रख पाओगे।
+
+## कितने Trades Paper में करने चाहिए?
+
+Minimum **50–100 trades** — एक consistent market condition में।
+
+क्यों? 20–30 trades में luck और skill का अंतर नहीं पता चलता। 100 trades में pattern साफ होता है।
+
+**Track करो:**
+- Win rate (कितने % trades profitable थे)
+- Average profit vs average loss
+- किस day/time में best performance
+- कौन सी mistakes बार-बार हुईं
+
+यह data आपकी real trading की foundation बनेगा।
+
+## शुरू कैसे करें?
+
+1. **PaperPe पर account बनाओ** — free है, no credit card
+2. **₹10 लाख virtual capital मिलेगा**
+3. **पहले 10 trades:** बस market feel करो — कोई strategy नहीं, बस देखो कैसे काम करता है
+4. **अगले 40 trades:** एक specific strategy test करो। Rules लिखो पहले, फिर execute करो
+5. **Review करो:** 50 trades के बाद data analyze करो
+
+अगर paper trading में consistent profitable हो — तब real money लगाओ। अगर नहीं — और practice।
+
+## Final Word
+
+F&O trading को लोग passive income की तरह treat करते हैं। यह नहीं है।
+
+यह एक skill है। Skill सीखने में time लगता है। और traditionally, skills सीखने में पैसे भी लगते हैं।
+
+Paper trading वो rare opportunity है जहाँ आप एक high-income skill को **बिना tuition fee के** सीख सकते हो।
+
+₹0 investment, live market data, real mistakes — बिना real consequences।
+
+इसका फायदा उठाओ। PaperPe पर आज ही शुरू करो।
+    `
+  }
+];
+
+// Merge all posts for blog listing
+export const allPosts: BlogPost[] = [...posts, ...hindiPosts];

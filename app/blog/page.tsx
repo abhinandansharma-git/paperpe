@@ -27,9 +27,14 @@ const posts = [
   { slug: 'position-sizing-guide', title: 'Position Sizing: The Key to Surviving as a Trader', excerpt: 'Learn the 2% rule and other position sizing techniques. Never blow up your account with proper risk management.', category: 'Risk Management', readTime: '9 min', date: 'Feb 27, 2026' },
   { slug: 'india-vix-explained', title: 'India VIX Explained: How to Use the Fear Index', excerpt: 'What is India VIX and why does it matter? Learn to use the volatility index to time your trades better.', category: 'Market Analysis', readTime: '7 min', date: 'Feb 26, 2026' },
   { slug: 'best-time-to-trade', title: 'Best Time to Trade NIFTY Options: Hour by Hour', excerpt: 'Not all market hours are equal. Discover the best and worst times to trade NIFTY options for maximum profits.', category: 'Strategies', readTime: '8 min', date: 'Feb 26, 2026' },
+  // ── Hindi Articles ──
+  { slug: 'nifty-options-trading-hindi', title: 'NIFTY Options Trading कैसे करें: Beginners के लिए Complete Guide', excerpt: 'NIFTY options क्या होता है, Call और Put कैसे काम करते हैं, Strike Price कैसे चुनें — सब कुछ हिंदी में, बिना confusion के।', category: 'Hindi', readTime: '12 min', date: 'Mar 15, 2026' },
+  { slug: 'fo-mein-loss-kyun-hota-hai', title: 'F&O में Loss क्यों होता है? 95% Traders की 7 सबसे बड़ी गलतियाँ', excerpt: 'SEBI का data कहता है 95% F&O traders lose money। PaperPe पर हजारों trades analyze करने के बाद हमने जाना — loss का pattern हर बार same होता है।', category: 'Hindi', readTime: '10 min', date: 'Mar 15, 2026' },
+  { slug: 'option-chain-kaise-padhein', title: 'Option Chain कैसे पढ़ें: Support, Resistance और Market Direction का Secret', excerpt: 'Option Chain वो X-Ray है जो market की असली हालत दिखाती है। Open Interest, PCR, Max Pain — सब हिंदी में step-by-step समझो।', category: 'Hindi', readTime: '11 min', date: 'Mar 15, 2026' },
+  { slug: 'paper-trading-kya-hai', title: 'Paper Trading क्या है? Real Money लगाने से पहले यह जरूर पढ़ो', excerpt: 'Paper trading सिर्फ practice नहीं है — यह वो laboratory है जहाँ आप अपनी mistakes का सबसे सस्ता tuition fee देते हो। सब कुछ हिंदी में।', category: 'Hindi', readTime: '8 min', date: 'Mar 15, 2026' },
 ];
 
-const categories = ['All', 'Options', 'Commodities', 'Strategies', 'Trading Psychology', 'Risk Management', 'Market Analysis', 'Brokers'];
+const categories = ['All', 'Options', 'Commodities', 'Strategies', 'Trading Psychology', 'Risk Management', 'Market Analysis', 'Brokers', 'Hindi'];
 
 export default function BlogPage() {
   return (
