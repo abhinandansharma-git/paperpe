@@ -232,10 +232,12 @@ const TICKERS = [
 ];
 
 const TOOLS = [
-  { name: 'Option Calculator', desc: 'Greeks, P&L, breakeven analysis', href: '/calculator', icon: Calculator, color: '#7c3aed' },
-  { name: 'Position Sizing', desc: 'Risk-based lot calculator', href: '/tools/position-size', icon: TrendingUp, color: '#0891b2' },
-  { name: 'Brokerage Calculator', desc: 'Compare broker charges', href: '/tools/brokerage', icon: BarChart3, color: '#059669' },
-  { name: 'Margin Calculator', desc: 'F&O margin requirements', href: '/tools/margin', icon: Shield, color: '#ea580c' },
+  { name: 'Options P&L Calculator', desc: 'P&L at expiry for any strike, long or short', href: '/options-pl-calculator', icon: Calculator, color: '#7c3aed' },
+  { name: 'Position Sizing', desc: 'Risk-based lot calculator — how many lots you can take', href: '/position-sizing-calculator', icon: TrendingUp, color: '#0891b2' },
+  { name: 'Brokerage Calculator', desc: 'Exact charges: STT, GST, exchange + net P&L', href: '/brokerage-calculator', icon: BarChart3, color: '#059669' },
+  { name: 'Max Pain Calculator', desc: 'Live NIFTY/BANKNIFTY max pain from NSE option chain', href: '/max-pain', icon: Target, color: '#f0883e' },
+  { name: 'PCR Tracker', desc: 'Put-Call Ratio with live sentiment gauge', href: '/pcr', icon: Zap, color: '#58a6ff' },
+  { name: 'Events Calendar', desc: 'RBI, FOMC, expiry dates — never miss a key event', href: '/events', icon: Shield, color: '#ea580c' },
 ];
 
 const FAQS = [
@@ -599,7 +601,7 @@ export default function HomePage() {
           <h2 style={{ fontSize: 44, fontWeight: 800, marginBottom: 12, letterSpacing: '-0.02em' }}>Trading Tools</h2>
           <p style={{ color: '#475569', fontSize: 16 }}>No signup required. Open and use instantly.</p>
         </div>
-        <div className="four-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16 }}>
+        <div className="four-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
           {TOOLS.map((tool, i) => (
             <Link key={i} href={tool.href} style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="card" style={{ padding: 28, cursor: 'pointer', height: '100%' }}>
