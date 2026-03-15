@@ -113,31 +113,110 @@ function FloatingParticles() {
 }
 
 // ── Animated counter ───────────────────────────────────────────────────────────
-function useCounter(end: number, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const started = useRef(false);
+function useCounter(end: number, duration = 1800, startDelay = 400) {
+  const [count, setCount] = useState(end); // start at end to avoid zero flash
+  useEffect(() => {
+    setCount(0);
+    const timeout = setTimeout(() => {
+      let cur = 0;
+      const inc = end / (duration / 16);
+      const t = setInterval(() => {
+        cur += inc;
+        if (cur >= end) { setCount(end); clearInterval(t); }
+        else setCount(Math.floor(cur));
+      }, 16);
+      return () => clearInterval(t);
+    }, startDelay);
+    return () => clearTimeout(timeout);
+  }, [end, duration, startDelay]);
+  return count;
+}
+
+// ── Live trade notifications ───────────────────────────────────────────────────
+const TRADE_NOTIFICATIONS = [
+  { name: 'Rahul K.', city: 'Mumbai', instrument: 'GOLDM', pnl: '+₹4,200', emoji: '🔥' },
+  { name: 'Priya S.', city: 'Pune', instrument: 'BANKNIFTY', pnl: '+₹8,900', emoji: '📈' },
+  { name: 'Arjun M.', city: 'Delhi', instrument: 'CRUDEOILM', pnl: '+₹2,640', emoji: '⚡' },
+  { name: 'Sneha R.', city: 'Bangalore', instrument: 'NIFTY50', pnl: '+₹3,150', emoji: '🎯' },
+  { name: 'Vikram P.', city: 'Hyderabad', instrument: 'SILVERM', pnl: '+₹1,890', emoji: '💰' },
+  { name: 'Anita D.', city: 'Chennai', instrument: 'GOLDM', pnl: '+₹5,600', emoji: '🚀' },
+];
+
+function LiveTradeToasts() {
+  const [visible, setVisible] = useState<{ id: number; trade: typeof TRADE_NOTIFICATIONS[0] } | null>(null);
+  const indexRef = useRef(0);
+  const counterRef = useRef(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !started.current) {
-        started.current = true;
-        let cur = 0;
-        const inc = end / (duration / 16);
-        const t = setInterval(() => {
-          cur += inc;
-          if (cur >= end) { setCount(end); clearInterval(t); }
-          else setCount(Math.floor(cur));
-        }, 16);
-      }
-    }, { threshold: 0.3 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [end, duration]);
+    const show = () => {
+      const trade = TRADE_NOTIFICATIONS[indexRef.current % TRADE_NOTIFICATIONS.length];
+      const id = ++counterRef.current;
+      setVisible({ id, trade });
+      indexRef.current++;
+      setTimeout(() => setVisible(v => v?.id === id ? null : v), 3200);
+    };
+    const t = setTimeout(show, 2000);
+    const interval = setInterval(show, 5500);
+    return () => { clearTimeout(t); clearInterval(interval); };
+  }, []);
 
-  return { count, ref };
+  if (!visible) return null;
+  const { trade } = visible;
+
+  return (
+    <div style={{
+      position: 'absolute', bottom: 32, left: 32, zIndex: 10,
+      background: '#111827', border: '1px solid rgba(0,192,118,0.2)',
+      borderRadius: 14, padding: '12px 16px',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+      animation: 'toastIn 0.35s ease',
+      maxWidth: 260,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 22 }}>{trade.emoji}</span>
+        <div>
+          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 2 }}>{trade.name} · {trade.city}</div>
+          <div style={{ fontSize: 13, fontWeight: 700 }}>
+            <span style={{ color: '#00C076' }}>{trade.pnl}</span>
+            <span style={{ color: '#475569', fontWeight: 400 }}> on {trade.instrument}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Live price mini-cards ──────────────────────────────────────────────────────
+function LivePriceBar({ tickers }: { tickers: { sym: string; price: number; chg: number }[] }) {
+  const items = tickers.slice(0, 3);
+  const sparkPaths = [
+    'M0,30 L10,26 L20,28 L30,18 L40,22 L50,12 L60,8 L70,4',
+    'M0,28 L10,32 L20,24 L30,30 L40,20 L50,24 L60,16 L70,10',
+    'M0,32 L10,28 L20,34 L30,22 L40,26 L50,18 L60,22 L70,12',
+  ];
+  return (
+    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+      {items.map((tk, i) => {
+        const up = tk.chg >= 0;
+        return (
+          <div key={tk.sym} style={{
+            background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
+            borderRadius: 12, padding: '10px 16px',
+            display: 'flex', alignItems: 'center', gap: 12, minWidth: 160,
+          }}>
+            <div>
+              <div style={{ fontSize: 10, color: '#374151', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{tk.sym}</div>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>₹{tk.price.toLocaleString('en-IN')}</div>
+              <div style={{ fontSize: 11, color: up ? '#00C076' : '#FF4D4D', marginTop: 2 }}>{up ? '▲' : '▼'} {Math.abs(tk.chg)}%</div>
+            </div>
+            <svg viewBox="0 0 70 40" width={70} height={30} style={{ opacity: 0.8 }}>
+              <path d={sparkPaths[i]} fill="none" stroke={up ? '#00C076' : '#FF4D4D'} strokeWidth="1.5" />
+            </svg>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 // ── Ticker data ────────────────────────────────────────────────────────────────
@@ -176,10 +255,10 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [tickers, setTickers] = useState(TICKERS);
 
-  const stat1 = useCounter(10, 1500);
-  const stat2 = useCounter(500, 2000);
-  const stat3 = useCounter(4, 1000);
-  const stat4 = useCounter(65, 1800);
+  const stat1 = useCounter(10, 1500, 400);
+  const stat2 = useCounter(500, 2000, 500);
+  const stat3 = useCounter(4, 1000, 300);
+  const stat4 = useCounter(65, 1800, 600);
 
   useEffect(() => {
     const t = setTimeout(() => setShowPopup(true), 10000);
@@ -228,6 +307,7 @@ export default function HomePage() {
         @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
         @keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
         @keyframes glowPulse { 0%,100%{box-shadow:0 0 30px rgba(0,192,118,0.25)} 50%{box-shadow:0 0 60px rgba(0,192,118,0.45)} }
+        @keyframes toastIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
         
         .w0{animation:fadeUp 0.5s 0.00s both;display:inline-block}
         .w1{animation:fadeUp 0.5s 0.09s both;display:inline-block}
@@ -357,14 +437,22 @@ export default function HomePage() {
           )}
 
           {/* Trust */}
-          <div className="fu4" style={{ display: 'flex', justifyContent: 'center', gap: 28, fontSize: 13, color: '#374151', flexWrap: 'wrap' }}>
+          <div className="fu4" style={{ display: 'flex', justifyContent: 'center', gap: 28, fontSize: 13, color: '#374151', flexWrap: 'wrap', marginBottom: 40 }}>
             {['Free forever', 'No credit card', 'Real-time prices'].map(t => (
               <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <CheckCircle size={13} color="#00C076" /> {t}
               </span>
             ))}
           </div>
+
+          {/* Live price mini cards */}
+          <div className="fu4">
+            <LivePriceBar tickers={tickers} />
+          </div>
         </div>
+
+        {/* Live trade toasts */}
+        <LiveTradeToasts />
       </section>
 
       {/* ── Dashboard Showcase ───────────────────────── */}
@@ -427,14 +515,14 @@ export default function HomePage() {
       </section>
 
       {/* ── Stats ───────────────────────────────────── */}
-      <div ref={stat1.ref as React.RefObject<HTMLDivElement>} style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '60px 24px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '60px 24px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 100% at 50% 50%, rgba(0,192,118,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div className="stat-grid" style={{ maxWidth: 880, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 32, textAlign: 'center', position: 'relative' }}>
           {[
-            { v: `₹${stat1.count}L+`, l: 'Starting Capital', glow: true },
-            { v: `${stat2.count}+`, l: 'On Waitlist', glow: false },
-            { v: String(stat3.count), l: 'Free Tools', glow: false },
-            { v: `${stat4.count}%`, l: 'Win Rate Boost', glow: true },
+            { v: `₹${stat1}L+`, l: 'Starting Capital', glow: true },
+            { v: `${stat2}+`, l: 'On Waitlist', glow: false },
+            { v: String(stat3), l: 'Free Tools', glow: false },
+            { v: `${stat4}%`, l: 'Win Rate Boost', glow: true },
           ].map((s, i) => (
             <div key={i}>
               <div style={{ fontSize: 48, fontWeight: 800, color: s.glow ? '#00C076' : '#e2e8f0', marginBottom: 8, letterSpacing: '-0.02em', ...(s.glow ? { textShadow: '0 0 32px rgba(0,192,118,0.55)' } : {}) }}>
