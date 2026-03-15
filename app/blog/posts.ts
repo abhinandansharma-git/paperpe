@@ -965,6 +965,871 @@ Avoid the temptation to trade every hour. Professional traders often trade only 
 
 Use PaperPe to simulate specific time-of-day strategies. Track which hours produce profits and losses in your paper trading journal. You'll quickly discover your personal peak performance windows.
     `
+  },
+  {
+    slug: 'why-95-percent-traders-lose-money',
+    title: 'Why 95% of Traders Lose Money in F&O (And How to Be in the 5%)',
+    excerpt: 'SEBI data confirms 9 out of 10 F&O traders lose money. Here is exactly why — and the specific habits that separate profitable traders from the rest.',
+    category: 'Trading Psychology',
+    readTime: '11 min',
+    date: 'Mar 15, 2026',
+    content: `
+## The Brutal SEBI Data
+
+In 2023, SEBI published a landmark study on individual F&O traders. The numbers are staggering:
+
+- **89% of individual F&O traders lost money** over a 3-year period
+- The average loss per trader was **₹1.1 lakh per year**
+- Only 11% were profitable — and most of those barely covered transaction costs
+- Active traders (10+ trades/month) fared worse: **93% lost money**
+
+This is not a market problem. The market makes money for someone — it just isn't most retail traders. The question is: what separates the 5-11% who profit?
+
+## Reason 1: They Trade With Money They Can't Afford to Lose
+
+The number one killer of retail traders is position sizing. When ₹50,000 in your account represents 3 months of savings, every loss feels catastrophic. You hold losing positions hoping they recover. You take profits too early because you're scared. You trade emotionally.
+
+**Professional traders risk 1-2% of their capital per trade.** On a ₹1 lakh account, that's ₹1,000-2,000 per trade. Most retail traders risk 20-50% per trade without realizing it.
+
+A single bad day can wipe out months of careful gains when position sizing is wrong.
+
+## Reason 2: They Don't Have an Edge — They Have Hope
+
+"I think NIFTY will go up today" is not a strategy. Yet most retail traders operate this way.
+
+An edge is a repeatable statistical advantage. It means: "When X setup appears, historically Y% of the time the market moves in direction Z by at least N points." Without this, you're gambling.
+
+Building an edge requires:
+- Defining specific entry and exit rules
+- Backtesting those rules over at least 100 trades
+- Tracking your actual performance against expectations
+
+Most traders never do this. They trade based on news, tips, gut feelings, or YouTube videos.
+
+## Reason 3: Theta is Silently Destroying Them
+
+Every option you buy loses value every single day just from time passing — this is called **theta decay**. For weekly options in the final 2 days before expiry, theta decay accelerates dramatically.
+
+A common retail pattern: buy Monday morning, hold through Wednesday hoping for a move, watch the option go from ₹100 to ₹20 even when the market barely moved — because theta ate it alive.
+
+**The math works against option buyers in the long run.** Statistically, options sellers have the edge because they collect theta. But selling options requires significant margin and strict risk management.
+
+## Reason 4: Overtrading
+
+SEBI's data showed the more frequently someone traded, the more they lost. This seems counterintuitive — shouldn't more trades = more opportunities?
+
+The problem is transaction costs and slippage. Every trade costs brokerage, STT, exchange charges, GST — approximately ₹100-300 per lot round trip. If you trade 20 lots per day, that's ₹2,000-6,000 in costs alone. You need to make that back before seeing any profit.
+
+Professional traders are selective. They wait for high-probability setups and skip low-quality ones.
+
+## Reason 5: They Have No Written Trading Plan
+
+Before market opens, profitable traders know:
+- What instrument they'll trade
+- What setup they're waiting for
+- Exact entry price
+- Stop loss level
+- Target level
+- Maximum trades for the day
+- Maximum loss for the day (after which they stop)
+
+Most retail traders open their broker app at 9:30 AM with no plan, react to price movements emotionally, and make decisions under stress.
+
+## What the Profitable 5-11% Do Differently
+
+| Habit | Losing Traders | Profitable Traders |
+|-------|---------------|-------------------|
+| Position sizing | 20-50% of capital per trade | 1-2% of capital per trade |
+| Trading plan | None | Written, specific |
+| Edge | Hope/tips/gut | Backtested system |
+| Overtrading | 10-50 trades/day | 1-5 high-quality trades |
+| Emotions | Trade on fear/greed | Follow rules mechanically |
+| Learning | YouTube/tips | Own trade journal analysis |
+| Paper trading | Skip it | Practice new strategies first |
+
+## The One Thing That Separates Consistent Winners
+
+**They treat losses as data, not disasters.**
+
+Every loss is information: What setup failed? Why? What would I do differently? They keep detailed trade journals and review them weekly.
+
+Losing traders treat losses as bad luck or market manipulation. Profitable traders treat losses as tuition — paid for valuable data about what doesn't work.
+
+## How to Join the 5%
+
+1. **Paper trade for at least 3 months** before risking real money. Validate your strategy across different market conditions — trending, sideways, volatile.
+2. **Keep a trade journal.** Write down every trade: setup, entry, exit, P&L, and what you learned.
+3. **Never risk more than 2% per trade.** This sounds conservative. It is. It also keeps you in the game long enough to get good.
+4. **Define your edge.** What specific setup are you trading? When does it work? When does it fail?
+5. **Set a daily loss limit.** If you lose a predetermined amount, stop trading for the day.
+
+The market will be open tomorrow. There is no edge in revenge trading.
+
+PaperPe exists specifically to help you do step 1 properly — real market data, real P&L tracking, zero real money at risk. Build your edge before risking capital.
+    `
+  },
+  {
+    slug: 'how-to-read-option-chain',
+    title: 'How to Read an Option Chain: Complete Guide for Indian Traders',
+    excerpt: 'The option chain contains everything about market sentiment. Learn to read OI, volume, PCR, and IV to make better trading decisions in NIFTY and BANKNIFTY.',
+    category: 'Options',
+    readTime: '10 min',
+    date: 'Mar 15, 2026',
+    content: `
+## What is an Option Chain?
+
+An option chain is a real-time table showing all available option contracts for a specific underlying (like NIFTY 50) across different strike prices and expiry dates. The NSE publishes this data free at nseindia.com for every derivative instrument.
+
+Reading the option chain correctly gives you an X-ray of where big traders are positioned — and where the market is likely to find support and resistance.
+
+## Anatomy of an Option Chain
+
+The option chain has two halves: **CALLS on the left, PUTS on the right**, with strike prices in the middle column.
+
+### Left Side (Calls — CE):
+- **OI (Open Interest):** Total outstanding contracts at this strike
+- **Chng in OI:** How OI changed from previous close (build-up or unwinding)
+- **Volume:** Today's traded volume at this strike
+- **IV (Implied Volatility):** Market's expectation of future volatility
+- **LTP (Last Traded Price):** Current premium of this call
+
+### Right Side (Puts — PE):
+Same columns, but for put options.
+
+### Center Column:
+- Strike price (in increments of 50 for NIFTY, 100 for BANKNIFTY)
+- ATM strike is highlighted — it's closest to current NIFTY price
+
+## The Most Important Metric: Open Interest
+
+**Open Interest (OI) = Total number of outstanding contracts that have NOT been squared off.**
+
+High OI at a strike = significant activity. This matters because:
+
+**Large Call OI = Resistance level.** If 22,700 CE has 50 lakh+ OI, many traders have sold that call (expecting NIFTY NOT to cross 22,700). This creates resistance. Option sellers defend their positions.
+
+**Large Put OI = Support level.** If 22,000 PE has 40 lakh+ OI, many traders have sold that put (expecting NIFTY NOT to fall below 22,000). This creates support.
+
+The strikes with maximum Call OI and Put OI form what traders call the **"Options Pain" zone** — the range where the market tends to close at expiry, causing maximum pain to buyers on both sides.
+
+## Change in OI: Even More Important
+
+The change in OI tells you what's happening TODAY:
+
+| Change in OI | LTP Change | What it means |
+|-------------|-----------|---------------|
+| OI ↑ | LTP ↑ | Long build-up (bullish) |
+| OI ↑ | LTP ↓ | Short build-up (bearish) |
+| OI ↓ | LTP ↑ | Short covering (bullish) |
+| OI ↓ | LTP ↓ | Long unwinding (bearish) |
+
+Focus on strikes where OI is BUILDING rapidly (high change in OI). That's where smart money is adding positions.
+
+## Put-Call Ratio (PCR): Market Sentiment
+
+PCR = Total Put OI ÷ Total Call OI
+
+**PCR > 1:** More puts than calls — market is hedging heavily, sentiment is cautious/bearish. **Contrarian signal:** When PCR is extremely high (>1.4), the market may actually reverse up (too many bears = crowded trade).
+
+**PCR < 0.7:** More calls than puts — excessive optimism. **Contrarian signal:** When PCR is very low, market may have upside capped.
+
+**PCR between 0.8 and 1.2:** Neutral zone. No strong signal.
+
+Most traders check PCR at start of day as a sentiment filter.
+
+## Implied Volatility (IV): Reading Fear
+
+IV tells you how expensive options are. High IV = expensive premiums. Low IV = cheap premiums.
+
+**When to BUY options:** When IV is relatively low (historical comparison). You're buying cheap insurance.
+
+**When to SELL options:** When IV is high (after a big event, or when market is fearful). You're selling expensive premium.
+
+Track the IV of ATM options over time. When IV is in its bottom 20-30% of historical range, conditions favor buying. When IV is in top 20-30%, conditions favor selling.
+
+## Practical Example: Reading NIFTY Option Chain
+
+Say NIFTY is at 22,450. You open the option chain and see:
+
+- 22,500 CE: OI = 45 lakh, Chng OI = +8 lakh (building), LTP = ₹180
+- 22,000 PE: OI = 52 lakh, Chng OI = +5 lakh (building), LTP = ₹120
+- PCR = 1.05 (neutral)
+- ATM IV = 12% (moderate)
+
+**Interpretation:** Strong resistance at 22,500 (heavy call selling). Strong support at 22,000 (heavy put selling). Market likely rangebound between 22,000-22,500 until expiry. This would favor an Iron Condor or short straddle strategy, not directional buying.
+
+## Key Levels to Watch Every Day
+
+Before market opens, identify:
+1. **Maximum Call OI strike** → Resistance
+2. **Maximum Put OI strike** → Support
+3. **PCR** → Market sentiment
+4. **ATM IV vs yesterday** → Is volatility expanding or contracting?
+
+These four data points take 5 minutes to check and dramatically improve your trade planning.
+
+Practice reading option chains in PaperPe before executing real trades. Understanding the chain is one skill. Using it under market pressure is another — that takes practice.
+    `
+  },
+  {
+    slug: 'options-buying-vs-selling',
+    title: 'Options Buying vs Selling: Which is Better for Indian Traders?',
+    excerpt: 'The eternal debate in F&O trading. Options buyers risk limited capital but win rarely. Options sellers collect premium but face unlimited risk. Here is the truth.',
+    category: 'Options',
+    readTime: '12 min',
+    date: 'Mar 15, 2026',
+    content: `
+## The Core Difference
+
+**Option Buyer:** Pays premium upfront. Limited loss (only premium paid). Unlimited profit potential. Needs the market to move significantly in your direction.
+
+**Option Seller (Writer):** Collects premium upfront. Limited profit (only premium collected). Theoretically unlimited loss. Profits when the market does NOT move in the buyer's direction.
+
+Statistically, options sellers win more often than buyers. But when buyers win, they win big. When sellers lose, they can lose catastrophically without proper risk management.
+
+## The Math of Options Buying
+
+Let's be honest about the numbers.
+
+For an option to be profitable at expiry, the underlying must move more than the premium paid (the breakeven point). For NIFTY weekly options on Monday:
+
+- ATM option premium: ~₹100-150
+- NIFTY must move 100-150 points in your direction just to break even
+- Movement of 200+ points needed for meaningful profit
+- How often does NIFTY move 200+ points in a week in a single direction? **Less than 30% of weeks**
+
+This means if you're buying ATM options and holding to expiry, you'll likely lose premium 70%+ of the time.
+
+**But the 30% of times you win can be explosive.** A 300-point NIFTY move could turn a ₹100 option into ₹300+ — a 3x return in days.
+
+## The Math of Options Selling
+
+Options sellers win that same 70% of the time when markets don't move far. They collect premium consistently.
+
+A common strategy: sell ATM straddle (sell both CE and PE at same strike), collect ₹200-300 premium. If NIFTY stays within 200 points until expiry, you keep most of it.
+
+**The problem:** The 30% of times the market moves big, your losses are far larger than your premium collected. A 400-point move against your straddle can cost ₹400-500+ per lot — more than double your premium.
+
+**This is why options sellers MUST use hedges** (buying cheap OTM options as insurance) and strict stop losses.
+
+## Which Strategy Suits Which Trader?
+
+| Factor | Options Buying | Options Selling |
+|--------|---------------|-----------------|
+| Capital needed | Low (just premium) | High (margin required) |
+| Win rate | ~30-40% of trades | ~60-70% of trades |
+| Risk | Limited (premium paid) | High (requires strict stops) |
+| Stress level | Lower | Higher |
+| Suitable for | Beginners, low capital | Experienced, higher capital |
+| Best market condition | High volatility | Low/stable volatility |
+
+## The Real Answer: Context Matters
+
+Neither is universally better. The right approach depends on:
+
+**1. Market condition (IV level):**
+- High IV (15%+): Sell options. Premium is expensive, sellers have edge.
+- Low IV (below 12%): Buy options. Premium is cheap, buyers get leverage.
+
+**2. Your capital:**
+- Under ₹2 lakhs: Option buying (can't meet margin for selling safely)
+- ₹3 lakhs+: Can consider simple option selling with proper hedges
+
+**3. Your time:**
+- Part-time traders: Option buying (simpler, less monitoring needed)
+- Full-time traders: Option selling (requires constant monitoring)
+
+## Common Mistakes in Each Approach
+
+**Option buyers make these mistakes:**
+- Buying OTM options (cheap but rarely make money)
+- Holding to expiry hoping for recovery
+- Ignoring theta decay
+- Buying in low-volatility markets when options are expensive relative to actual movement
+
+**Option sellers make these mistakes:**
+- Selling naked (without hedges) — catastrophic loss potential
+- Not having defined stop losses
+- Selling during high IV events (earnings, elections, budget) without adjusting size
+- Over-leveraging with margin
+
+## A Practical Starting Point
+
+For beginners: **Start with buying ATM options, targeting quick moves.**
+
+Specific rules:
+1. Buy only ATM or 1-strike OTM options
+2. Never hold past Wednesday for Thursday expiry (theta destroys you)
+3. Take 50% profit when available instead of waiting for more
+4. Define your max loss before entry — exit if that's hit
+
+For intermediate traders moving to selling: **Start with credit spreads (bull put spread or bear call spread), not naked selling.**
+
+Example bull put spread: Sell 22,000 PE, Buy 21,800 PE. Net credit ₹40. Max loss ₹160. Limited risk, limited reward — but you learn the mechanics safely.
+
+Practice both approaches extensively on PaperPe before committing real capital. The market doesn't care which approach you prefer — only which one you execute well.
+    `
+  },
+  {
+    slug: 'zerodha-vs-upstox-vs-dhan',
+    title: 'Zerodha vs Upstox vs Dhan vs Angel One: Best Broker for F&O 2026',
+    excerpt: 'Choosing the wrong broker costs you money every trade. Detailed comparison of India top brokers for options and futures trading — brokerage, margin, platform, and reliability.',
+    category: 'Brokers',
+    readTime: '9 min',
+    date: 'Mar 15, 2026',
+    content: `
+## Why Your Broker Choice Matters
+
+For an options trader doing 10-15 trades per week, brokerage differences can add up to ₹5,000-15,000 per month. Over a year, that's ₹60,000-180,000 — real money that comes directly from your profits.
+
+Beyond cost, your broker determines: platform reliability during market volatility, margin availability, order execution speed, and customer support when things go wrong.
+
+## The Big 4 Compared
+
+### Zerodha
+India's largest discount broker by active clients.
+
+**Brokerage:** ₹20 per order or 0.03% (whichever is lower) for intraday and F&O. Free for delivery equity.
+
+**Strengths:**
+- Kite platform is clean and reliable — battle-tested for 10+ years
+- Largest broker = best liquidity and execution in most cases
+- Sensibull (options analytics platform) integration
+- Strong educational content (Varsity)
+- Most trusted brand in India for traders
+
+**Weaknesses:**
+- Customer support can be slow during peak times
+- No call-and-trade option (online only)
+- Slightly higher margins required vs competition for some contracts
+
+**Best for:** Traders who want reliability above everything else. First-time F&O traders who want a stable platform to learn on.
+
+---
+
+### Upstox
+Second largest discount broker, backed by Ratan Tata and Tiger Global.
+
+**Brokerage:** ₹20 per order or 0.05% for F&O (flat ₹20 most scenarios).
+
+**Strengths:**
+- Pro Web platform is modern and feature-rich
+- Good charting tools built-in
+- Faster account opening process
+- Competitive margin rates
+
+**Weaknesses:**
+- Platform has had outages during high-volatility sessions (documented history)
+- Customer support slower than Zerodha
+- Less trusted for very large ticket trades
+
+**Best for:** Traders who want a modern UI and don't mind occasional reliability issues.
+
+---
+
+### Dhan
+Newer broker, rapidly gaining popularity among active traders.
+
+**Brokerage:** ₹20 per order flat for F&O.
+
+**Strengths:**
+- Options trader-focused platform — options chain, payoff diagrams, IV charts all built-in
+- Mobile app is the best in class for options trading
+- Fast execution reported by users
+- Good for options strategies (spreads, straddles)
+
+**Weaknesses:**
+- Newer = smaller track record
+- Less data on performance during extreme volatility events
+- Smaller brand trust vs Zerodha
+
+**Best for:** Active options traders who want the best options-specific tools on mobile.
+
+---
+
+### Angel One
+Full-service broker that transitioned to discount model.
+
+**Brokerage:** ₹20 per order for F&O.
+
+**Strengths:**
+- SmartAPI for algo trading
+- Research and advisory available (unlike pure discounts)
+- Strong branch network if you prefer in-person support
+
+**Weaknesses:**
+- Platform (Angel One app) is less refined than Zerodha/Dhan
+- Cross-selling of financial products can feel pushy
+- Not the best choice for pure F&O traders
+
+**Best for:** Traders who want optional research/advisory alongside self-directed trading.
+
+---
+
+## Direct Comparison
+
+| Feature | Zerodha | Upstox | Dhan | Angel One |
+|---------|---------|--------|------|-----------|
+| F&O Brokerage | ₹20/order | ₹20/order | ₹20/order | ₹20/order |
+| Account opening | Free | Free | Free | Free |
+| Platform reliability | ★★★★★ | ★★★★ | ★★★★ | ★★★ |
+| Options tools | Good | Good | Excellent | Average |
+| Mobile app | Good | Good | Excellent | Average |
+| Customer support | ★★★★ | ★★★ | ★★★★ | ★★★★ |
+| Best for | All traders | Modern UI lovers | Options traders | Research seekers |
+
+## Hidden Costs to Watch For
+
+Beyond brokerage, these costs eat your profits:
+
+**STT (Securities Transaction Tax):** 0.0125% on F&O sell side. On a ₹10 lakh turnover, that's ₹1,250 per day. Same across all brokers.
+
+**Exchange charges:** NSE charges ₹1.90 per lakh of turnover. Same across all brokers.
+
+**GST:** 18% on brokerage + exchange charges. Unavoidable.
+
+**DP charges:** ₹13.5+GST per scrip per day for delivery selling. Zerodha and Upstox same.
+
+**The math:** For a ₹10 lot NIFTY options trade (premium ₹100, lot size 75 = ₹7,500 trade value), your all-in cost is approximately ₹25-35 per round trip regardless of broker. Focus on fewer, higher-quality trades.
+
+## Our Recommendation
+
+**For beginners:** Zerodha. Reliability and trust matter most when you're learning. The slightly less modern UI is worth the peace of mind.
+
+**For active options traders:** Dhan. The options-specific tools are genuinely better for managing complex positions.
+
+**For algo traders:** Angel One (SmartAPI) or Zerodha (Kite Connect API).
+
+Before opening a live account with any broker, practice your strategies on PaperPe. Learn your approach, know your edge, then choose the broker that best fits your trading style.
+    `
+  },
+  {
+    slug: 'open-interest-analysis',
+    title: 'Open Interest Analysis: How to Use OI Data to Trade NIFTY',
+    excerpt: 'Open Interest is the most underused indicator in Indian options markets. Learn how to read OI build-up, unwinding, and changes to predict NIFTY support and resistance.',
+    category: 'Options',
+    readTime: '9 min',
+    date: 'Mar 15, 2026',
+    content: `
+## What Is Open Interest?
+
+Open Interest (OI) is the total number of outstanding derivative contracts (futures or options) that have not been settled. Every time a new buyer and seller open a new contract, OI increases by 1. When a position is closed, OI decreases.
+
+**OI ≠ Volume.** Volume counts total trades in a day (including opening and closing). OI counts only positions still open.
+
+For NIFTY options, OI is broken down by every strike price and expiry. This data is your most powerful tool for understanding where institutional money is positioned.
+
+## The Four OI Combinations
+
+Every price and OI combination tells a different story:
+
+| Price Movement | OI Change | Signal | Meaning |
+|---------------|-----------|--------|---------|
+| Price UP | OI UP | Bullish | New longs being added — strong uptrend |
+| Price DOWN | OI UP | Bearish | New shorts being added — strong downtrend |
+| Price UP | OI DOWN | Short covering | Bears exiting — weak/unsustained rally |
+| Price DOWN | OI DOWN | Long unwinding | Bulls exiting — controlled pullback, not panic |
+
+**Long build-up (Price UP + OI UP)** is the strongest bullish signal. Real buyers are entering.
+
+**Short build-up (Price DOWN + OI UP)** is the strongest bearish signal. Real sellers are entering.
+
+**Short covering (Price UP + OI DOWN)** = bears closing positions, not necessarily new bulls entering. Rally may not sustain.
+
+## OI in Options: Finding Support and Resistance
+
+For options, massive OI concentration at specific strikes creates invisible walls in the market.
+
+**High Call OI at a strike = Resistance.** The traders who sold those calls (option writers) collected premium expecting NIFTY to stay below that strike. If NIFTY approaches their sold strike, they'll aggressively SELL futures to hedge their position — which pushes NIFTY back down.
+
+**High Put OI at a strike = Support.** Put writers sold puts expecting NIFTY to stay above. If NIFTY falls toward their sold puts, they'll BUY futures to hedge — which provides a floor.
+
+This is why NIFTY often "gravitates" toward the maximum pain level (the strike where both call and put buyers lose the most) near expiry.
+
+## How to Use OI Data in Your Trading
+
+**Step 1: Morning routine (before 9:15 AM)**
+
+Check NSE option chain and identify:
+- Strike with maximum Call OI (resistance for the day)
+- Strike with maximum Put OI (support for the day)
+- Total PCR (Put-Call Ratio) for sentiment
+
+**Step 2: Watch for OI changes intraday**
+
+The Chng in OI column is crucial. A strike that had 20 lakh OI yesterday but shows +8 lakh new OI today is being heavily targeted.
+
+If 22,500 CE shows massive new OI building while NIFTY approaches 22,500, it signals writers are defending that level aggressively.
+
+**Step 3: OI unwinding near expiry**
+
+As expiry approaches (Wednesday/Thursday), watch for OI unwinding at support/resistance strikes. When put writers start covering (OI decreasing at put strikes), that support level is weakening — potential breakdown.
+
+## Practical Example: Reading OI for a Trade
+
+Scenario: It's Monday. NIFTY is at 22,300.
+
+Option chain shows:
+- 22,500 CE: OI = 65 lakh (massive call writing at 22,500)
+- 22,000 PE: OI = 58 lakh (massive put writing at 22,000)
+- PCR = 1.1 (slightly bearish tilt but neutral range)
+
+**Interpretation:** NIFTY is likely to stay between 22,000 and 22,500 this week. The range is defined by option writers.
+
+**Possible trades based on this:**
+1. **Range trade:** Sell 22,500 CE + Sell 22,000 PE (straddle/strangle). Profit if NIFTY stays in range.
+2. **Breakout trade:** Buy 22,550 CE if you believe 22,500 resistance breaks. Entry only after sustained price above 22,500 with OI at 22,500 CE starting to unwind.
+3. **Avoid:** Buying 22,300 CE hoping for unlimited upside — the 22,500 wall is very strong.
+
+## Max Pain Theory
+
+Max Pain = the strike price at which option buyers collectively lose the most money at expiry. Mathematically, this is where option sellers (who are often institutions and market makers) profit maximally.
+
+Research shows NIFTY closes near max pain level in roughly 60-65% of weekly expiries. It's not guaranteed, but it's a meaningful probability-weighted anchor.
+
+Calculate max pain on any options calculator. If max pain is 22,200 and NIFTY is at 22,400 with 2 days to expiry, there's gravitational pull toward 22,200.
+
+## Common Mistakes in OI Analysis
+
+**Mistake 1:** Looking at OI in isolation without price movement. Always check the OI + price combination.
+
+**Mistake 2:** Expecting OI levels to hold perfectly. Institutional orders can overwhelm option writers when big macro events hit.
+
+**Mistake 3:** Using yesterday's OI without checking today's changes. Fresh OI build-up is more relevant than historical positioning.
+
+Practice OI-based strategies on PaperPe. Map out your support/resistance zones from OI data each morning, then observe how the actual market respects or breaks those levels. Over time, you'll develop an intuition for when OI walls hold and when they break.
+    `
+  },
+  {
+    slug: 'nifty-options-lot-size-margin',
+    title: 'NIFTY Options Lot Size, Margin & Capital Required in 2026',
+    excerpt: 'Exact lot sizes, margin requirements, and minimum capital needed to trade NIFTY, BANKNIFTY, FINNIFTY, and MCX options in 2026. Updated with current SEBI regulations.',
+    category: 'Options',
+    readTime: '7 min',
+    date: 'Mar 15, 2026',
+    content: `
+## Current Lot Sizes for Major F&O Instruments (2026)
+
+Lot sizes are reviewed quarterly by SEBI. These are the current lot sizes:
+
+| Instrument | Lot Size | Approx. Value per Lot |
+|-----------|----------|----------------------|
+| NIFTY 50 | 75 units | ~₹16-17 lakh (notional) |
+| BANKNIFTY | 35 units | ~₹18-19 lakh (notional) |
+| FINNIFTY | 65 units | ~₹14-15 lakh (notional) |
+| MIDCPNIFTY | 75 units | ~₹8-9 lakh (notional) |
+
+**SEBI update (Nov 2024):** SEBI increased lot sizes for NIFTY and BANKNIFTY to reduce retail speculation in high-risk weekly options. NIFTY went from 50 to 75 units; BANKNIFTY from 25 to 35 units.
+
+## Capital Required for Options Buying
+
+Option buying requires only the **premium amount** — no additional margin.
+
+**Example: NIFTY options buying capital**
+
+| Option type | Typical premium | Capital per lot (NIFTY 75) |
+|------------|----------------|---------------------------|
+| ATM option (expiry week) | ₹80-150 | ₹6,000 - ₹11,250 |
+| ATM option (next week) | ₹180-280 | ₹13,500 - ₹21,000 |
+| OTM option (1 strike) | ₹30-70 | ₹2,250 - ₹5,250 |
+| Deep OTM | ₹5-20 | ₹375 - ₹1,500 |
+
+**Minimum capital to start buying NIFTY options: ~₹10,000-15,000** (enough for 1-2 ATM lots with some buffer for losses).
+
+**Recommended starting capital for options buying: ₹50,000-1,00,000** (allows for proper position sizing where each trade is 10-20% of capital).
+
+## Capital Required for Options Selling
+
+Options selling requires **SPAN + Exposure margin**. This is significantly higher than buying.
+
+| Strategy | Approx margin required |
+|----------|----------------------|
+| Naked NIFTY CE/PE sell (1 lot) | ₹90,000 - ₹1,20,000 |
+| NIFTY Straddle (sell CE + PE) | ₹1,20,000 - ₹1,60,000 |
+| Bull Put Spread (sell + buy) | ₹20,000 - ₹35,000 |
+| Iron Condor | ₹30,000 - ₹50,000 |
+
+**Minimum capital for options selling: ₹2,00,000+** (naked selling is extremely risky; hedged strategies need less but still significant margin).
+
+**Recommended for options selling: ₹3,00,000-5,00,000** (allows proper position sizing and buffer for margin calls).
+
+## BANKNIFTY Margins
+
+BANKNIFTY is more volatile and more expensive:
+
+| Strategy | Approx margin required |
+|----------|----------------------|
+| Naked BANKNIFTY CE/PE sell (1 lot) | ₹1,00,000 - ₹1,40,000 |
+| ATM option buying (1 lot, 35 units) | ₹4,000 - ₹8,000 |
+
+## MCX Commodity Margins
+
+| Commodity | Lot size | Margin for futures |
+|-----------|----------|-------------------|
+| Gold (GOLD) | 1 kg | ₹45,000 - ₹55,000 |
+| Gold Mini (GOLDM) | 100g | ₹4,500 - ₹6,000 |
+| Silver (SILVER) | 30 kg | ₹45,000 - ₹60,000 |
+| Silver Mini (SILVERM) | 5 kg | ₹7,000 - ₹10,000 |
+| Crude Oil (CRUDEOILM) | 100 bbl | ₹15,000 - ₹25,000 |
+| Natural Gas | 1250 mmBtu | ₹20,000 - ₹30,000 |
+
+MCX margins fluctuate based on commodity volatility. Check your broker's margin calculator before trading.
+
+## Transaction Costs Per Trade (All-In)
+
+For a NIFTY options buy and sell (1 lot, premium ₹100):
+
+| Cost component | Amount |
+|---------------|--------|
+| Brokerage (₹20 × 2) | ₹40 |
+| STT (0.0125% × sell side) | ~₹1-7 |
+| Exchange charges | ~₹3-5 |
+| GST on brokerage+exchange | ~₹8-10 |
+| SEBI charges | ~₹0.50 |
+| **Total round-trip cost** | **~₹52-62** |
+
+On a ₹7,500 position (100 premium × 75 lots), this represents ~0.7-0.8% cost just to enter and exit. Factor this into your breakeven calculation.
+
+## Practical Capital Planning
+
+For a trader starting with ₹50,000:
+
+- Max per trade (2% rule): ₹1,000
+- This means: buy options where your maximum loss is ₹1,000 per trade
+- If ATM option costs ₹100/lot = ₹7,500 per lot — this is TOO large for the account
+- Solution: Use OTM options at ₹10-15 each = ₹750-1,125 per lot exposure
+
+For a trader starting with ₹2,00,000:
+
+- Max per trade (2% rule): ₹4,000
+- Can buy 1 lot ATM options (₹80-100 premium = ₹6,000-7,500) with reasonable risk
+- Enough to explore simple spreads
+
+Practice position sizing and margin management on PaperPe before putting real money at risk. Understanding how margin works in paper trading prevents expensive real-money mistakes.
+    `
+  },
+  {
+    slug: 'iron-condor-strategy-india',
+    title: 'Iron Condor Strategy: How to Profit in Sideways NIFTY Markets',
+    excerpt: 'When NIFTY is rangebound, Iron Condor lets you profit from time decay. Learn how to set up, manage, and exit this popular options selling strategy with Indian market examples.',
+    category: 'Strategies',
+    readTime: '10 min',
+    date: 'Mar 15, 2026',
+    content: `
+## What is an Iron Condor?
+
+An Iron Condor is an options strategy that profits when the underlying stays within a specific range by expiry. It's the preferred strategy of professional options sellers during low-volatility, sideways markets.
+
+It consists of four legs:
+1. **Sell OTM Call** (collect premium)
+2. **Buy further OTM Call** (limit risk)
+3. **Sell OTM Put** (collect premium)
+4. **Buy further OTM Put** (limit risk)
+
+You collect net premium upfront. If the underlying stays between your sold strikes at expiry, you keep most or all of it.
+
+## Iron Condor Example on NIFTY
+
+NIFTY is at 22,500. It's a low-volatility week — India VIX is around 12-13. You expect NIFTY to stay between 22,000 and 23,000.
+
+You set up:
+- **Sell** 23,000 CE at ₹40
+- **Buy** 23,200 CE at ₹20 (cap your upside risk)
+- **Sell** 22,000 PE at ₹45
+- **Buy** 21,800 PE at ₹22 (cap your downside risk)
+
+**Net credit received:**
+- Calls: ₹40 - ₹20 = ₹20
+- Puts: ₹45 - ₹22 = ₹23
+- **Total credit: ₹43 per unit × 75 lots = ₹3,225**
+
+**Maximum loss:**
+- Either spread is 200 points wide
+- Max loss on each side = ₹200 - ₹43 = ₹157 per unit × 75 = ₹11,775
+- (Plus whatever the other side credit helps offset)
+
+**Breakeven points:**
+- Upper: 23,000 + 43 = 23,043 (NIFTY must stay below this)
+- Lower: 22,000 - 43 = 21,957 (NIFTY must stay above this)
+
+## When to Use Iron Condor
+
+The Iron Condor works best when:
+
+**1. India VIX is below 14-15.** Low volatility = NIFTY unlikely to make large moves.
+
+**2. Market is in a sideways phase.** No strong trend. No major events nearby.
+
+**3. 1-2 weeks to expiry.** Theta decay accelerates — you collect premium faster.
+
+**Avoid Iron Condor when:**
+- VIX is above 18 (market expecting big moves)
+- Budget/RBI policy/election results are approaching
+- Global markets are in significant distress (US Fed decisions, geopolitical events)
+- NIFTY is in a strong trending phase (will break your range)
+
+## Managing the Iron Condor
+
+An Iron Condor in trouble needs active management. Three scenarios:
+
+**Scenario 1: NIFTY stays in range (ideal)**
+Do nothing. Let time decay work. Close the entire position when you've collected 50-60% of max profit to avoid gamma risk near expiry.
+
+**Scenario 2: One side is threatened**
+
+Example: NIFTY rallies toward your 23,000 CE sold strike.
+
+Options:
+- **Roll up the put side:** Close your 22,000/21,800 put spread and re-sell it higher (e.g., 22,500/22,300). This collects additional premium and shifts your profit zone up.
+- **Close the threatened call spread:** Take the loss on calls, keep put credit. Better than full loss.
+- **Stop loss rule:** Many traders close the threatened spread when its value reaches 2× the credit received. If you sold calls for ₹20 net, close when that spread costs ₹40 to buy back.
+
+**Scenario 3: Market breaks your range with force**
+
+Close the entire Iron Condor. Cut losses. No adjustments when a strong trend starts — the risk of further losses outweighs the remaining credit.
+
+## Profit and Loss Profile
+
+| NIFTY at Expiry | Your P&L |
+|----------------|---------|
+| Below 21,800 | Max loss (lower spread triggers) |
+| 21,800 - 21,957 | Partial loss |
+| 21,957 - 23,043 | Full profit (₹3,225 in our example) |
+| 23,043 - 23,200 | Partial loss |
+| Above 23,200 | Max loss (upper spread triggers) |
+
+## Margin Required for Iron Condor
+
+The margin for an Iron Condor is approximately equal to one spread's width (since both can't trigger simultaneously).
+
+For our 200-point spreads: approximately ₹15,000 - ₹25,000 per lot after hedge credit.
+
+This makes it significantly more capital-efficient than naked selling.
+
+## Common Iron Condor Mistakes
+
+**Setting strikes too close:** Greedy for premium, but NIFTY easily breaches tight ranges. Use at least ±3-5% from current price for weekly condors.
+
+**Not defining exit rules before entry:** Decide your stop loss and profit target before you enter. Deciding under pressure leads to emotional decisions.
+
+**Ignoring macro events:** Check economic calendar before setting up. A Fed speech or RBI decision inside your expiry window can instantly break your range.
+
+**Holding through expiry every time:** Many traders collect 60-70% max profit on the 10-15th of the expiry and let the rest ride. This is risky. Close at 50-60% profit, reset next expiry.
+
+## Starting Out: Paper Trade First
+
+The Iron Condor is deceptively simple to set up and genuinely complex to manage. The mechanics are easy. Knowing when to adjust, when to close, and when to do nothing — that requires experience.
+
+Use PaperPe to run 5-10 Iron Condor paper trades before real money. Deliberately set one up before a volatile event so you experience what a bad Iron Condor feels like — without real consequences.
+    `
+  },
+  {
+    slug: 'mcx-gold-trading-guide',
+    title: 'MCX Gold Trading Guide: GOLDM vs GOLD, Timings, and Strategies',
+    excerpt: 'Everything you need to trade gold on MCX India. GOLD vs GOLDM contracts, trading hours, margin requirements, what moves gold prices, and practical trading strategies.',
+    category: 'Commodities',
+    readTime: '9 min',
+    date: 'Mar 14, 2026',
+    content: `
+## Why Trade Gold on MCX?
+
+Gold is India's most popular commodity for retail traders. MCX (Multi Commodity Exchange) is the primary platform for commodity derivatives in India. Gold on MCX offers:
+
+- **Genuine hedging:** If you hold physical gold jewelry or coins, MCX gold can hedge price risk
+- **Leverage:** Trade ₹80,000+ worth of gold with ₹5,000-6,000 margin (GOLDM)
+- **Liquidity:** GOLDM is one of the most liquid commodity contracts in India
+- **International price tracking:** MCX gold closely tracks international COMEX gold (with currency conversion)
+
+## GOLD vs GOLDM: Which to Trade?
+
+| Feature | GOLD | GOLDM |
+|---------|------|-------|
+| Contract size | 1 kg | 100 grams |
+| Approx. value per contract | ₹75-80 lakhs | ₹7.5-8 lakhs |
+| Margin required | ₹45,000-55,000 | ₹4,500-6,000 |
+| Tick size | ₹1 | ₹1 |
+| Delivery | Yes (1 kg bar) | Yes (100g bar) |
+| Best for | Large traders/hedgers | Retail traders |
+
+**For most retail traders: GOLDM is the right choice.** It requires 10× less capital than GOLD and has excellent liquidity.
+
+## MCX Trading Timings
+
+MCX operates Monday to Friday in two sessions:
+
+- **Morning session:** 9:00 AM to 5:00 PM IST
+- **Evening session:** 5:00 PM to 11:30 PM IST (till 11:55 PM on daylight saving days when US is in summer time)
+
+**Important:** Most gold price action happens in the evening session (5-11:30 PM) because this aligns with:
+- US market opening (7:30 PM IST)
+- COMEX gold futures active trading (US session)
+- US economic data releases (typically 6:30 PM - 10:30 PM IST)
+
+## What Moves Gold Prices?
+
+Understanding gold's drivers is essential before trading:
+
+**1. US Dollar (DXY index):** Gold and dollar have an inverse relationship. When USD strengthens, gold typically falls (denominated in USD). When USD weakens, gold rises.
+
+**2. US Interest Rates / Fed Policy:** Rising US interest rates are generally negative for gold (opportunity cost of holding gold increases). Fed dovish signals are bullish for gold.
+
+**3. Inflation:** Gold is a traditional inflation hedge. High US CPI data often boosts gold.
+
+**4. Geopolitical risk:** Wars, conflicts, political instability drive safe-haven demand for gold. The Russia-Ukraine conflict, Middle East tensions drove gold to record highs in 2024-25.
+
+**5. India domestic factors:**
+- Indian Rupee vs USD exchange rate (MCX gold = international gold × $/₹ rate)
+- Indian wedding/festival season (Oct-Nov demand surge)
+- Import duties (government can change these — immediate impact)
+
+## Key Economic Events for Gold Traders
+
+Mark these on your calendar every week:
+
+| Event | Time (IST) | Impact |
+|-------|-----------|--------|
+| US CPI (monthly) | ~6:30 PM | Very High |
+| US NFP/Jobs (1st Friday) | ~6:30 PM | Very High |
+| FOMC Meeting (8×/year) | ~11:30 PM | Very High |
+| US GDP (quarterly) | ~6:30 PM | High |
+| Fed Chair speech | Variable | High |
+| India RBI policy (6×/year) | 10:00 AM IST | Medium |
+
+Trading gold during major US data releases without a clear plan = gambling. Either be out of positions or have strict stop losses in place.
+
+## Basic Gold Trading Strategies
+
+### Strategy 1: US Session Momentum Trade (Evening)
+
+- Wait for US market open (7:30 PM IST)
+- If COMEX gold is making a clear directional move in first 30 minutes
+- Enter GOLDM in same direction
+- Tight stop (₹50-100 per 100g = ₹5,000-10,000)
+- Target: 1.5-2× your stop
+- Exit before 11 PM IST to avoid end-of-session volatility
+
+### Strategy 2: Morning Range Trade (Indian Session)
+
+- 9 AM to 12 PM: MCX gold often consolidates after overnight US moves
+- Identify the morning high and low (first 45 minutes)
+- Trade breakouts from that range with confirmation
+- Close before 4 PM if position not profitable
+
+### Strategy 3: Event Play
+
+- Before major US data (CPI, NFP), buy a straddle on GOLDM options
+- If you don't trade options: stay out before data, enter after reaction settles (10-15 minutes post-release)
+
+## Risk Management for Gold Trading
+
+Gold can move ₹500-2,000 per 100g on major news days. On a GOLDM contract, that's ₹50,000-2,00,000 in a single session.
+
+**Always use stop losses.** Given gold's volatility, many traders prefer options on gold for defined risk rather than futures.
+
+**Position sizing:** Never risk more than 2% of your account on a single gold trade. For a ₹1 lakh account: max loss ₹2,000 per trade.
+
+Practice gold trading strategies on PaperPe before going live. The evening session's volatility around US data is significantly different from daytime trading — experience it risk-free first.
+    `
   }
 ];
 
