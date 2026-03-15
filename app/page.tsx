@@ -155,8 +155,8 @@ function LiveTradeToasts() {
       indexRef.current++;
       setTimeout(() => setVisible(v => v?.id === id ? null : v), 3200);
     };
-    const t = setTimeout(show, 2000);
-    const interval = setInterval(show, 5500);
+    const t = setTimeout(show, 2500);
+    const interval = setInterval(show, 6000);
     return () => { clearTimeout(t); clearInterval(interval); };
   }, []);
 
@@ -165,17 +165,17 @@ function LiveTradeToasts() {
 
   return (
     <div style={{
-      position: 'absolute', bottom: 32, left: 32, zIndex: 10,
+      position: 'fixed', bottom: 24, left: 24, zIndex: 200,
       background: '#111827', border: '1px solid rgba(0,192,118,0.2)',
       borderRadius: 14, padding: '12px 16px',
-      boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+      boxShadow: '0 20px 40px rgba(0,0,0,0.6)',
       animation: 'toastIn 0.35s ease',
-      maxWidth: 260,
+      maxWidth: 240,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ fontSize: 22 }}>{trade.emoji}</span>
+        <span style={{ fontSize: 20 }}>{trade.emoji}</span>
         <div>
-          <div style={{ fontSize: 12, color: '#64748b', marginBottom: 2 }}>{trade.name} · {trade.city}</div>
+          <div style={{ fontSize: 11, color: '#64748b', marginBottom: 2 }}>{trade.name} · {trade.city}</div>
           <div style={{ fontSize: 13, fontWeight: 700 }}>
             <span style={{ color: '#00C076' }}>{trade.pnl}</span>
             <span style={{ color: '#475569', fontWeight: 400 }}> on {trade.instrument}</span>
@@ -195,21 +195,21 @@ function LivePriceBar({ tickers }: { tickers: { sym: string; price: number; chg:
     'M0,32 L10,28 L20,34 L30,22 L40,26 L50,18 L60,22 L70,12',
   ];
   return (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
       {items.map((tk, i) => {
         const up = tk.chg >= 0;
         return (
           <div key={tk.sym} style={{
             background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
-            borderRadius: 12, padding: '10px 16px',
-            display: 'flex', alignItems: 'center', gap: 12, minWidth: 160,
+            borderRadius: 12, padding: '10px 14px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
           }}>
             <div>
               <div style={{ fontSize: 10, color: '#374151', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 3 }}>{tk.sym}</div>
-              <div style={{ fontWeight: 700, fontSize: 14 }}>₹{tk.price.toLocaleString('en-IN')}</div>
+              <div style={{ fontWeight: 700, fontSize: 13 }}>₹{tk.price.toLocaleString('en-IN')}</div>
               <div style={{ fontSize: 11, color: up ? '#00C076' : '#FF4D4D', marginTop: 2 }}>{up ? '▲' : '▼'} {Math.abs(tk.chg)}%</div>
             </div>
-            <svg viewBox="0 0 70 40" width={70} height={30} style={{ opacity: 0.8 }}>
+            <svg viewBox="0 0 70 40" width={55} height={28} style={{ opacity: 0.8, flexShrink: 0 }}>
               <path d={sparkPaths[i]} fill="none" stroke={up ? '#00C076' : '#FF4D4D'} strokeWidth="1.5" />
             </svg>
           </div>
@@ -302,7 +302,7 @@ export default function HomePage() {
 
       <style>{`
         @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes floatUp { 0%{transform:translateY(0);opacity:0} 5%{opacity:1} 90%{opacity:1} 100%{transform:translateY(-100vh);opacity:0} }
+        @keyframes floatUp { 0%{transform:translateY(0);opacity:0} 8%{opacity:1} 85%{opacity:0.8} 100%{transform:translateY(-90vh);opacity:0} }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
         @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
         @keyframes ping { 75%,100%{transform:scale(2);opacity:0} }
