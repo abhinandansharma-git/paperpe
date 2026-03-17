@@ -439,12 +439,25 @@ export default function HomePage() {
           )}
 
           {/* Trust */}
-          <div className="fu4" style={{ display: 'flex', justifyContent: 'center', gap: 28, fontSize: 13, color: '#374151', flexWrap: 'wrap', marginBottom: 40 }}>
+          <div className="fu4" style={{ display: 'flex', justifyContent: 'center', gap: 28, fontSize: 13, color: '#374151', flexWrap: 'wrap', marginBottom: 28 }}>
             {['Free forever', 'No credit card', 'Real-time prices'].map(t => (
               <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <CheckCircle size={13} color="#00C076" /> {t}
               </span>
             ))}
+          </div>
+
+          {/* Telegram CTA */}
+          <div className="fu4" style={{ marginBottom: 28 }}>
+            <a href="https://t.me/paperpe_in" target="_blank" rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(0,136,204,0.08)', border: '1px solid rgba(0,136,204,0.2)', borderRadius: 14, padding: '12px 22px', textDecoration: 'none', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,136,204,0.15)'; e.currentTarget.style.borderColor = 'rgba(0,136,204,0.4)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,136,204,0.08)'; e.currentTarget.style.borderColor = 'rgba(0,136,204,0.2)'; }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.012 9.484c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697l-2.95-.924c-.642-.2-.655-.642.136-.953l11.527-4.444c.535-.194 1.003.131.37.872z"/></svg>
+              <span style={{ color: '#0088cc', fontWeight: 700, fontSize: 14 }}>Join our Telegram</span>
+              <span style={{ color: '#374151', fontSize: 13 }}>@paperpe_in</span>
+              <span style={{ fontSize: 11, background: 'rgba(0,136,204,0.15)', color: '#0088cc', padding: '2px 8px', borderRadius: 999, fontWeight: 700 }}>FREE signals</span>
+            </a>
           </div>
 
           {/* Live price mini cards */}
@@ -725,9 +738,20 @@ export default function HomePage() {
           </div>
           <div style={{ borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 28, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
             <p style={{ fontSize: 12, color: '#1e293b' }}>© 2026 PaperPe. For educational purposes only. Not SEBI registered.</p>
-            <div style={{ display: 'flex', gap: 20 }}>
-              <a href="https://twitter.com/paperpe_in" style={{ color: '#1e293b', fontSize: 12, textDecoration: 'none' }}>Twitter</a>
-              <a href="https://reddit.com/u/Paperpe_in" style={{ color: '#1e293b', fontSize: 12, textDecoration: 'none' }}>Reddit</a>
+            <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+              <a href="https://twitter.com/paperpe_in" style={{ color: '#1e293b', fontSize: 12, textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#94a3b8'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#1e293b'; }}>Twitter</a>
+              <a href="https://reddit.com/u/Paperpe_in" style={{ color: '#1e293b', fontSize: 12, textDecoration: 'none' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#94a3b8'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#1e293b'; }}>Reddit</a>
+              <a href="https://t.me/paperpe_in" target="_blank" rel="noopener noreferrer"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(0,136,204,0.1)', border: '1px solid rgba(0,136,204,0.2)', color: '#0088cc', fontSize: 12, fontWeight: 600, textDecoration: 'none', padding: '5px 12px', borderRadius: 8, transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,136,204,0.18)'; e.currentTarget.style.borderColor = 'rgba(0,136,204,0.4)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,136,204,0.1)'; e.currentTarget.style.borderColor = 'rgba(0,136,204,0.2)'; }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="#0088cc"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.012 9.484c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697l-2.95-.924c-.642-.2-.655-.642.136-.953l11.527-4.444c.535-.194 1.003.131.37.872z"/></svg>
+                Telegram
+              </a>
             </div>
           </div>
         </div>
