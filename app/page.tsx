@@ -364,7 +364,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
-              <img src="/emblem-transparent.png" alt="PaperPe" style={{ height: 38, width: 38, objectFit: 'contain' }} />
+              <img src="/paperpe-emblem.svg" alt="PaperPe" style={{ height: 38, width: 38, objectFit: 'contain' }} />
               <span style={{ fontWeight: 800, fontSize: 18, color: '#e2e8f0' }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
             </Link>
             <div className="nav-mid" style={{ display: 'flex', gap: 2 }}>
@@ -710,7 +710,7 @@ export default function HomePage() {
           <div className="two-col" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 14 }}>
-                <img src="/emblem-transparent.png" alt="PaperPe" style={{ height: 32, width: 32, objectFit: 'contain' }} />
+                <img src="/paperpe-emblem.svg" alt="PaperPe" style={{ height: 32, width: 32, objectFit: 'contain' }} />
                 <span style={{ fontWeight: 800, fontSize: 16 }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
               </div>
               <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.7, maxWidth: 240 }}>India&apos;s paper trading platform for MCX commodities and F&amp;O options.</p>

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Practice trading with zero risk. Launching soon!',
     url: 'https://paperpe.in',
     siteName: 'PaperPe',
-    images: [{ url: '/emblem.png', width: 512, height: 512, alt: 'PaperPe Logo' }],
+    images: [{ url: '/paperpe-logo-dark.png', width: 1024, height: 512, alt: 'PaperPe Logo' }],
     type: 'website',
   },
   twitter: {

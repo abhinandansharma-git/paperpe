@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
+  <defs>
+    <linearGradient id="goldGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C8A84B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5E1A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="darkGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2C1A0E;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A0A00;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle (optional, comment out for transparent) -->
+  <!-- <circle cx="36" cy="36" r="35" fill="#0D1117"/> -->
+  
+  <!-- Outer gold ring -->
+  <circle cx="36" cy="36" r="30" fill="none" stroke="url(#goldGrad2)" stroke-width="3.5"/>
+  
+  <!-- P letter vertical bar -->
+  <rect x="20" y="16" width="5.5" height="40" fill="url(#darkGrad2)" rx="2.5"/>
+  
+  <!-- P letter bowl -->
+  <path d="M25.5 16 Q46 16 46 27 Q46 38 25.5 38" fill="none" stroke="url(#darkGrad2)" stroke-width="5.5" stroke-linecap="round"/>
+  
+  <!-- Green chart/arrow line -->
+  <polyline points="26,48 32,38 38,43 44,28 50,20" fill="none" stroke="#00C076" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="50,20 44,23 47,29" fill="#00C076"/>
+  
+  <!-- Gold sparkles -->
+  <circle cx="14" cy="55" r="2.5" fill="#C8A84B" opacity="0.75"/>
+  <circle cx="19" cy="63" r="2" fill="#C8A84B" opacity="0.55"/>
+  <circle cx="10" cy="63" r="1.5" fill="#C8A84B" opacity="0.4"/>
+  <circle cx="22" cy="58" r="1" fill="#C8A84B" opacity="0.35"/>
+</svg>
