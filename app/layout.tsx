@@ -6,16 +6,31 @@ export const metadata: Metadata = {
   title: 'PaperPe - India\'s #1 Paper Trading Platform | Coming Soon',
   description: 'Practice trading NSE, MCX & F&O with virtual money. Zero risk, real skills. Launching soon!',
   keywords: 'paper trading, virtual trading, stock market simulator, NSE, MCX, F&O, options trading, India',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      { rel: 'mask-icon', url: '/favicon.ico' },
+    ],
+  },
   openGraph: {
     title: 'PaperPe - Paper Trading Platform',
     description: 'Practice trading with zero risk. Launching soon!',
     url: 'https://paperpe.in',
     siteName: 'PaperPe',
+    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'PaperPe Logo' }],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     site: '@paperpe_in',
+    images: ['/logo.png'],
   },
 };
 
