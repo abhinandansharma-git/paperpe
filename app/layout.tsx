@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { GeistSans } from 'geist/font/sans';
 import './globals.css';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: 'PaperPe - India\'s #1 Paper Trading Platform | Coming Soon',
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Practice trading with zero risk. Launching soon!',
     url: 'https://paperpe.in',
     siteName: 'PaperPe',
-    images: [{ url: '/logo.png', width: 512, height: 512, alt: 'PaperPe Logo' }],
+    images: [{ url: '/emblem.png', width: 512, height: 512, alt: 'PaperPe Logo' }],
     type: 'website',
   },
   twitter: {
