@@ -364,8 +364,7 @@ export default function HomePage() {
         <div style={{ maxWidth: 1200, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 28 }}>
             <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 9, textDecoration: 'none' }}>
-              <img src="/emblem.png" alt="PaperPe" style={{ width: 34, height: 34, borderRadius: 10, objectFit: 'contain', boxShadow: '0 0 16px rgba(0,192,118,0.25)' }} />
-              <span style={{ fontWeight: 800, fontSize: 18, color: '#e2e8f0' }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
+              <img src="/logo.png" alt="PaperPe" style={{ height: 36, width: 'auto', objectFit: 'contain' }} />
             </Link>
             <div className="nav-mid" style={{ display: 'flex', gap: 2 }}>
               {[['Tools', '/calculator'], ['Indicators', '/indicators'], ['Blog', '/blog'], ['Brokers', '/brokers']].map(([l, h]) => (
@@ -710,8 +709,7 @@ export default function HomePage() {
           <div className="two-col" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 48, marginBottom: 48 }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, marginBottom: 14 }}>
-                <img src="/emblem.png" alt="PaperPe" style={{ width: 30, height: 30, borderRadius: 8, objectFit: 'contain' }} />
-                <span style={{ fontWeight: 800, fontSize: 16 }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
+                <img src="/logo.png" alt="PaperPe" style={{ height: 30, width: 'auto', objectFit: 'contain' }} />
               </div>
               <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.7, maxWidth: 240 }}>India&apos;s paper trading platform for MCX commodities and F&amp;O options.</p>
             </div>
