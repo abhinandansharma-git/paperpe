@@ -6,7 +6,8 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node tests/run-commerce-tests.mjs"
   },
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.6.0",

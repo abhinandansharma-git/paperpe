@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { getResend, FROM_EMAIL } from '@/lib/email/resend';
 import { purchaseEmail } from '@/lib/email/templates';
+import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,6 +23,9 @@ export async function POST(req: NextRequest) {
       amount,
     } = await req.json();
 
+    const catalogProduct = getProductCatalogEntry(productId);
+    const canonicalProductId = catalogProduct?.canonicalId || productId;
+
     // Verify signature
     const body = razorpay_order_id + '|' + razorpay_payment_id;
     const expectedSignature = crypto
@@ -33,12 +37,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
+    const { data: existingOrder } = await supabaseAdmin
+      .from('orders')
+      .select('id')
+      .eq('razorpay_payment_id', razorpay_payment_id)
+      .maybeSingle();
+
+    if (existingOrder) {
+      return NextResponse.json({
+        success: true,
+        message: 'Payment already verified.',
+        paymentId: razorpay_payment_id,
+        orderId: existingOrder.id,
+      });
+    }
+
     // Find product in DB
     const { data: product } = await supabaseAdmin
       .from('products')
       .select('id, name')
-      .eq('slug', productId)
+      .eq('slug', canonicalProductId)
       .single();
+
+    const resolvedAmount = Number.isFinite(amount) && amount > 0
+      ? amount
+      : (catalogProduct?.price || 0);
 
     // Save order to DB
     const { data: order, error: orderError } = await supabaseAdmin
@@ -46,7 +69,7 @@ export async function POST(req: NextRequest) {
       .insert({
         user_id: userId || null,
         product_id: product?.id || null,
-        amount: amount || 0,
+        amount: resolvedAmount,
         razorpay_order_id,
         razorpay_payment_id,
         status: 'paid',
@@ -64,8 +87,8 @@ export async function POST(req: NextRequest) {
       try {
         const template = purchaseEmail({
           name: email.split('@')[0],
-          productName: product?.name || productName,
-          amount: amount || 0,
+          productName: product?.name || catalogProduct?.name || productName,
+          amount: resolvedAmount,
           orderId: order?.id || razorpay_order_id,
         });
         await getResend()?.emails.send({

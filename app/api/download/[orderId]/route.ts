@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { isStoragePath } from '@/lib/commerce/storage.js';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -36,8 +37,18 @@ export async function GET(
       return NextResponse.json({ error: 'Order not found or not paid' }, { status: 404 });
     }
 
-    // ── Verify ownership: order must belong to requesting user ──
-    if (order.user_id && userId && order.user_id !== userId) {
+    // ── Verify ownership: downloads are tied to the purchasing account ──
+    if (!order.user_id) {
+      return NextResponse.json({
+        error: 'This order is not linked to an account yet. Contact support@paperpe.in',
+      }, { status: 409 });
+    }
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Please sign in to download your purchase' }, { status: 401 });
+    }
+
+    if (order.user_id !== userId) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
@@ -62,9 +73,26 @@ export async function GET(
       }, { status: 429 });
     }
 
-    // If product has a file_url, redirect to it
+    // If product has a file_url, sign storage paths or redirect to absolute URLs
     if (order.product?.file_url) {
-      return NextResponse.redirect(order.product.file_url);
+      const fileUrl = order.product.file_url.trim();
+
+      if (isStoragePath(fileUrl)) {
+        const { data: signedUrlData, error: signedUrlError } = await supabaseAdmin.storage
+          .from('products')
+          .createSignedUrl(fileUrl, 60 * 10, { download: true });
+
+        if (signedUrlError || !signedUrlData?.signedUrl) {
+          console.error('Signed URL error:', signedUrlError);
+          return NextResponse.json({
+            error: 'Download file is not ready yet. Contact support@paperpe.in',
+          }, { status: 500 });
+        }
+
+        return NextResponse.redirect(signedUrlData.signedUrl);
+      }
+
+      return NextResponse.redirect(fileUrl);
     }
 
     return NextResponse.json({

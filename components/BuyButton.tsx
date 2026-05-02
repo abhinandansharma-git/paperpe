@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { buildPaymentVerifyPayload } from '@/lib/commerce/checkout.js';
 
 declare global {
   interface Window { Razorpay: any; }
@@ -76,14 +77,14 @@ export default function BuyButton({ productId, productName, price, color = 'oran
           const verifyRes = await fetch('/api/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...response,
+            body: JSON.stringify(buildPaymentVerifyPayload({
+              response,
               email: user.email,
-              productId,
+              productId: data.productId || productId,
               productName: data.productName,
               userId: user.id,
               amount: price,
-            }),
+            })),
           });
 
           const verifyData = await verifyRes.json();

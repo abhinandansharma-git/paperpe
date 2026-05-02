@@ -18,6 +18,9 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [profileForm, setProfileForm] = useState({ fullName: '', phone: '' });
+  const [profileSaving, setProfileSaving] = useState(false);
+  const [profileNotice, setProfileNotice] = useState('');
 
   useEffect(() => { checkUser(); }, []);
 
@@ -32,6 +35,10 @@ export default function DashboardPage() {
     ]);
 
     setProfile(profileData);
+    setProfileForm({
+      fullName: profileData?.full_name || '',
+      phone: profileData?.phone || '',
+    });
     setOrders(ordersData || []);
     setLoading(false);
   };
@@ -39,6 +46,34 @@ export default function DashboardPage() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push('/');
+  };
+
+  const handleProfileSave = async () => {
+    if (!user) {
+      return;
+    }
+
+    setProfileSaving(true);
+    setProfileNotice('');
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({
+        full_name: profileForm.fullName.trim() || null,
+        phone: profileForm.phone.trim() || null,
+      })
+      .eq('id', user.id)
+      .select()
+      .single();
+
+    if (error) {
+      setProfileNotice('Could not save your profile right now.');
+    } else {
+      setProfile(data);
+      setProfileNotice('Profile updated successfully.');
+    }
+
+    setProfileSaving(false);
   };
 
   const paidOrders = orders.filter(o => o.status === 'paid');
@@ -310,23 +345,43 @@ export default function DashboardPage() {
               <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
                 <h2 className="font-semibold text-white mb-6">Profile Settings</h2>
                 <div className="space-y-4">
-                  {[
-                    { label: 'Full Name', value: profile?.full_name || 'Not set', placeholder: 'Your full name' },
-                    { label: 'Email', value: user?.email, placeholder: '', readonly: true },
-                    { label: 'Phone', value: profile?.phone || 'Not set', placeholder: 'Your phone number' },
-                  ].map(field => (
-                    <div key={field.label}>
-                      <label className="block text-gray-400 text-sm mb-2">{field.label}</label>
-                      <input
-                        defaultValue={field.value}
-                        readOnly={field.readonly}
-                        className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00C076] disabled:opacity-50"
-                        placeholder={field.placeholder}
-                      />
-                    </div>
-                  ))}
-                  <button className="bg-[#00C076] hover:bg-[#00a865] text-[#0D1117] font-bold px-6 py-2.5 rounded-xl transition-colors text-sm">
-                    Save Changes
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">Full Name</label>
+                    <input
+                      value={profileForm.fullName}
+                      onChange={(e) => setProfileForm((current) => ({ ...current, fullName: e.target.value }))}
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00C076]"
+                      placeholder="Your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">Email</label>
+                    <input
+                      value={user?.email || ''}
+                      readOnly
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm opacity-70"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-sm mb-2">Phone</label>
+                    <input
+                      value={profileForm.phone}
+                      onChange={(e) => setProfileForm((current) => ({ ...current, phone: e.target.value }))}
+                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00C076]"
+                      placeholder="Your phone number"
+                    />
+                  </div>
+                  {profileNotice && (
+                    <p className={`text-sm ${profileNotice.includes('successfully') ? 'text-[#00C076]' : 'text-red-400'}`}>
+                      {profileNotice}
+                    </p>
+                  )}
+                  <button
+                    onClick={handleProfileSave}
+                    disabled={profileSaving}
+                    className="bg-[#00C076] hover:bg-[#00a865] disabled:bg-[#00C076]/50 text-[#0D1117] font-bold px-6 py-2.5 rounded-xl transition-colors text-sm"
+                  >
+                    {profileSaving ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>
               </div>

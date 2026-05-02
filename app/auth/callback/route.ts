@@ -6,7 +6,8 @@ import { welcomeEmail } from '@/lib/email/templates';
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
-  const isNewUser = requestUrl.searchParams.get('new') === '1';
+  const requestedRedirect = requestUrl.searchParams.get('redirect') || '/dashboard';
+  const safeRedirect = requestedRedirect.startsWith('/') ? requestedRedirect : '/dashboard';
 
   if (code) {
     const supabase = createClient(
@@ -41,5 +42,5 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(new URL('/dashboard', requestUrl.origin));
+  return NextResponse.redirect(new URL(safeRedirect, requestUrl.origin));
 }

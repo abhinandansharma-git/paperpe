@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Check, Zap, Target, Shield, X, LogIn, UserPlus } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { buildPaymentVerifyPayload } from '@/lib/commerce/checkout.js';
 
 declare global {
   interface Window {
@@ -87,13 +88,15 @@ const indicators = [
 ];
 
 const bundle = {
-  id: 'bundle',
+  id: 'complete-bundle',
   name: 'Complete Bundle',
   price: 3999,
   originalPrice: 8996,
   includes: ['ARIA SUPREME', 'OI Pulse', 'Fear & Greed Meter', 'Smart S/R'],
   savings: 4997
 };
+
+const PENDING_PRODUCT_STORAGE_KEY = 'paperpe:pending-product';
 
 export default function IndicatorsPage() {
   const [showModal, setShowModal] = useState(false);
@@ -104,19 +107,58 @@ export default function IndicatorsPage() {
   const [user, setUser] = useState<any>(null);
   const [authLoading, setAuthLoading] = useState(false);
 
+  const syncCheckoutToUser = (nextUser: any, product: { id: string, name: string, price: number } | null) => {
+    if (!nextUser || !product) {
+      return;
+    }
+
+    setSelectedProduct(product);
+    setShowAuthModal(false);
+    setFormData((current) => ({
+      ...current,
+      name: nextUser.user_metadata?.full_name || current.name,
+      email: nextUser.email || current.email,
+    }));
+    setShowModal(true);
+  };
+
+  const restorePendingCheckout = (nextUser: any) => {
+    if (!nextUser || typeof window === 'undefined') {
+      return false;
+    }
+
+    const pendingProduct = window.sessionStorage.getItem(PENDING_PRODUCT_STORAGE_KEY);
+    if (!pendingProduct) {
+      return false;
+    }
+
+    try {
+      const parsedProduct = JSON.parse(pendingProduct);
+      window.sessionStorage.removeItem(PENDING_PRODUCT_STORAGE_KEY);
+      syncCheckoutToUser(nextUser, parsedProduct);
+      return true;
+    } catch {
+      window.sessionStorage.removeItem(PENDING_PRODUCT_STORAGE_KEY);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => setUser(user));
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+      restorePendingCheckout(user);
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      const sessionUser = session?.user ?? null;
+      setUser(sessionUser);
+
+      if (restorePendingCheckout(sessionUser)) {
+        return;
+      }
+
       // If user just logged in and has a pending product, proceed to checkout
-      if (session?.user && selectedProduct) {
-        setShowAuthModal(false);
-        setFormData(f => ({
-          ...f,
-          name: session.user.user_metadata?.full_name || f.name,
-          email: session.user.email || f.email,
-        }));
-        setShowModal(true);
+      if (sessionUser && selectedProduct) {
+        syncCheckoutToUser(sessionUser, selectedProduct);
       }
     });
     return () => subscription.unsubscribe();
@@ -140,23 +182,20 @@ export default function IndicatorsPage() {
     setSelectedProduct(product);
     const { data: { user: currentUser } } = await supabase.auth.getUser();
     if (!currentUser) {
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem(PENDING_PRODUCT_STORAGE_KEY, JSON.stringify(product));
+      }
       setShowAuthModal(true);
       return;
     }
-    // Pre-fill from user profile
-    setFormData(f => ({
-      ...f,
-      name: currentUser.user_metadata?.full_name || f.name,
-      email: currentUser.email || f.email,
-    }));
-    setShowModal(true);
+    syncCheckoutToUser(currentUser, product);
   };
 
   const handleGoogleLogin = async () => {
     setAuthLoading(true);
     await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${window.location.origin}/indicators` }
+      options: { redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent('/indicators')}` }
     });
   };
 
@@ -210,20 +249,25 @@ export default function IndicatorsPage() {
           const verifyRes = await fetch('/api/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ...response,
+            body: JSON.stringify(buildPaymentVerifyPayload({
+              response,
               email: formData.email,
               phone: formData.phone,
-              productId: selectedProduct.id,
+              productId: data.productId || selectedProduct.id,
               productName: data.productName,
-            }),
+              userId: user?.id,
+              amount: selectedProduct.price,
+            })),
           });
 
           const verifyData = await verifyRes.json();
           if (verifyData.success) {
-            alert('🎉 Payment successful! Check your email/WhatsApp for the indicator file.');
+            if (typeof window !== 'undefined') {
+              window.sessionStorage.removeItem(PENDING_PRODUCT_STORAGE_KEY);
+            }
             setShowModal(false);
             setFormData({ name: '', email: '', phone: '' });
+            window.location.assign('/dashboard?payment=success');
           } else {
             alert('Payment received! Contact us on WhatsApp (+91 99303 24251) for delivery.');
           }
