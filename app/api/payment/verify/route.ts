@@ -4,6 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getResend, FROM_EMAIL } from '@/lib/email/resend';
 import { purchaseEmail } from '@/lib/email/templates';
 import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
+import { buildVerifiedOrderInsert } from '@/lib/commerce/checkout.js';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -62,19 +63,21 @@ export async function POST(req: NextRequest) {
     const resolvedAmount = Number.isFinite(amount) && amount > 0
       ? amount
       : (catalogProduct?.price || 0);
+    const normalizedEmail = typeof email === 'string'
+      ? email.trim().toLowerCase()
+      : undefined;
 
     // Save order to DB
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
-      .insert({
-        user_id: userId || null,
-        product_id: product?.id || null,
+      .insert(buildVerifiedOrderInsert({
+        userId,
+        productId: product?.id,
         amount: resolvedAmount,
-        razorpay_order_id,
-        razorpay_payment_id,
-        status: 'paid',
-        email,
-      })
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        email: normalizedEmail,
+      }))
       .select()
       .single();
 
@@ -83,17 +86,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Send purchase confirmation email
-    if (email && process.env.RESEND_API_KEY) {
+    if (normalizedEmail && process.env.RESEND_API_KEY) {
       try {
         const template = purchaseEmail({
-          name: email.split('@')[0],
+          name: normalizedEmail.split('@')[0],
           productName: product?.name || catalogProduct?.name || productName,
           amount: resolvedAmount,
           orderId: order?.id || razorpay_order_id,
         });
         await getResend()?.emails.send({
           from: FROM_EMAIL,
-          to: email,
+          to: normalizedEmail,
           subject: template.subject,
           html: template.html,
         });

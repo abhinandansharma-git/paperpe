@@ -4,7 +4,10 @@ import {
   canonicalizeProductId,
   getProductCatalogEntry,
 } from '../lib/commerce/catalog.js';
-import { buildPaymentVerifyPayload } from '../lib/commerce/checkout.js';
+import {
+  buildPaymentVerifyPayload,
+  buildVerifiedOrderInsert,
+} from '../lib/commerce/checkout.js';
 import { isStoragePath } from '../lib/commerce/storage.js';
 
 function run(name, fn) {
@@ -65,6 +68,27 @@ run('payment verify payload keeps ownership and amount fields intact', () => {
     productName: 'ARIA SUPREME Indicator',
     userId: 'user_123',
     amount: 2999,
+  });
+});
+
+run('verified orders target the customer_email column expected by Supabase', () => {
+  const record = buildVerifiedOrderInsert({
+    userId: 'user_123',
+    productId: 'product_123',
+    amount: 2999,
+    razorpayOrderId: 'order_123',
+    razorpayPaymentId: 'pay_123',
+    email: 'abhi@paperpe.in',
+  });
+
+  assert.deepEqual(record, {
+    user_id: 'user_123',
+    product_id: 'product_123',
+    amount: 2999,
+    razorpay_order_id: 'order_123',
+    razorpay_payment_id: 'pay_123',
+    status: 'paid',
+    customer_email: 'abhi@paperpe.in',
   });
 });
 
