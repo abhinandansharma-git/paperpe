@@ -3,12 +3,15 @@ import { createClient } from '@supabase/supabase-js';
 
 const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 async function verifyAdmin(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin();
   const authHeader = req.headers.get('authorization');
   if (!authHeader) return null;
   const token = authHeader.replace('Bearer ', '');
@@ -19,6 +22,7 @@ async function verifyAdmin(req: NextRequest) {
 
 // CREATE product
 export async function POST(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin();
   const user = await verifyAdmin(req);
   if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
@@ -41,6 +45,7 @@ export async function POST(req: NextRequest) {
 
 // UPDATE product
 export async function PUT(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin();
   const user = await verifyAdmin(req);
   if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
@@ -62,6 +67,7 @@ export async function PUT(req: NextRequest) {
 
 // DELETE product
 export async function DELETE(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin();
   const user = await verifyAdmin(req);
   if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 

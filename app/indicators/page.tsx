@@ -97,6 +97,7 @@ const bundle = {
 };
 
 const PENDING_PRODUCT_STORAGE_KEY = 'paperpe:pending-product';
+const SUPPORT_WHATSAPP_LABEL = '+91 99303 24251';
 
 export default function IndicatorsPage() {
   const [showModal, setShowModal] = useState(false);
@@ -269,7 +270,7 @@ export default function IndicatorsPage() {
             setFormData({ name: '', email: '', phone: '' });
             window.location.assign('/dashboard?payment=success');
           } else {
-            alert('Payment received! Contact us on WhatsApp (+91 99303 24251) for delivery.');
+            alert(`Payment received! Contact us on WhatsApp (${SUPPORT_WHATSAPP_LABEL}) for delivery.`);
           }
         },
       };
@@ -429,7 +430,7 @@ export default function IndicatorsPage() {
           <h2 className="text-2xl font-bold text-white mb-8 text-center">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {[
-              { q: 'How do I use these indicators?', a: 'After purchase, you will receive a Pine Script file. Add it to TradingView via the Pine Editor. Works on free TradingView accounts.' },
+              { q: 'How do I receive my indicator right now?', a: 'After purchase, our team delivers your access manually on WhatsApp or email. Your dashboard will show the delivery status, and direct downloads will appear there once file access is enabled.' },
               { q: 'Do I need TradingView Premium?', a: 'No, these work on free TradingView accounts. Premium is only needed if you want to use more than 3 indicators on one chart.' },
               { q: 'Can I use on multiple devices?', a: 'Yes, once added to your TradingView account, it works everywhere you log in.' },
               { q: 'Is there a refund policy?', a: 'Due to the digital nature of the product, we do not offer refunds. Please review the features carefully before purchasing.' },
@@ -491,7 +492,7 @@ export default function IndicatorsPage() {
             </div>
             
             <p className="text-center text-gray-400 text-xs mt-4">
-              🔒 Secure payment via Razorpay
+              🔒 Secure payment via Razorpay. Delivery is currently handled manually on WhatsApp or email.
             </p>
           </div>
         </div>

@@ -11,6 +11,9 @@ import {
   Activity, ShoppingBag, Trophy, Zap
 } from 'lucide-react';
 
+const SUPPORT_EMAIL = 'hello@paperpe.in';
+const SUPPORT_WHATSAPP_LABEL = '+91 99303 24251';
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
@@ -18,11 +21,17 @@ export default function DashboardPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [profileForm, setProfileForm] = useState({ fullName: '', phone: '' });
   const [profileSaving, setProfileSaving] = useState(false);
   const [profileNotice, setProfileNotice] = useState('');
 
-  useEffect(() => { checkUser(); }, []);
+  useEffect(() => {
+    checkUser();
+    if (typeof window !== 'undefined') {
+      setPaymentSuccess(new URLSearchParams(window.location.search).get('payment') === 'success');
+    }
+  }, []);
 
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -78,6 +87,7 @@ export default function DashboardPage() {
 
   const paidOrders = orders.filter(o => o.status === 'paid');
   const memberSince = user ? new Date(user.created_at).toLocaleDateString('en-IN', { month: 'long', year: 'numeric' }) : '';
+  const hasDownload = (order: any) => Boolean(order.product?.file_url);
 
   if (loading) return (
     <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
@@ -170,6 +180,14 @@ export default function DashboardPage() {
 
           {/* Main */}
           <div className="col-span-1 md:col-span-9 space-y-6">
+            {paymentSuccess && (
+              <div className="bg-[#00C076]/10 border border-[#00C076]/20 rounded-2xl p-5">
+                <p className="text-[#00C076] font-semibold mb-1">Payment received successfully.</p>
+                <p className="text-sm text-gray-300">
+                  Your order is in our manual delivery queue right now. We will share your indicator on WhatsApp or email, and you can track the status from this dashboard. Reach us at {SUPPORT_EMAIL} or {SUPPORT_WHATSAPP_LABEL} if you need help.
+                </p>
+              </div>
+            )}
 
             {/* Overview Tab */}
             {activeTab === 'overview' && (
@@ -239,14 +257,28 @@ export default function DashboardPage() {
                         <div key={order.id} className="p-4 flex items-center justify-between">
                           <div>
                             <p className="font-medium text-white text-sm">{order.product?.name}</p>
-                            <p className="text-gray-500 text-xs">{new Date(order.created_at).toLocaleDateString('en-IN')}</p>
+                            <p className="text-gray-500 text-xs">
+                              {new Date(order.created_at).toLocaleDateString('en-IN')}
+                              {order.fulfillment_status === 'delivered'
+                                ? ' • Delivered manually'
+                                : hasDownload(order)
+                                  ? ' • Ready to download'
+                                  : ' • Manual delivery pending'}
+                            </p>
                           </div>
                           <div className="flex items-center gap-3">
                             <span className="text-[#00C076] text-sm font-medium">₹{order.amount}</span>
-                            <Link href={`/api/download/${order.id}`} className="flex items-center gap-1.5 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all">
-                              <Download className="w-3.5 h-3.5" />
-                              Download
-                            </Link>
+                            {hasDownload(order) ? (
+                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-1.5 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all">
+                                <Download className="w-3.5 h-3.5" />
+                                Download
+                              </Link>
+                            ) : (
+                              <Link href="/support" className="flex items-center gap-1.5 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all">
+                                <HelpCircle className="w-3.5 h-3.5" />
+                                Delivery status
+                              </Link>
+                            )}
                           </div>
                         </div>
                       ))}
@@ -274,29 +306,52 @@ export default function DashboardPage() {
                 ) : (
                   <div className="divide-y divide-[#21262D]">
                     {paidOrders.map(order => (
-                      <div key={order.id} className="p-5 flex items-center justify-between hover:bg-[#0D1117]/50 transition-colors">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 bg-[#00C076]/10 rounded-xl flex items-center justify-center">
-                            <Star className="w-5 h-5 text-[#00C076]" />
+                        <div key={order.id} className="p-5 flex items-center justify-between hover:bg-[#0D1117]/50 transition-colors">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 bg-[#00C076]/10 rounded-xl flex items-center justify-center">
+                              <Star className="w-5 h-5 text-[#00C076]" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-white">{order.product?.name}</p>
+                              <p className="text-gray-400 text-sm">{order.product?.description?.slice(0, 60)}...</p>
+                              <p className="text-gray-500 text-xs mt-1">
+                                Purchased {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              </p>
+                              <p className="text-gray-500 text-xs mt-1">
+                                {hasDownload(order)
+                                  ? 'File ready for download'
+                                  : order.fulfillment_status === 'delivered'
+                                    ? `Delivered manually. Contact ${SUPPORT_EMAIL} if you need help.`
+                                    : `Manual delivery pending to ${order.customer_phone || 'your registered contact'} via WhatsApp/email.`}
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-medium text-white">{order.product?.name}</p>
-                            <p className="text-gray-400 text-sm">{order.product?.description?.slice(0, 60)}...</p>
-                            <p className="text-gray-500 text-xs mt-1">Purchased {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                          <div className="flex items-center gap-4">
+                            <div className="text-right">
+                              <p className="text-[#00C076] font-semibold">₹{order.amount}</p>
+                              <span className="inline-block px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded-full">Paid</span>
+                              <p className="text-gray-500 text-xs mt-1">
+                                {hasDownload(order)
+                                  ? 'Download enabled'
+                                  : order.fulfillment_status === 'delivered'
+                                    ? 'Delivered manually'
+                                    : 'Awaiting manual delivery'}
+                              </p>
+                            </div>
+                            {hasDownload(order) ? (
+                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-sm transition-all">
+                                <Download className="w-4 h-4" />
+                                Download
+                              </Link>
+                            ) : (
+                              <Link href="/support" className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-sm transition-all">
+                                <HelpCircle className="w-4 h-4" />
+                                Get support
+                              </Link>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <p className="text-[#00C076] font-semibold">₹{order.amount}</p>
-                            <span className="inline-block px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded-full">Paid</span>
-                          </div>
-                          <Link href={`/api/download/${order.id}`} className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-sm transition-all">
-                            <Download className="w-4 h-4" />
-                            Download
-                          </Link>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 )}
               </div>

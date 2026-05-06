@@ -9,6 +9,11 @@ import {
   buildVerifiedOrderInsert,
 } from '../lib/commerce/checkout.js';
 import { isStoragePath } from '../lib/commerce/storage.js';
+import {
+  buildOrdersCsv,
+  buildOrderWhatsAppLink,
+  filterOrdersForAdmin,
+} from '../lib/admin/fulfillment.js';
 
 function run(name, fn) {
   try {
@@ -79,6 +84,7 @@ run('verified orders target the customer_email column expected by Supabase', () 
     razorpayOrderId: 'order_123',
     razorpayPaymentId: 'pay_123',
     email: 'abhi@paperpe.in',
+    phone: '+919999999999',
   });
 
   assert.deepEqual(record, {
@@ -89,6 +95,8 @@ run('verified orders target the customer_email column expected by Supabase', () 
     razorpay_payment_id: 'pay_123',
     status: 'paid',
     customer_email: 'abhi@paperpe.in',
+    customer_phone: '+919999999999',
+    fulfillment_status: 'pending',
   });
 });
 
@@ -98,6 +106,86 @@ run('relative storage paths are treated as private storage objects', () => {
 
 run('absolute urls are not treated as storage paths', () => {
   assert.equal(isStoragePath('https://example.com/download.pine'), false);
+});
+
+run('admin order filter narrows to the manual fulfillment queue and matches search text', () => {
+  const orders = [
+    {
+      id: 'order_auto',
+      status: 'paid',
+      fulfillment_status: 'pending',
+      customer_email: 'auto@paperpe.in',
+      customer_phone: '+91 9000000001',
+      product: { name: 'ARIA SUPREME Indicator', file_url: 'indicators/aria/file.pine' },
+    },
+    {
+      id: 'order_manual_pending',
+      status: 'paid',
+      fulfillment_status: 'pending',
+      customer_email: 'manual@paperpe.in',
+      customer_phone: '+91 9000000002',
+      product: { name: 'Fear & Greed Meter', file_url: null },
+    },
+    {
+      id: 'order_manual_delivered',
+      status: 'paid',
+      fulfillment_status: 'delivered',
+      customer_email: 'delivered@paperpe.in',
+      customer_phone: '+91 9000000003',
+      product: { name: 'OI Pulse', file_url: null },
+    },
+  ];
+
+  const filtered = filterOrdersForAdmin(orders, {
+    query: 'fear',
+    paymentStatus: 'paid',
+    deliveryState: 'manual-pending',
+  });
+
+  assert.equal(filtered.length, 1);
+  assert.equal(filtered[0].id, 'order_manual_pending');
+});
+
+run('whatsapp links normalize phone numbers and include the order context', () => {
+  const link = buildOrderWhatsAppLink({
+    id: 'ord_123456',
+    customer_phone: '98765 43210',
+    product: { name: 'Fear & Greed Meter', file_url: null },
+  });
+
+  assert.equal(
+    link,
+    'https://wa.me/919876543210?text=Hi!%20Your%20PaperPe%20order%20for%20Fear%20%26%20Greed%20Meter%20is%20confirmed.%20Order%20ID%3A%20ord_123456.%20Reply%20here%20if%20you%20need%20help%20with%20delivery.'
+  );
+});
+
+run('csv export includes delivery details for manual and auto orders', () => {
+  const csv = buildOrdersCsv([
+    {
+      id: 'ord_manual',
+      created_at: '2026-05-04T10:30:00.000Z',
+      amount: 499,
+      status: 'paid',
+      fulfillment_status: 'pending',
+      customer_email: 'manual@paperpe.in',
+      customer_phone: '+91 9000000002',
+      product: { name: 'Fear & Greed Meter', slug: 'fear-greed', file_url: null },
+    },
+    {
+      id: 'ord_auto',
+      created_at: '2026-05-04T11:00:00.000Z',
+      amount: 2999,
+      status: 'paid',
+      fulfillment_status: 'pending',
+      customer_email: 'auto@paperpe.in',
+      customer_phone: '+91 9000000001',
+      product: { name: 'ARIA SUPREME Indicator', slug: 'aria-supreme', file_url: 'indicators/aria/file.pine' },
+    },
+  ]);
+
+  assert.match(csv, /^order_id,created_at,product_slug,product_name,amount,payment_status,delivery_type,delivery_status,customer_email,customer_phone$/m);
+  assert.match(csv, /^ord_manual,2026-05-04T10:30:00.000Z,fear-greed,Fear & Greed Meter,499,paid,manual,pending,manual@paperpe.in,\+91 9000000002$/m);
+  assert.match(csv, /^ord_auto,2026-05-04T11:00:00.000Z,aria-supreme,ARIA SUPREME Indicator,2999,paid,auto-download,available,auto@paperpe.in,\+91 9000000001$/m);
 });
 
 console.log('All commerce tests passed.');

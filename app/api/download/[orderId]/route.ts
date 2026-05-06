@@ -2,16 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { isStoragePath } from '@/lib/commerce/storage.js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+export const dynamic = 'force-dynamic';
+
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { orderId: string } }
 ) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const { orderId } = params;
 
     // ── Auth check: verify user is logged in ──
@@ -40,7 +45,7 @@ export async function GET(
     // ── Verify ownership: downloads are tied to the purchasing account ──
     if (!order.user_id) {
       return NextResponse.json({
-        error: 'This order is not linked to an account yet. Contact support@paperpe.in',
+        error: 'This order is not linked to an account yet. Contact hello@paperpe.in',
       }, { status: 409 });
     }
 
@@ -69,7 +74,7 @@ export async function GET(
 
     if (count && count > 10) {
       return NextResponse.json({
-        error: 'Download limit exceeded (10 max). Contact support@paperpe.in',
+        error: 'Download limit exceeded (10 max). Contact hello@paperpe.in',
       }, { status: 429 });
     }
 
@@ -85,7 +90,7 @@ export async function GET(
         if (signedUrlError || !signedUrlData?.signedUrl) {
           console.error('Signed URL error:', signedUrlError);
           return NextResponse.json({
-            error: 'Download file is not ready yet. Contact support@paperpe.in',
+            error: 'Download file is not ready yet. Contact hello@paperpe.in',
           }, { status: 500 });
         }
 
@@ -96,9 +101,11 @@ export async function GET(
     }
 
     return NextResponse.json({
-      message: 'Download will be available soon. Contact support@paperpe.in',
+      message: 'Direct download is not available yet. Your order is being handled manually. Contact hello@paperpe.in if you need help.',
       product: order.product?.name,
       orderId,
+      fulfillmentStatus: order.fulfillment_status || 'pending',
+      customerPhone: order.customer_phone || null,
     });
   } catch (error) {
     console.error('Download error:', error);

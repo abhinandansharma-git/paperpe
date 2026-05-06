@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 const BACKEND_URL = process.env.MARKET_API_URL || 'http://localhost:5000';
 const CACHE = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 60000;

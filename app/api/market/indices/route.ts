@@ -1,4 +1,6 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+
+export const dynamic = 'force-dynamic';
 
 const INDICES = [
   { symbol: '^NSEI', name: 'NIFTY 50' },
@@ -13,7 +15,7 @@ export async function GET() {
   if (cache && Date.now() - cache.timestamp < CACHE_TTL) {
     return NextResponse.json({ ...cache.data, _cached: true });
   }
-  
+
   try {
     const results = await Promise.all(
       INDICES.map(async (idx) => {
@@ -23,25 +25,25 @@ export async function GET() {
           );
           const data = await res.json();
           const meta = data?.chart?.result?.[0]?.meta;
-          
+
           return {
             symbol: idx.name,
             lastPrice: meta?.regularMarketPrice || 0,
             previousClose: meta?.previousClose || 0,
             change: (meta?.regularMarketPrice - meta?.previousClose) || 0,
-            pctChange: meta?.previousClose 
+            pctChange: meta?.previousClose
               ? (((meta.regularMarketPrice - meta.previousClose) / meta.previousClose) * 100).toFixed(2)
-              : '0.00'
+              : '0.00',
           };
         } catch {
           return { symbol: idx.name, error: true };
         }
       })
     );
-    
+
     const response = { indices: results, timestamp: new Date().toISOString() };
     cache = { data: response, timestamp: Date.now() };
-    
+
     return NextResponse.json(response);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch indices' }, { status: 500 });

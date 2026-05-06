@@ -3,12 +3,15 @@ import { createClient } from '@supabase/supabase-js';
 
 const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function POST(req: NextRequest) {
+  const supabaseAdmin = getSupabaseAdmin();
   // Verify admin
   const authHeader = req.headers.get('authorization');
   if (!authHeader) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -1,13 +1,22 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import {
+  buildOrderMailtoLink,
+  buildOrderWhatsAppLink,
+  buildOrdersCsv,
+  filterOrdersForAdmin,
+  getOrderDeliveryStatus,
+  getOrderDeliveryType,
+} from '@/lib/admin/fulfillment.js';
 import {
   IndianRupee, Users, ShoppingBag, Package,
   TrendingUp, Download, Clock, CheckCircle,
   XCircle, Loader2, LogOut, RefreshCw,
-  Plus, Edit2, Trash2, Upload, X, Save, AlertTriangle
+  Plus, Edit2, Trash2, Upload, X, Save, AlertTriangle,
+  Mail, MessageCircle, Search
 } from 'lucide-react';
 
 const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
@@ -25,6 +34,9 @@ export default function AdminPage() {
   const [data, setData] = useState<any>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [token, setToken] = useState('');
+  const [orderQuery, setOrderQuery] = useState('');
+  const [paymentFilter, setPaymentFilter] = useState('all');
+  const [deliveryFilter, setDeliveryFilter] = useState('all');
 
   // Product modal
   const [showProductModal, setShowProductModal] = useState(false);
@@ -169,19 +181,63 @@ export default function AdminPage() {
 
   const handleLogout = async () => { await supabase.auth.signOut(); router.push('/'); };
 
+  const updateOrderFulfillment = async (orderId: string, fulfillmentStatus: 'pending' | 'delivered') => {
+    const res = await fetch('/api/admin/orders', {
+      method: 'PUT',
+      headers: authHeaders(),
+      body: JSON.stringify({
+        id: orderId,
+        fulfillment_status: fulfillmentStatus,
+      }),
+    });
+    const result = await res.json();
+    if (res.ok) {
+      showToast(fulfillmentStatus === 'delivered' ? 'Order marked delivered' : 'Order moved back to pending');
+      await fetchData();
+      return;
+    }
+
+    showToast(result.error || 'Could not update order', 'err');
+  };
+
+  const { stats, orders, users, products } = data || {};
+  const filteredOrders = useMemo(() => filterOrdersForAdmin(orders || [], {
+    query: orderQuery,
+    paymentStatus: paymentFilter,
+    deliveryState: deliveryFilter,
+  }), [orders, orderQuery, paymentFilter, deliveryFilter]);
+
+  const filteredOrderSummary = useMemo(() => ({
+    manualPending: filteredOrders.filter((order: any) => getOrderDeliveryType(order) === 'manual' && getOrderDeliveryStatus(order) === 'pending').length,
+    manualDelivered: filteredOrders.filter((order: any) => getOrderDeliveryType(order) === 'manual' && getOrderDeliveryStatus(order) === 'delivered').length,
+    autoDownload: filteredOrders.filter((order: any) => getOrderDeliveryType(order) === 'auto-download').length,
+  }), [filteredOrders]);
+
+  const exportOrdersCsv = () => {
+    const csv = buildOrdersCsv(filteredOrders);
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `paperpe-orders-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast(`Exported ${filteredOrders.length} orders`);
+  };
+
   if (loading) return (
     <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-[#00C076]" />
     </div>
   );
 
-  const { stats, orders, users, products } = data || {};
-
   const statCards = [
     { label: 'Total Revenue', value: `₹${(stats?.totalRevenue || 0).toLocaleString('en-IN')}`, icon: IndianRupee, color: '#00C076', sub: `${stats?.totalOrders || 0} paid orders` },
     { label: 'Total Users', value: stats?.totalUsers || 0, icon: Users, color: '#3b82f6', sub: 'Registered accounts' },
     { label: 'Products', value: stats?.totalProducts || 0, icon: Package, color: '#8b5cf6', sub: 'Active listings' },
-    { label: 'Pending Orders', value: stats?.pendingOrders || 0, icon: Clock, color: '#f59e0b', sub: 'Awaiting payment' },
+    { label: 'Pending Deliveries', value: stats?.pendingDeliveries || 0, icon: Clock, color: '#f59e0b', sub: 'Manual fulfillment queue' },
   ];
 
   return (
@@ -247,7 +303,7 @@ export default function AdminPage() {
                 <h2 className="font-semibold text-white">Recent Orders</h2>
                 <button onClick={() => setActiveTab('orders')} className="text-[#00C076] text-xs hover:underline">View all</button>
               </div>
-              <OrdersTable orders={(orders || []).slice(0, 10)} />
+              <OrdersTable orders={(orders || []).slice(0, 10)} onUpdateFulfillment={updateOrderFulfillment} />
             </div>
           </div>
         )}
@@ -255,8 +311,61 @@ export default function AdminPage() {
         {/* Orders */}
         {activeTab === 'orders' && (
           <div className="bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden">
-            <div className="p-5 border-b border-[#21262D]"><h2 className="font-semibold text-white">All Orders ({orders?.length || 0})</h2></div>
-            <OrdersTable orders={orders || []} />
+            <div className="p-5 border-b border-[#21262D] space-y-4">
+              <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                  <h2 className="font-semibold text-white">All Orders ({filteredOrders.length})</h2>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {(orders?.length || 0)} total orders • {filteredOrderSummary.manualPending} pending manual • {filteredOrderSummary.manualDelivered} delivered manual • {filteredOrderSummary.autoDownload} auto-download
+                  </p>
+                </div>
+                <button
+                  onClick={exportOrdersCsv}
+                  className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#30363D] text-white px-4 py-2 rounded-xl text-sm transition-colors"
+                >
+                  <Download className="w-4 h-4" /> Export CSV
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,1fr)_180px_220px]">
+                <label className="relative block">
+                  <Search className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    value={orderQuery}
+                    onChange={(event) => setOrderQuery(event.target.value)}
+                    placeholder="Search order, email, phone, or product"
+                    className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl pl-10 pr-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                  />
+                </label>
+
+                <select
+                  value={paymentFilter}
+                  onChange={(event) => setPaymentFilter(event.target.value)}
+                  className="bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                >
+                  <option value="all">All payments</option>
+                  <option value="paid">Paid</option>
+                  <option value="created">Created</option>
+                  <option value="failed">Failed</option>
+                </select>
+
+                <select
+                  value={deliveryFilter}
+                  onChange={(event) => setDeliveryFilter(event.target.value)}
+                  className="bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                >
+                  <option value="all">All delivery states</option>
+                  <option value="manual-pending">Manual pending</option>
+                  <option value="manual-delivered">Manual delivered</option>
+                  <option value="auto-download">Auto download</option>
+                </select>
+              </div>
+            </div>
+            <OrdersTable
+              orders={filteredOrders}
+              onUpdateFulfillment={updateOrderFulfillment}
+              emptyMessage={orders?.length ? 'No orders match the current filters' : 'No orders yet'}
+            />
           </div>
         )}
 
@@ -333,7 +442,7 @@ export default function AdminPage() {
                         </span>
                       ) : (
                         <span className="flex items-center gap-1.5 text-yellow-400 text-xs bg-yellow-500/10 px-2.5 py-1 rounded-full">
-                          <AlertTriangle className="w-3.5 h-3.5" /> No file
+                          <AlertTriangle className="w-3.5 h-3.5" /> Manual delivery only
                         </span>
                       )}
                       <button onClick={() => openUpload(p)} className="flex items-center gap-1.5 text-xs text-[#00C076] hover:text-white transition-colors">
@@ -479,42 +588,144 @@ export default function AdminPage() {
   );
 }
 
-function OrdersTable({ orders }: { orders: any[] }) {
+function OrdersTable({
+  orders,
+  onUpdateFulfillment,
+  emptyMessage = 'No orders yet',
+}: {
+  orders: any[];
+  onUpdateFulfillment: (orderId: string, fulfillmentStatus: 'pending' | 'delivered') => Promise<void>;
+  emptyMessage?: string;
+}) {
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
+
+  const handleUpdate = async (orderId: string, fulfillmentStatus: 'pending' | 'delivered') => {
+    setUpdatingOrderId(orderId);
+    await onUpdateFulfillment(orderId, fulfillmentStatus);
+    setUpdatingOrderId(null);
+  };
+
   if (orders.length === 0) return (
-    <div className="p-16 text-center"><ShoppingBag className="w-12 h-12 text-gray-600 mx-auto mb-3" /><p className="text-gray-400">No orders yet</p></div>
+    <div className="p-16 text-center"><ShoppingBag className="w-12 h-12 text-gray-600 mx-auto mb-3" /><p className="text-gray-400">{emptyMessage}</p></div>
   );
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead><tr className="border-b border-[#21262D] text-gray-400 text-xs">
           <th className="text-left p-4 font-medium">Order ID</th>
+          <th className="text-left p-4 font-medium">Buyer</th>
           <th className="text-left p-4 font-medium">Product</th>
           <th className="text-left p-4 font-medium">Amount</th>
-          <th className="text-left p-4 font-medium">Status</th>
+          <th className="text-left p-4 font-medium">Payment</th>
+          <th className="text-left p-4 font-medium">Delivery</th>
           <th className="text-left p-4 font-medium">Date</th>
-          <th className="text-left p-4 font-medium">Download</th>
+          <th className="text-left p-4 font-medium">Action</th>
         </tr></thead>
         <tbody className="divide-y divide-[#21262D]">
-          {orders.map((order: any) => (
-            <tr key={order.id} className="hover:bg-[#0D1117]/50">
-              <td className="p-4 text-gray-400 text-xs font-mono">{order.id?.slice(0, 12)}...</td>
-              <td className="p-4 text-white font-medium">{order.product?.name || '—'}</td>
-              <td className="p-4 text-[#00C076] font-semibold">₹{order.amount}</td>
-              <td className="p-4">
-                {order.status === 'paid' ? (
-                  <span className="flex items-center gap-1 text-green-400 text-xs bg-green-500/10 px-2 py-1 rounded-full w-fit"><CheckCircle className="w-3 h-3" /> Paid</span>
-                ) : order.status === 'created' ? (
-                  <span className="flex items-center gap-1 text-yellow-400 text-xs bg-yellow-500/10 px-2 py-1 rounded-full w-fit"><Clock className="w-3 h-3" /> Pending</span>
-                ) : (
-                  <span className="flex items-center gap-1 text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded-full w-fit"><XCircle className="w-3 h-3" /> {order.status}</span>
-                )}
-              </td>
-              <td className="p-4 text-gray-400 text-xs">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
-              <td className="p-4">{order.status === 'paid' && (
-                <a href={`/api/download/${order.id}`} className="flex items-center gap-1 text-[#00C076] hover:underline text-xs"><Download className="w-3.5 h-3.5" /> Download</a>
-              )}</td>
-            </tr>
-          ))}
+          {orders.map((order: any) => {
+            const deliveryType = getOrderDeliveryType(order);
+            const deliveryStatus = getOrderDeliveryStatus(order);
+            const whatsAppLink = buildOrderWhatsAppLink(order);
+            const mailtoLink = buildOrderMailtoLink(order);
+            const buyerLabel = order.user?.full_name || order.customer_email || order.user?.email || 'Unknown buyer';
+
+            return (
+              <tr key={order.id} className="hover:bg-[#0D1117]/50">
+                <td className="p-4 text-gray-400 text-xs font-mono">{order.id?.slice(0, 12)}...</td>
+                <td className="p-4">
+                  <div className="space-y-1">
+                    <p className="text-white font-medium text-xs">{buyerLabel}</p>
+                    <p className="text-gray-400 text-xs">{order.customer_email || order.user?.email || 'No email saved'}</p>
+                    <p className="text-gray-500 text-xs">{order.customer_phone || order.user?.phone || 'No WhatsApp number saved'}</p>
+                  </div>
+                </td>
+                <td className="p-4 text-white font-medium">{order.product?.name || '—'}</td>
+                <td className="p-4 text-[#00C076] font-semibold">₹{order.amount}</td>
+                <td className="p-4">
+                  {order.status === 'paid' ? (
+                    <span className="flex items-center gap-1 text-green-400 text-xs bg-green-500/10 px-2 py-1 rounded-full w-fit"><CheckCircle className="w-3 h-3" /> Paid</span>
+                  ) : order.status === 'created' ? (
+                    <span className="flex items-center gap-1 text-yellow-400 text-xs bg-yellow-500/10 px-2 py-1 rounded-full w-fit"><Clock className="w-3 h-3" /> Pending</span>
+                  ) : (
+                    <span className="flex items-center gap-1 text-red-400 text-xs bg-red-500/10 px-2 py-1 rounded-full w-fit"><XCircle className="w-3 h-3" /> {order.status}</span>
+                  )}
+                </td>
+                <td className="p-4">
+                  {order.status !== 'paid' ? (
+                    <span className="text-gray-500 text-xs">Awaiting payment</span>
+                  ) : deliveryType === 'auto-download' ? (
+                    <div className="space-y-1">
+                      <span className="flex items-center gap-1 text-[#00C076] text-xs bg-[#00C076]/10 px-2 py-1 rounded-full w-fit">
+                        <Download className="w-3 h-3" /> Auto download
+                      </span>
+                      <p className="text-gray-500 text-xs">File available in dashboard</p>
+                    </div>
+                  ) : deliveryStatus === 'delivered' ? (
+                    <div className="space-y-1">
+                      <span className="flex items-center gap-1 text-blue-400 text-xs bg-blue-500/10 px-2 py-1 rounded-full w-fit"><CheckCircle className="w-3 h-3" /> Delivered manually</span>
+                      {order.fulfilled_at && (
+                        <p className="text-gray-500 text-xs">
+                          {new Date(order.fulfilled_at).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <span className="flex items-center gap-1 text-yellow-400 text-xs bg-yellow-500/10 px-2 py-1 rounded-full w-fit"><Clock className="w-3 h-3" /> Pending manual delivery</span>
+                  )}
+                </td>
+                <td className="p-4 text-gray-400 text-xs">{new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                <td className="p-4">
+                  <div className="flex flex-col gap-2 items-start">
+                    {order.status === 'paid' ? (
+                      deliveryType === 'auto-download' ? (
+                        <a href={`/api/download/${order.id}`} className="flex items-center gap-1 text-[#00C076] hover:underline text-xs"><Download className="w-3.5 h-3.5" /> Download</a>
+                      ) : (
+                        <button
+                          onClick={() => handleUpdate(order.id, order.fulfillment_status === 'delivered' ? 'pending' : 'delivered')}
+                          disabled={updatingOrderId === order.id}
+                          className="flex items-center gap-1.5 bg-[#21262D] hover:bg-[#30363D] disabled:opacity-50 text-white px-3 py-1.5 rounded-lg text-xs transition-colors"
+                        >
+                          {updatingOrderId === order.id ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : order.fulfillment_status === 'delivered' ? (
+                            <Clock className="w-3.5 h-3.5" />
+                          ) : (
+                            <CheckCircle className="w-3.5 h-3.5" />
+                          )}
+                          {order.fulfillment_status === 'delivered' ? 'Mark pending' : 'Mark delivered'}
+                        </button>
+                      )
+                    ) : (
+                      <span className="text-gray-500 text-xs">—</span>
+                    )}
+
+                    {(whatsAppLink || mailtoLink) && (
+                      <div className="flex flex-wrap gap-2">
+                        {whatsAppLink && (
+                          <a
+                            href={whatsAppLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center gap-1 text-xs text-[#00C076] hover:text-white transition-colors"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                          </a>
+                        )}
+                        {mailtoLink && (
+                          <a
+                            href={mailtoLink}
+                            className="flex items-center gap-1 text-xs text-blue-400 hover:text-white transition-colors"
+                          >
+                            <Mail className="w-3.5 h-3.5" /> Email
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

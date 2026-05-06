@@ -91,7 +91,7 @@ export default function BuyButton({ productId, productName, price, color = 'oran
           if (verifyData.success) {
             router.push('/dashboard?payment=success');
           } else {
-            alert('Payment verification failed. Contact support@paperpe.in');
+            alert('Payment verification failed. Contact hello@paperpe.in');
           }
         },
       };
