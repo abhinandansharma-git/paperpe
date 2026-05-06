@@ -34,6 +34,9 @@ CREATE TABLE IF NOT EXISTS orders (
   razorpay_payment_id TEXT,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'paid', 'failed', 'refunded')),
   customer_email TEXT,
+  customer_phone TEXT,
+  fulfillment_status TEXT DEFAULT 'pending' CHECK (fulfillment_status IN ('pending', 'delivered')),
+  fulfilled_at TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -41,8 +44,10 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS downloads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id UUID REFERENCES orders ON DELETE CASCADE,
+  user_id UUID REFERENCES profiles ON DELETE SET NULL,
   downloaded_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  ip_address TEXT
+  ip_address TEXT,
+  user_agent TEXT
 );
 
 -- 5. Support Tickets

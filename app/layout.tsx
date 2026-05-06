@@ -3,7 +3,10 @@ import { GeistSans } from 'geist/font/sans';
 import './globals.css';
 import Image from 'next/image';
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://paperpe.in';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(appUrl),
   title: 'PaperPe - India\'s #1 Paper Trading Platform | Coming Soon',
   description: 'Practice trading NSE, MCX & F&O with virtual money. Zero risk, real skills. Launching soon!',
   keywords: 'paper trading, virtual trading, stock market simulator, NSE, MCX, F&O, options trading, India',
@@ -23,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'PaperPe - Paper Trading Platform',
     description: 'Practice trading with zero risk. Launching soon!',
-    url: 'https://paperpe.in',
+    url: appUrl,
     siteName: 'PaperPe',
     images: [{ url: '/paperpe-logo-dark.png', width: 1024, height: 512, alt: 'PaperPe Logo' }],
     type: 'website',

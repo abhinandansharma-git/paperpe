@@ -114,10 +114,13 @@ export function purchaseEmail({
           <tr><td style="padding-top:10px;">Order ID</td><td style="text-align:right;color:#6B7280;padding-top:10px;font-size:12px;">${orderId}</td></tr>
         </table>
       </div>
-      <p style="color:#D1D5DB;font-size:15px;">Your indicator file is ready to download from your dashboard:</p>
+      <p style="color:#D1D5DB;font-size:15px;">Your payment is confirmed and your order is now in our manual delivery queue.</p>
       <div style="text-align:center;margin:28px 0;">
-        <a href="https://paperpe.in/dashboard" style="${btnStyle}">Download Now →</a>
+        <a href="https://paperpe.in/dashboard" style="${btnStyle}">Track Order Status →</a>
       </div>
+      <p style="color:#9CA3AF;font-size:14px;line-height:1.7;">
+        We will share your indicator access on your registered WhatsApp number or email. Your dashboard will reflect the delivery status.
+      </p>
       <div style="background:#1a0a0a;border:1px solid #7f1d1d;border-radius:12px;padding:20px;margin:24px 0;">
         <p style="color:#f87171;font-weight:700;font-size:14px;margin:0 0 8px;">⚠️ IMPORTANT — Please Read</p>
         <p style="color:#fca5a5;font-size:13px;line-height:1.6;margin:0;">
@@ -131,7 +134,7 @@ export function purchaseEmail({
       </div>
       <p style="color:#6B7280;font-size:13px;">
         Need help setting up the indicator? Reply to this email or contact
-        <a href="mailto:support@paperpe.in" style="color:#00C076;">support@paperpe.in</a>
+        <a href="mailto:hello@paperpe.in" style="color:#00C076;">hello@paperpe.in</a>
       </p>
     </div>
     <div style="${footerStyle}">

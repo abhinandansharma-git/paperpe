@@ -5,13 +5,16 @@ import { welcomeEmail, purchaseEmail, newsletterEmail, promoEmail } from '@/lib/
 
 const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     // ── Auth: only admin or internal calls can send emails ──
     const authHeader = req.headers.get('authorization');
     const internalSecret = req.headers.get('x-internal-secret');

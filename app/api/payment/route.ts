@@ -1,59 +1,48 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
 
-// Products catalog
-const PRODUCTS: Record<string, { name: string; price: number; description: string }> = {
-  'early-bird': {
-    name: 'Early Bird Lifetime Access',
-    price: 49900, // ₹499
-    description: 'Lifetime access to PaperPe Pro at 86% off',
-  },
-  'oi-pulse': {
-    name: 'OI Pulse Indicator',
-    price: 99900, // in paise (₹999)
-    description: 'Open Interest based trading signals for TradingView',
-  },
-  'fear-greed': {
-    name: 'Fear & Greed Meter',
-    price: 49900, // ₹499
-    description: 'Market sentiment oscillator for TradingView',
-  },
-  'smart-sr': {
-    name: 'Smart S/R Zones',
-    price: 99900, // ₹999
-    description: 'Auto support & resistance zones for TradingView',
-  },
-  'bundle': {
-    name: 'ARIA Indicator Bundle (All 3)',
-    price: 199900, // ₹1999
-    description: 'OI Pulse + Fear & Greed + Smart S/R - Complete package',
-  },
+const PRODUCT_DESCRIPTIONS: Record<string, string> = {
+  'early-bird': 'Lifetime access to PaperPe Pro at an early-launch price',
+  'aria-supreme': '7-in-1 flagship TradingView indicator for Indian markets',
+  'oi-pulse': 'Open Interest based trading signals for TradingView',
+  'fear-greed': 'Market sentiment oscillator for TradingView',
+  'smart-sr': 'Auto support and resistance levels for TradingView',
+  'complete-bundle': 'All premium PaperPe indicators in one bundle',
 };
+
+const SUPPORTED_PRODUCTS = [
+  'early-bird',
+  'aria-supreme',
+  'oi-pulse',
+  'fear-greed',
+  'smart-sr',
+  'complete-bundle',
+] as const;
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { productId, email, name, referral } = body;
 
-    const product = PRODUCTS[productId];
+    const product = getProductCatalogEntry(productId);
     if (!product) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
     }
 
     // Dynamic import to avoid build issues
     const Razorpay = (await import('razorpay')).default;
-    
+
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID || '',
       key_secret: process.env.RAZORPAY_KEY_SECRET || '',
     });
 
-    // Create Razorpay order
     const order = await razorpay.orders.create({
-      amount: product.price,
+      amount: product.price * 100,
       currency: 'INR',
       receipt: `order_${Date.now()}`,
       notes: {
-        productId,
+        productId: product.canonicalId,
         email,
         name,
         referral: referral || 'direct',
@@ -62,9 +51,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       orderId: order.id,
-      amount: product.price,
+      amount: product.price * 100,
       currency: 'INR',
       productName: product.name,
+      productId: product.canonicalId,
       keyId: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error: any) {
@@ -75,11 +65,14 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   return NextResponse.json({
-    products: Object.entries(PRODUCTS).map(([id, p]) => ({
-      id,
-      name: p.name,
-      price: p.price / 100,
-      description: p.description,
-    })),
+    products: SUPPORTED_PRODUCTS.map((id) => {
+      const product = getProductCatalogEntry(id)!;
+      return {
+        id: product.canonicalId,
+        name: product.name,
+        price: product.price,
+        description: PRODUCT_DESCRIPTIONS[product.canonicalId] || '',
+      };
+    }),
   });
 }

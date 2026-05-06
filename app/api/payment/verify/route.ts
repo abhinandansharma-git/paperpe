@@ -3,24 +3,33 @@ import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { getResend, FROM_EMAIL } from '@/lib/email/resend';
 import { purchaseEmail } from '@/lib/email/templates';
+import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
+import { buildVerifiedOrderInsert } from '@/lib/commerce/checkout.js';
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
+    const supabaseAdmin = getSupabaseAdmin();
     const {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
       email,
+      phone,
       productId,
       productName,
       userId,
       amount,
     } = await req.json();
+
+    const catalogProduct = getProductCatalogEntry(productId);
+    const canonicalProductId = catalogProduct?.canonicalId || productId;
 
     // Verify signature
     const body = razorpay_order_id + '|' + razorpay_payment_id;
@@ -33,25 +42,50 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
 
+    const { data: existingOrder } = await supabaseAdmin
+      .from('orders')
+      .select('id')
+      .eq('razorpay_payment_id', razorpay_payment_id)
+      .maybeSingle();
+
+    if (existingOrder) {
+      return NextResponse.json({
+        success: true,
+        message: 'Payment already verified.',
+        paymentId: razorpay_payment_id,
+        orderId: existingOrder.id,
+      });
+    }
+
     // Find product in DB
     const { data: product } = await supabaseAdmin
       .from('products')
       .select('id, name')
-      .eq('slug', productId)
+      .eq('slug', canonicalProductId)
       .single();
+
+    const resolvedAmount = Number.isFinite(amount) && amount > 0
+      ? amount
+      : (catalogProduct?.price || 0);
+    const normalizedEmail = typeof email === 'string'
+      ? email.trim().toLowerCase()
+      : undefined;
+    const normalizedPhone = typeof phone === 'string'
+      ? phone.trim()
+      : undefined;
 
     // Save order to DB
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
-      .insert({
-        user_id: userId || null,
-        product_id: product?.id || null,
-        amount: amount || 0,
-        razorpay_order_id,
-        razorpay_payment_id,
-        status: 'paid',
-        email,
-      })
+      .insert(buildVerifiedOrderInsert({
+        userId,
+        productId: product?.id,
+        amount: resolvedAmount,
+        razorpayOrderId: razorpay_order_id,
+        razorpayPaymentId: razorpay_payment_id,
+        email: normalizedEmail,
+        phone: normalizedPhone,
+      }))
       .select()
       .single();
 
@@ -60,17 +94,17 @@ export async function POST(req: NextRequest) {
     }
 
     // Send purchase confirmation email
-    if (email && process.env.RESEND_API_KEY) {
+    if (normalizedEmail && process.env.RESEND_API_KEY) {
       try {
         const template = purchaseEmail({
-          name: email.split('@')[0],
-          productName: product?.name || productName,
-          amount: amount || 0,
+          name: normalizedEmail.split('@')[0],
+          productName: product?.name || catalogProduct?.name || productName,
+          amount: resolvedAmount,
           orderId: order?.id || razorpay_order_id,
         });
         await getResend()?.emails.send({
           from: FROM_EMAIL,
-          to: email,
+          to: normalizedEmail,
           subject: template.subject,
           html: template.html,
         });
@@ -88,6 +122,6 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('Payment verify error:', error);
     // Never leak internal errors to client
-    return NextResponse.json({ error: 'Payment verification failed. Contact support@paperpe.in' }, { status: 500 });
+    return NextResponse.json({ error: 'Payment verification failed. Contact hello@paperpe.in' }, { status: 500 });
   }
 }

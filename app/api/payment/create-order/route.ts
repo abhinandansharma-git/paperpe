@@ -1,14 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-
-const PRODUCTS: Record<string, { name: string; price: number }> = {
-  'early-bird': { name: 'Early Bird Lifetime Access', price: 499 },
-  'aria-supreme': { name: 'ARIA SUPREME Indicator', price: 2999 },
-  'oi-pulse': { name: 'OI Pulse Indicator', price: 999 },
-  'fear-greed': { name: 'Fear & Greed Meter', price: 499 },
-  'smart-sr': { name: 'Smart S/R Levels', price: 999 },
-  'bundle': { name: 'Complete Indicator Bundle', price: 3999 },
-};
+import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
 
 // ── Input validation ──
 function isValidEmail(email: string): boolean {
@@ -29,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid product ID' }, { status: 400 });
     }
 
-    const product = PRODUCTS[productId];
+    const product = getProductCatalogEntry(productId);
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 400 });
     }
@@ -59,9 +51,9 @@ export async function POST(req: NextRequest) {
     const order = await razorpay.orders.create({
       amount: product.price * 100, // Price from server-side catalog only — never trust client
       currency: 'INR',
-      receipt: `order_${Date.now()}_${productId}`,
+      receipt: `order_${Date.now()}_${product.canonicalId}`,
       notes: {
-        productId,
+        productId: product.canonicalId,
         productName: product.name,
         customerEmail: sanitizedEmail,
         customerName: sanitizedName,
@@ -73,6 +65,7 @@ export async function POST(req: NextRequest) {
       amount: order.amount,
       currency: order.currency,
       keyId: process.env.RAZORPAY_KEY_ID,
+      productId: product.canonicalId,
       productName: product.name,
     });
   } catch (error) {
