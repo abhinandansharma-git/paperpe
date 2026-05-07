@@ -1,0 +1,409 @@
+// @version=5
+// FEAR & GREED METER v2 - Advanced Market Sentiment Indicator
+// By ARIA (PaperPe)
+//
+// Production-grade sentiment engine with:
+// - VIX proxy (ATR + Bollinger Band width)
+// - Put/Call ratio proxy from volume analysis
+// - Sentiment exhaustion detection
+// - Price-sentiment divergence
+// - Historical percentile ranking
+// - Indian market session awareness (NSE/BSE)
+// - Professional dashboard with component breakdown
+// - Multi-level alert system
+
+indicator("Fear & Greed Meter v2 [ARIA]", shorttitle="F&G v2", format=format.price, precision=1, max_bars_back=500)
+
+// ══════════════════════════════════════════════════════════════
+// INPUTS
+// ══════════════════════════════════════════════════════════════
+
+grp_core    = "Core Settings"
+length      = input.int(14, "Analysis Period", minval=5, maxval=50, group=grp_core)
+smoothLen   = input.int(5, "Smoothing Length", minval=1, maxval=10, group=grp_core)
+percLen     = input.int(252, "Percentile Lookback (bars)", minval=50, maxval=500, tooltip="Number of bars for historical percentile ranking", group=grp_core)
+
+grp_weights = "Component Weights"
+w_momentum  = input.float(0.20, "Momentum", minval=0, maxval=1, step=0.05, group=grp_weights)
+w_vix       = input.float(0.20, "VIX Proxy", minval=0, maxval=1, step=0.05, group=grp_weights)
+w_pcr       = input.float(0.15, "PCR Proxy", minval=0, maxval=1, step=0.05, group=grp_weights)
+w_trend     = input.float(0.15, "Trend Strength", minval=0, maxval=1, step=0.05, group=grp_weights)
+w_breadth   = input.float(0.15, "Range Breadth", minval=0, maxval=1, step=0.05, group=grp_weights)
+w_volume    = input.float(0.15, "Volume Sentiment", minval=0, maxval=1, step=0.05, group=grp_weights)
+
+grp_display = "Display"
+showDash    = input.bool(true, "Show Dashboard", group=grp_display)
+showSignals = input.bool(true, "Show Buy/Sell Signals", group=grp_display)
+showDiverg  = input.bool(true, "Show Divergence Markers", group=grp_display)
+showExhaust = input.bool(true, "Show Exhaustion Warnings", group=grp_display)
+showFill    = input.bool(true, "Show Zone Fill", group=grp_display)
+dashPos     = input.string("Top Right", "Dashboard Position", options=["Top Right", "Top Left", "Bottom Right", "Bottom Left"], group=grp_display)
+
+grp_market  = "Market Session"
+useIndian   = input.bool(true, "Indian Market Hours Filter", tooltip="Highlight pre-market, market, and post-market sessions for NSE/BSE", group=grp_market)
+mktOpen     = input.session("0915-1530", "Market Hours (IST)", group=grp_market)
+
+grp_alerts  = "Alert Thresholds"
+alertExtFear  = input.int(20, "Extreme Fear Below", minval=0, maxval=40, group=grp_alerts)
+alertExtGreed = input.int(80, "Extreme Greed Above", minval=60, maxval=100, group=grp_alerts)
+alertDivBars  = input.int(20, "Divergence Lookback", minval=10, maxval=50, group=grp_alerts)
+
+// ══════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+
+// Clamp value between 0 and 100
+clamp(val) =>
+    math.max(0.0, math.min(100.0, val))
+
+// Historical percentile rank of a value over N bars
+percentileRank(src, len) =>
+    count = 0
+    for i = 1 to len
+        if src > src[i]
+            count += 1
+    (count / len) * 100
+
+// Detect divergence: price makes new high/low but indicator doesn't
+bullishDivergence(price, osc, lookback) =>
+    priceLow = ta.lowest(price, lookback)
+    oscLow   = ta.lowest(osc, lookback)
+    priceAtLow = price == priceLow
+    oscNotLow  = osc > oscLow * 1.05
+    priceAtLow and oscNotLow and osc < 40
+
+bearishDivergence(price, osc, lookback) =>
+    priceHigh = ta.highest(price, lookback)
+    oscHigh   = ta.highest(osc, lookback)
+    priceAtHigh = price == priceHigh
+    oscNotHigh  = osc < oscHigh * 0.95
+    priceAtHigh and oscNotHigh and osc > 60
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 1: MOMENTUM SCORE (RSI + Rate of Change blend)
+// ══════════════════════════════════════════════════════════════
+
+rsi = ta.rsi(close, length)
+roc = ta.roc(close, length)
+rocNorm = clamp(50 + roc * 5)  // Normalize ROC around 50
+momentumScore = rsi * 0.6 + rocNorm * 0.4
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 2: VIX PROXY (ATR + Bollinger Band Width)
+// ══════════════════════════════════════════════════════════════
+
+// ATR component - high ATR relative to average = fear
+atr = ta.atr(length)
+atrMA = ta.sma(atr, length * 3)
+atrRatio = atrMA > 0 ? atr / atrMA : 1.0
+
+// Bollinger Band width - widening bands = rising fear
+bbBasis = ta.sma(close, 20)
+bbDev   = ta.stdev(close, 20) * 2
+bbUpper = bbBasis + bbDev
+bbLower = bbBasis - bbDev
+bbWidth = bbBasis > 0 ? (bbUpper - bbLower) / bbBasis * 100 : 0.0
+bbWidthMA = ta.sma(bbWidth, length * 3)
+bbWidthRatio = bbWidthMA > 0 ? bbWidth / bbWidthMA : 1.0
+
+// Combined VIX proxy: high ratio = high implied vol = fear = low score
+vixProxy = (atrRatio + bbWidthRatio) / 2
+vixScore = clamp(100 - (vixProxy - 0.5) * 100)  // 1.0 ratio = 50, >1 = fear, <1 = greed
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 3: PUT/CALL RATIO PROXY (Volume Analysis)
+// ══════════════════════════════════════════════════════════════
+
+// Proxy PCR: ratio of volume on down days vs up days
+// High down-volume ratio = put-like behavior = fear
+volMA = ta.sma(volume, length)
+upVol = close > close[1] ? volume : 0.0
+dnVol = close < close[1] ? volume : 0.0
+upVolSum = math.sum(upVol, length)
+dnVolSum = math.sum(dnVol, length)
+pcrProxy = dnVolSum > 0 and upVolSum > 0 ? dnVolSum / upVolSum : 1.0
+
+// PCR > 1 = more put-like activity = fear; PCR < 1 = call-like = greed
+pcrScore = clamp(100 - (pcrProxy - 0.5) * 100)
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 4: TREND STRENGTH (Multi-EMA distance)
+// ══════════════════════════════════════════════════════════════
+
+ema21  = ta.ema(close, 21)
+ema50  = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+
+dist21  = ((close - ema21)  / ema21)  * 100
+dist50  = ((close - ema50)  / ema50)  * 100
+dist200 = ((close - ema200) / ema200) * 100
+
+// Weighted distance from EMAs, normalized to 0-100
+trendRaw = dist21 * 0.4 + dist50 * 0.35 + dist200 * 0.25
+trendScore = clamp(50 + trendRaw * 5)
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 5: RANGE BREADTH (Position in recent range)
+// ══════════════════════════════════════════════════════════════
+
+highest50 = ta.highest(high, 50)
+lowest50  = ta.lowest(low, 50)
+rangeSpan = highest50 - lowest50
+breadthScore = rangeSpan > 0 ? ((close - lowest50) / rangeSpan) * 100 : 50.0
+
+// ══════════════════════════════════════════════════════════════
+// COMPONENT 6: VOLUME SENTIMENT (Smart money proxy)
+// ══════════════════════════════════════════════════════════════
+
+volRatio = volMA > 0 ? volume / volMA : 1.0
+// High volume on green candles = greed; high volume on red = fear
+volSentiment = close > open ? volRatio : -volRatio
+volSentMA = ta.sma(volSentiment, length)
+volumeScore = clamp(50 + volSentMA * 30)
+
+// ══════════════════════════════════════════════════════════════
+// COMPOSITE FEAR & GREED INDEX
+// ══════════════════════════════════════════════════════════════
+
+// Normalize weights to sum to 1
+totalWeight = w_momentum + w_vix + w_pcr + w_trend + w_breadth + w_volume
+nw_m = w_momentum / totalWeight
+nw_v = w_vix      / totalWeight
+nw_p = w_pcr      / totalWeight
+nw_t = w_trend    / totalWeight
+nw_b = w_breadth  / totalWeight
+nw_vol = w_volume / totalWeight
+
+rawIndex = momentumScore * nw_m + vixScore * nw_v + pcrScore * nw_p + trendScore * nw_t + breadthScore * nw_b + volumeScore * nw_vol
+
+// Smooth the composite
+fgIndex = ta.ema(rawIndex, smoothLen)
+
+// ══════════════════════════════════════════════════════════════
+// HISTORICAL PERCENTILE RANKING
+// ══════════════════════════════════════════════════════════════
+
+fgPercentile = percentileRank(fgIndex, math.min(percLen, bar_index > percLen ? percLen : math.max(bar_index, 1)))
+
+// ══════════════════════════════════════════════════════════════
+// SENTIMENT EXHAUSTION DETECTION
+// ══════════════════════════════════════════════════════════════
+
+// Exhaustion: sentiment stays extreme for extended period then reverses
+barsInExtremeFear  = ta.barssince(fgIndex >= alertExtFear)
+barsInExtremeGreed = ta.barssince(fgIndex <= alertExtGreed)
+
+fearExhaustion  = barsInExtremeFear  >= 10 and ta.rising(fgIndex, 3) and fgIndex < 35
+greedExhaustion = barsInExtremeGreed >= 10 and ta.falling(fgIndex, 3) and fgIndex > 65
+
+// Rate of change of sentiment itself - sharp reversals indicate exhaustion
+fgROC = ta.roc(fgIndex, 5)
+sharpFearReversal  = fgROC > 15 and fgIndex[5] < 25
+sharpGreedReversal = fgROC < -15 and fgIndex[5] > 75
+
+isExhaustion = fearExhaustion or greedExhaustion or sharpFearReversal or sharpGreedReversal
+
+// ══════════════════════════════════════════════════════════════
+// DIVERGENCE DETECTION
+// ══════════════════════════════════════════════════════════════
+
+bullDiv = bullishDivergence(close, fgIndex, alertDivBars)
+bearDiv = bearishDivergence(close, fgIndex, alertDivBars)
+
+// ══════════════════════════════════════════════════════════════
+// INDIAN MARKET SESSION DETECTION
+// ══════════════════════════════════════════════════════════════
+
+// IST = UTC+5:30 — TradingView uses exchange timezone
+inSession = not na(time(timeframe.period, mktOpen))
+
+// Pre-market: 9:00–9:15, Post-market: 15:30–16:00 (approx via session check)
+isPreMarket  = useIndian and not inSession and (hour == 9 and minute < 15)
+isPostMarket = useIndian and not inSession and (hour == 15 and minute >= 30)
+
+// Session strength modifier: signals during market hours are more reliable
+sessionMultiplier = useIndian ? (inSession ? 1.0 : 0.7) : 1.0
+
+// ══════════════════════════════════════════════════════════════
+// SENTIMENT CLASSIFICATION
+// ══════════════════════════════════════════════════════════════
+
+extremeFear  = fgIndex < alertExtFear
+fear         = fgIndex >= alertExtFear and fgIndex < 40
+neutral      = fgIndex >= 40 and fgIndex < 60
+greed        = fgIndex >= 60 and fgIndex < alertExtGreed
+extremeGreed = fgIndex >= alertExtGreed
+
+getSentimentLabel() =>
+    extremeFear ? "EXTREME FEAR" : fear ? "FEAR" : neutral ? "NEUTRAL" : greed ? "GREED" : "EXTREME GREED"
+
+getSentimentColor() =>
+    extremeFear ? color.red : fear ? color.orange : neutral ? color.gray : greed ? color.lime : color.green
+
+// ══════════════════════════════════════════════════════════════
+// SIGNAL GENERATION
+// ══════════════════════════════════════════════════════════════
+
+// Primary signals: crossing out of extremes
+buySignal  = ta.crossover(fgIndex, float(alertExtFear)) and sessionMultiplier >= 1.0
+sellSignal = ta.crossunder(fgIndex, float(alertExtGreed)) and sessionMultiplier >= 1.0
+
+// Enhanced signals: exhaustion-confirmed reversals
+strongBuy  = buySignal and (fearExhaustion or sharpFearReversal or bullDiv)
+strongSell = sellSignal and (greedExhaustion or sharpGreedReversal or bearDiv)
+
+// ══════════════════════════════════════════════════════════════
+// PLOTTING
+// ══════════════════════════════════════════════════════════════
+
+// Main F&G line
+fgColor = getSentimentColor()
+mainPlot = plot(fgIndex, "Fear & Greed Index", color=fgColor, linewidth=3)
+
+// Percentile line (secondary reference)
+plot(fgPercentile, "Percentile Rank", color=color.new(color.white, 60), linewidth=1, style=plot.style_stepline)
+
+// Zone lines
+h80 = hline(80, "Extreme Greed", color=color.new(color.green, 50), linestyle=hline.style_dashed)
+h60 = hline(60, "Greed", color=color.new(color.lime, 70), linestyle=hline.style_dotted)
+h50 = hline(50, "Neutral", color=color.new(color.gray, 60), linestyle=hline.style_solid)
+h40 = hline(40, "Fear", color=color.new(color.orange, 70), linestyle=hline.style_dotted)
+h20 = hline(20, "Extreme Fear", color=color.new(color.red, 50), linestyle=hline.style_dashed)
+
+// Zone fills
+fill(h80, h60, color=showFill ? color.new(color.green, 92) : na, title="Greed Zone")
+fill(h40, h20, color=showFill ? color.new(color.red, 92) : na, title="Fear Zone")
+
+// Background for extremes
+bgcolor(extremeFear ? color.new(color.red, 93) : extremeGreed ? color.new(color.green, 93) : na, title="Extreme Zone BG")
+
+// Session background for Indian markets
+bgcolor(useIndian and isPreMarket ? color.new(color.yellow, 95) : na, title="Pre-Market")
+bgcolor(useIndian and isPostMarket ? color.new(color.purple, 95) : na, title="Post-Market")
+
+// Buy/Sell signals
+plotshape(buySignal and showSignals and not strongBuy, title="Buy Signal", location=location.bottom, color=color.green, style=shape.triangleup, size=size.small, text="BUY")
+plotshape(sellSignal and showSignals and not strongSell, title="Sell Signal", location=location.top, color=color.red, style=shape.triangledown, size=size.small, text="SELL")
+
+// Strong signals (exhaustion-confirmed)
+plotshape(strongBuy and showSignals, title="Strong Buy", location=location.bottom, color=color.green, style=shape.triangleup, size=size.normal, text="STRONG\nBUY")
+plotshape(strongSell and showSignals, title="Strong Sell", location=location.top, color=color.red, style=shape.triangledown, size=size.normal, text="STRONG\nSELL")
+
+// Divergence markers
+plotshape(bullDiv and showDiverg, title="Bullish Divergence", location=location.bottom, color=color.aqua, style=shape.diamond, size=size.tiny, text="Bull Div")
+plotshape(bearDiv and showDiverg, title="Bearish Divergence", location=location.top, color=color.fuchsia, style=shape.diamond, size=size.tiny, text="Bear Div")
+
+// Exhaustion warnings
+plotshape(isExhaustion and showExhaust, title="Exhaustion", location=location.absolute, price=fgIndex, color=color.yellow, style=shape.xcross, size=size.tiny)
+
+// ══════════════════════════════════════════════════════════════
+// PROFESSIONAL DASHBOARD
+// ══════════════════════════════════════════════════════════════
+
+getDashPosition() =>
+    switch dashPos
+        "Top Right"    => position.top_right
+        "Top Left"     => position.top_left
+        "Bottom Right" => position.bottom_right
+        "Bottom Left"  => position.bottom_left
+
+if barstate.islast and showDash
+    var table dash = table.new(getDashPosition(), 3, 11, bgcolor=color.new(#0a0a0a, 10), border_width=1, border_color=color.new(color.gray, 70), frame_width=2, frame_color=color.new(color.gray, 50))
+
+    // Header
+    table.cell(dash, 0, 0, "FEAR & GREED v2", text_color=color.white, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 1, 0, str.tostring(fgIndex, "#.0"), text_color=fgColor, text_size=size.large, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 2, 0, getSentimentLabel(), text_color=fgColor, text_size=size.small, bgcolor=color.new(#1a1a2e, 0))
+
+    // Percentile
+    percColor = fgPercentile > 80 ? color.green : fgPercentile < 20 ? color.red : color.white
+    table.cell(dash, 0, 1, "Percentile", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 1, str.tostring(fgPercentile, "#.0") + "%", text_color=percColor, text_size=size.small)
+    table.cell(dash, 2, 1, fgPercentile > 80 ? "Historically High" : fgPercentile < 20 ? "Historically Low" : "Normal Range", text_color=percColor, text_size=size.tiny)
+
+    // Component breakdown
+    componentHeader = color.new(#16213e, 0)
+    table.cell(dash, 0, 2, "COMPONENT", text_color=color.gray, text_size=size.tiny, bgcolor=componentHeader)
+    table.cell(dash, 1, 2, "SCORE", text_color=color.gray, text_size=size.tiny, bgcolor=componentHeader)
+    table.cell(dash, 2, 2, "SIGNAL", text_color=color.gray, text_size=size.tiny, bgcolor=componentHeader)
+
+    // Helper: component color
+    compColor(val) =>
+        val < 30 ? color.red : val < 45 ? color.orange : val < 55 ? color.gray : val < 70 ? color.lime : color.green
+
+    compSignal(val) =>
+        val < 30 ? "Fear" : val < 45 ? "Cautious" : val < 55 ? "Neutral" : val < 70 ? "Bullish" : "Euphoric"
+
+    // Row: Momentum
+    table.cell(dash, 0, 3, "Momentum", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 3, str.tostring(momentumScore, "#.0"), text_color=compColor(momentumScore), text_size=size.tiny)
+    table.cell(dash, 2, 3, compSignal(momentumScore), text_color=compColor(momentumScore), text_size=size.tiny)
+
+    // Row: VIX Proxy
+    table.cell(dash, 0, 4, "VIX Proxy", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 4, str.tostring(vixScore, "#.0"), text_color=compColor(vixScore), text_size=size.tiny)
+    table.cell(dash, 2, 4, compSignal(vixScore), text_color=compColor(vixScore), text_size=size.tiny)
+
+    // Row: PCR Proxy
+    table.cell(dash, 0, 5, "PCR Proxy", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 5, str.tostring(pcrScore, "#.0"), text_color=compColor(pcrScore), text_size=size.tiny)
+    table.cell(dash, 2, 5, compSignal(pcrScore), text_color=compColor(pcrScore), text_size=size.tiny)
+
+    // Row: Trend
+    table.cell(dash, 0, 6, "Trend", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 6, str.tostring(trendScore, "#.0"), text_color=compColor(trendScore), text_size=size.tiny)
+    table.cell(dash, 2, 6, compSignal(trendScore), text_color=compColor(trendScore), text_size=size.tiny)
+
+    // Row: Breadth
+    table.cell(dash, 0, 7, "Breadth", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 7, str.tostring(breadthScore, "#.0"), text_color=compColor(breadthScore), text_size=size.tiny)
+    table.cell(dash, 2, 7, compSignal(breadthScore), text_color=compColor(breadthScore), text_size=size.tiny)
+
+    // Row: Volume
+    table.cell(dash, 0, 8, "Volume", text_color=color.white, text_size=size.tiny)
+    table.cell(dash, 1, 8, str.tostring(volumeScore, "#.0"), text_color=compColor(volumeScore), text_size=size.tiny)
+    table.cell(dash, 2, 8, compSignal(volumeScore), text_color=compColor(volumeScore), text_size=size.tiny)
+
+    // Status row
+    statusBg = color.new(#16213e, 0)
+    exhaustText = isExhaustion ? "EXHAUSTION DETECTED" : "None"
+    exhaustColor = isExhaustion ? color.yellow : color.gray
+    table.cell(dash, 0, 9, "Exhaustion", text_color=color.gray, text_size=size.tiny, bgcolor=statusBg)
+    table.cell(dash, 1, 9, exhaustText, text_color=exhaustColor, text_size=size.tiny, bgcolor=statusBg)
+
+    divText = bullDiv ? "BULLISH" : bearDiv ? "BEARISH" : "None"
+    divColor = bullDiv ? color.aqua : bearDiv ? color.fuchsia : color.gray
+    table.cell(dash, 2, 9, "Div: " + divText, text_color=divColor, text_size=size.tiny, bgcolor=statusBg)
+
+    // Session row
+    sessionText = useIndian ? (inSession ? "MARKET OPEN" : isPreMarket ? "PRE-MARKET" : isPostMarket ? "POST-MARKET" : "CLOSED") : "N/A"
+    sessionColor = useIndian ? (inSession ? color.green : isPreMarket ? color.yellow : isPostMarket ? color.purple : color.red) : color.gray
+    table.cell(dash, 0, 10, "Session", text_color=color.gray, text_size=size.tiny, bgcolor=statusBg)
+    table.cell(dash, 1, 10, sessionText, text_color=sessionColor, text_size=size.tiny, bgcolor=statusBg)
+
+    actionText = strongBuy ? "STRONG BUY" : strongSell ? "STRONG SELL" : buySignal ? "BUY" : sellSignal ? "SELL" : extremeFear ? "Accumulate" : extremeGreed ? "Book Profits" : "Hold"
+    actionColor = strongBuy or buySignal ? color.green : strongSell or sellSignal ? color.red : extremeFear ? color.lime : extremeGreed ? color.orange : color.white
+    table.cell(dash, 2, 10, actionText, text_color=actionColor, text_size=size.tiny, bgcolor=statusBg)
+
+// ══════════════════════════════════════════════════════════════
+// ALERTS
+// ══════════════════════════════════════════════════════════════
+
+// Primary alerts
+alertcondition(buySignal, title="Buy Signal", message="F&G v2: Fear zone exit — BUY signal on {{ticker}} at {{close}}")
+alertcondition(sellSignal, title="Sell Signal", message="F&G v2: Greed zone exit — SELL signal on {{ticker}} at {{close}}")
+
+// Strong signals
+alertcondition(strongBuy, title="Strong Buy", message="F&G v2: STRONG BUY — exhaustion-confirmed reversal on {{ticker}} at {{close}}")
+alertcondition(strongSell, title="Strong Sell", message="F&G v2: STRONG SELL — exhaustion-confirmed reversal on {{ticker}} at {{close}}")
+
+// Zone alerts
+alertcondition(ta.crossunder(fgIndex, float(alertExtFear)), title="Entered Extreme Fear", message="F&G v2: Entered EXTREME FEAR zone ({{ticker}}) — Index: " + str.tostring(fgIndex, "#.0"))
+alertcondition(ta.crossover(fgIndex, float(alertExtGreed)), title="Entered Extreme Greed", message="F&G v2: Entered EXTREME GREED zone ({{ticker}}) — Index: " + str.tostring(fgIndex, "#.0"))
+
+// Divergence alerts
+alertcondition(bullDiv, title="Bullish Divergence", message="F&G v2: Bullish divergence detected on {{ticker}} — price at low but sentiment improving")
+alertcondition(bearDiv, title="Bearish Divergence", message="F&G v2: Bearish divergence detected on {{ticker}} — price at high but sentiment weakening")
+
+// Exhaustion alert
+alertcondition(isExhaustion, title="Sentiment Exhaustion", message="F&G v2: Sentiment exhaustion detected on {{ticker}} — potential reversal incoming")

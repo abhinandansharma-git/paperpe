@@ -1,0 +1,418 @@
+//@version=5
+// -------------------------------------------------------------------------------
+//                            ARIA SUPREME v1.0
+//                   The Ultimate Indian Market Indicator
+//                         Built for NIFTY/BANKNIFTY
+// -------------------------------------------------------------------------------
+// 
+// MODULES:
+// 1. Regime Detector - Trend/Range/Volatile detection
+// 2.=== SMART MONEY ===Tracker - Volume-based institutional detection
+// 3.=== MOMENTUM ENGINE ===- Multi-indicator momentum scoring
+// 4. Confluence Scorer - Weighted signal combination
+// 5. India-Specific - Session, Expiry, VIX-proxy
+// 6. Visual Dashboard - Complete trading cockpit
+// 7. Dynamic Risk - Auto SL/Target calculation
+//
+// Designed specifically for Indian markets: NIFTY, BANKNIFTY, F&O
+// -------------------------------------------------------------------------------
+
+indicator("ARIA SUPREME [God Mode]", overlay=true, max_labels_count=500, max_boxes_count=500)
+
+// -------------------------------------------------------------------------------
+// INPUTS
+// -------------------------------------------------------------------------------
+
+// Main Settings
+grp_main = "---=== MAIN SETTINGS ===---"
+i_sensitivity = input.float(1.0, "Signal Sensitivity", minval=0.5, maxval=2.0, step=0.1, group=grp_main)
+i_showDashboard = input.bool(true, "Show Dashboard", group=grp_main)
+i_showSignals = input.bool(true, "Show Buy/Sell Signals", group=grp_main)
+i_showSR = input.bool(true, "Show Support/Resistance", group=grp_main)
+
+// Regime Detection
+grp_regime = "---=== REGIME DETECTION ===---"
+i_adxLen = input.int(14, "ADX Length", minval=5, maxval=50, group=grp_regime)
+i_adxThresh = input.int(25, "ADX Trend Threshold", minval=15, maxval=40, group=grp_regime)
+i_bbLen = input.int(20, "BB Length (Volatility)", minval=10, maxval=50, group=grp_regime)
+i_bbMult = input.float(2.0, "BB Multiplier", minval=1.0, maxval=3.0, group=grp_regime)
+
+// Momentum
+grp_mom = "---=== MOMENTUM ENGINE ===---"
+i_rsiLen = input.int(14, "RSI Length", minval=5, maxval=30, group=grp_mom)
+i_macdFast = input.int(12, "MACD Fast", minval=5, maxval=20, group=grp_mom)
+i_macdSlow = input.int(26, "MACD Slow", minval=15, maxval=40, group=grp_mom)
+i_macdSig = input.int(9, "MACD Signal", minval=5, maxval=15, group=grp_mom)
+i_stochK = input.int(14, "Stochastic K", minval=5, maxval=30, group=grp_mom)
+i_stochD = input.int(3, "Stochastic D", minval=2, maxval=10, group=grp_mom)
+
+// Smart Money
+grp_smart = "---=== SMART MONEY ===---"
+i_mfiLen = input.int(14, "MFI Length", minval=5, maxval=30, group=grp_smart)
+i_volLen = input.int(20, "Volume MA Length", minval=10, maxval=50, group=grp_smart)
+i_volThresh = input.float(1.5, "Unusual Volume Threshold", minval=1.2, maxval=3.0, group=grp_smart)
+
+// Risk Management
+grp_risk = "---=== RISK MANAGEMENT ===---"
+i_atrLen = input.int(14, "ATR Length", minval=5, maxval=30, group=grp_risk)
+i_atrMult = input.float(1.5, "SL ATR Multiplier", minval=1.0, maxval=3.0, group=grp_risk)
+i_rrRatio = input.float(2.0, "Risk:Reward Ratio", minval=1.0, maxval=5.0, group=grp_risk)
+
+// Session Filter
+grp_session = "---=== INDIA SESSION ===---"
+i_useSession = input.bool(true, "Filter by Session", group=grp_session)
+i_avoidOpen = input.bool(true, "Avoid Opening 15min", group=grp_session)
+i_avoidClose = input.bool(true, "Avoid Closing 30min", group=grp_session)
+i_timezone = input.string("Asia/Kolkata", "Timezone", group=grp_session)
+
+
+// -------------------------------------------------------------------------------
+// MODULE 1: REGIME DETECTOR
+// Determines if market is: TRENDING UP, TRENDING DOWN, RANGING, or VOLATILE
+// -------------------------------------------------------------------------------
+
+// ADX for trend strength
+[diPlus, diMinus, adxValue] = ta.dmi(i_adxLen, i_adxLen)
+
+// EMAs for trend direction
+ema20 = ta.ema(close, 20)
+ema50 = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+
+// Bollinger Bands for volatility
+[bbMiddle, bbUpper, bbLower] = ta.bb(close, i_bbLen, i_bbMult)
+bbWidth = (bbUpper - bbLower) / bbMiddle * 100
+bbWidthSma = ta.sma(bbWidth, 50)
+volatilityExpanding = bbWidth > bbWidthSma * 1.2
+
+// Regime Classification
+isTrendingUp = adxValue > i_adxThresh and diPlus > diMinus and close > ema20 and ema20 > ema50
+isTrendingDown = adxValue > i_adxThresh and diMinus > diPlus and close < ema20 and ema20 < ema50
+isVolatile = volatilityExpanding and adxValue < i_adxThresh
+isRanging = not isTrendingUp and not isTrendingDown and not isVolatile
+
+// Regime as number for scoring
+regimeScore = isTrendingUp ? 2 : isTrendingDown ? -2 : isVolatile ? 0 : 1
+regimeText = isTrendingUp ? "TREND !" : isTrendingDown ? "TREND !" : isVolatile ? "VOLATILE" : "RANGING"
+regimeColor = isTrendingUp ? color.green : isTrendingDown ? color.red : isVolatile ? color.orange : color.gray
+
+// -------------------------------------------------------------------------------
+// MODULE 2:=== SMART MONEY ===TRACKER
+// Detects institutional accumulation/distribution
+// -------------------------------------------------------------------------------
+
+// Money Flow Index
+mfi = ta.mfi(hlc3, i_mfiLen)
+
+// Volume Analysis
+volumeSma = ta.sma(volume, i_volLen)
+volumeRatio = volume / volumeSma
+unusualVolume = volumeRatio > i_volThresh
+
+// Accumulation/Distribution
+ad = ta.cum(close == high and close == low or high == low ? 0 : ((2 * close - low - high) / (high - low)) * volume)
+adEma = ta.ema(ad, 20)
+isAccumulating = ad > adEma and close > close[1]
+isDistributing = ad < adEma and close < close[1]
+
+// Volume-Price Confirmation
+volumeConfirmsBull = close > close[1] and volume > volumeSma
+volumeConfirmsBear = close < close[1] and volume > volumeSma
+
+//=== SMART MONEY ===Score (-100 to +100)
+smartMoneyRaw = (mfi - 50) + (isAccumulating ? 20 : isDistributing ? -20 : 0) + (volumeConfirmsBull ? 15 : volumeConfirmsBear ? -15 : 0)
+smartMoneyScore = math.max(-100, math.min(100, smartMoneyRaw))
+
+// -------------------------------------------------------------------------------
+// MODULE 3: MOMENTUM ENGINE
+// Multi-indicator momentum analysis with divergence detection
+// -------------------------------------------------------------------------------
+
+// RSI
+rsi = ta.rsi(close, i_rsiLen)
+rsiOverbought = rsi > 70
+rsiOversold = rsi < 30
+rsiBullish = rsi > 50 and rsi > rsi[1]
+rsiBearish = rsi < 50 and rsi < rsi[1]
+
+// RSI Divergence Detection
+rsiHigher = rsi > ta.highest(rsi[1], 5)
+rsiLower = rsi < ta.lowest(rsi[1], 5)
+priceHigher = high > ta.highest(high[1], 5)
+priceLower = low < ta.lowest(low[1], 5)
+bullishDivergence = priceLower and rsiHigher
+bearishDivergence = priceHigher and rsiLower
+
+// MACD
+[macdLine, signalLine, macdHist] = ta.macd(close, i_macdFast, i_macdSlow, i_macdSig)
+macdBullish = macdHist > 0 and macdHist > macdHist[1]
+macdBearish = macdHist < 0 and macdHist < macdHist[1]
+macdCrossUp = ta.crossover(macdLine, signalLine)
+macdCrossDown = ta.crossunder(macdLine, signalLine)
+
+// Stochastic
+stochK = ta.stoch(close, high, low, i_stochK)
+stochD = ta.sma(stochK, i_stochD)
+stochOverbought = stochK > 80
+stochOversold = stochK < 20
+stochBullish = stochK > stochD and stochK > stochK[1]
+stochBearish = stochK < stochD and stochK < stochK[1]
+
+// Combined Momentum Score (0-100)
+rsiScore = rsi  // Already 0-100
+macdScore = 50 + (macdHist / ta.atr(14) * 10)  // Normalize MACD
+macdScore := math.max(0, math.min(100, macdScore))
+stochScore = stochK  // Already 0-100
+
+momentumScore = (rsiScore * 0.4 + macdScore * 0.35 + stochScore * 0.25)
+momentumScore := math.round(momentumScore)
+
+
+// -------------------------------------------------------------------------------
+// MODULE 4: INDIA-SPECIFIC FILTERS
+// Session timing, Expiry awareness, VIX-proxy
+// -------------------------------------------------------------------------------
+
+// Time calculations (IST)
+currentHour = hour(time, i_timezone)
+currentMinute = minute(time, i_timezone)
+currentDay = dayofweek(time, i_timezone)  // 1=Sunday, 5=Thursday
+
+// Market Session Detection
+isMarketOpen = currentHour >= 9 and currentHour < 16
+isOpeningChaos = currentHour == 9 and currentMinute < 30  // First 15 mins
+isLunchChop = currentHour >= 12 and currentHour < 13  // Lunch hour
+isClosingVolatile = currentHour == 15 and currentMinute >= 0  // Last hour
+isPowerHour = currentHour >= 14 and currentHour < 15  // Pre-close moves
+
+// Expiry Detection (Thursday for weekly)
+isExpiry = currentDay == 5  // Thursday
+isExpiryEve = currentDay == 4  // Wednesday
+
+// Session Quality Score
+sessionScore = 100
+sessionScore := isOpeningChaos and i_avoidOpen ? sessionScore - 30 : sessionScore
+sessionScore := isLunchChop ? sessionScore - 20 : sessionScore
+sessionScore := isClosingVolatile and i_avoidClose ? sessionScore - 25 : sessionScore
+sessionScore := isPowerHour ? sessionScore + 10 : sessionScore
+sessionScore := isExpiry ? sessionScore - 15 : sessionScore  // Expiry = more risk
+
+// VIX Proxy (using ATR and BB width)
+atrValue = ta.atr(i_atrLen)
+atrPercent = atrValue / close * 100
+vixProxy = (atrPercent * 5 + bbWidth) / 2  // Normalize to VIX-like scale
+vixProxyHigh = vixProxy > 20
+vixProxyLow = vixProxy < 12
+vixProxyExtreme = vixProxy > 30
+
+// -------------------------------------------------------------------------------
+// MODULE 5: DYNAMIC SUPPORT/RESISTANCE
+// Auto-calculated key levels
+// -------------------------------------------------------------------------------
+
+// Pivot-based S/R
+pivotHigh = ta.pivothigh(high, 10, 10)
+pivotLow = ta.pivotlow(low, 10, 10)
+
+var float resistance1 = na
+var float support1 = na
+
+if not na(pivotHigh)
+    resistance1 := pivotHigh
+if not na(pivotLow)
+    support1 := pivotLow
+
+// ATR-based levels from current price
+atrSL_Long = close - (atrValue * i_atrMult)
+atrSL_Short = close + (atrValue * i_atrMult)
+atrTarget_Long = close + (atrValue * i_atrMult * i_rrRatio)
+atrTarget_Short = close - (atrValue * i_atrMult * i_rrRatio)
+
+// -------------------------------------------------------------------------------
+// MODULE 6: CONFLUENCE SCORER
+// The brain - combines all signals into final score
+// -------------------------------------------------------------------------------
+
+// Base scores from each module
+regimePoints = isTrendingUp ? 25 : isTrendingDown ? -25 : isVolatile ? 0 : 5
+momentumPoints = (momentumScore - 50) * 0.5  // -25 to +25
+smartMoneyPoints = smartMoneyScore * 0.25  // -25 to +25
+
+// Bonus points for confluence
+macdRsiAgree = (macdBullish and rsiBullish) ? 10 : (macdBearish and rsiBearish) ? -10 : 0
+divergenceBonus = bullishDivergence ? 15 : bearishDivergence ? -15 : 0
+volumeBonus = unusualVolume ? (close > close[1] ? 10 : -10) : 0
+
+// Trend alignment bonus
+trendAlignment = close > ema20 and ema20 > ema50 and ema50 > ema200 ? 15 : close < ema20 and ema20 < ema50 and ema50 < ema200 ? -15 : 0
+
+// Calculate raw confluence
+rawConfluence = 50 + regimePoints + momentumPoints + smartMoneyPoints + macdRsiAgree + divergenceBonus + volumeBonus + trendAlignment
+
+// Apply session filter
+sessionMultiplier = i_useSession ? sessionScore / 100 : 1.0
+
+// Apply sensitivity
+confluenceScore = 50 + ((rawConfluence - 50) * i_sensitivity * sessionMultiplier)
+confluenceScore := math.max(0, math.min(100, math.round(confluenceScore)))
+
+// Signal Classification
+isStrongBuy = confluenceScore >= 80
+isBuy = confluenceScore >= 60 and confluenceScore < 80
+isNeutral = confluenceScore >= 40 and confluenceScore < 60
+isSell = confluenceScore >= 20 and confluenceScore < 40
+isStrongSell = confluenceScore < 20
+
+// Signal text and color
+signalText = isStrongBuy ? "STRONG BUY >>" : isBuy ? "BUY >>" : isNeutral ? "NEUTRAL >>" : isSell ? "SELL >>" : "STRONG SELL >>"
+signalColor = isStrongBuy ? color.new(color.green, 0) : isBuy ? color.new(color.lime, 0) : isNeutral ? color.new(color.gray, 0) : isSell ? color.new(color.orange, 0) : color.new(color.red, 0)
+
+
+// -------------------------------------------------------------------------------
+// MODULE 7: ENTRY/EXIT SIGNALS
+// Clean signal generation with filters
+// -------------------------------------------------------------------------------
+
+// Entry conditions
+longEntry = ta.crossover(confluenceScore, 60) and (isTrendingUp or isRanging)
+shortEntry = ta.crossunder(confluenceScore, 40) and (isTrendingDown or isRanging)
+
+// Strong entries
+strongLongEntry = ta.crossover(confluenceScore, 80)
+strongShortEntry = ta.crossunder(confluenceScore, 20)
+
+// Exit conditions
+longExit = ta.crossunder(confluenceScore, 50) or ta.crossunder(close, ema20)
+shortExit = ta.crossover(confluenceScore, 50) or ta.crossover(close, ema20)
+
+// -------------------------------------------------------------------------------
+// VISUAL: SIGNAL MARKERS
+// -------------------------------------------------------------------------------
+
+// Buy signals
+plotshape(i_showSignals and strongLongEntry, title="Strong Buy", location=location.belowbar, color=color.green, style=shape.triangleup, size=size.normal, text="STRONG\nBUY")
+plotshape(i_showSignals and longEntry and not strongLongEntry, title="Buy", location=location.belowbar, color=color.lime, style=shape.triangleup, size=size.small, text="BUY")
+
+// Sell signals
+plotshape(i_showSignals and strongShortEntry, title="Strong Sell", location=location.abovebar, color=color.red, style=shape.triangledown, size=size.normal, text="STRONG\nSELL")
+plotshape(i_showSignals and shortEntry and not strongShortEntry, title="Sell", location=location.abovebar, color=color.orange, style=shape.triangledown, size=size.small, text="SELL")
+
+// Exit markers
+plotshape(i_showSignals and longExit and close[1] > ema20[1], title="Exit Long", location=location.abovebar, color=color.yellow, style=shape.xcross, size=size.tiny)
+plotshape(i_showSignals and shortExit and close[1] < ema20[1], title="Exit Short", location=location.belowbar, color=color.yellow, style=shape.xcross, size=size.tiny)
+
+// -------------------------------------------------------------------------------
+// VISUAL: BAR COLORING
+// -------------------------------------------------------------------------------
+
+barcolor(isStrongBuy ? color.new(color.green, 20) : isBuy ? color.new(color.lime, 40) : isNeutral ? na : isSell ? color.new(color.orange, 40) : color.new(color.red, 20))
+
+// -------------------------------------------------------------------------------
+// VISUAL: BACKGROUND
+// -------------------------------------------------------------------------------
+
+bgcolor(isTrendingUp ? color.new(color.green, 95) : isTrendingDown ? color.new(color.red, 95) : isVolatile ? color.new(color.orange, 95) : na)
+
+// -------------------------------------------------------------------------------
+// VISUAL: EMAs
+// -------------------------------------------------------------------------------
+
+plot(ema20, "EMA 20", color=color.new(color.yellow, 50), linewidth=1)
+plot(ema50, "EMA 50", color=color.new(color.blue, 50), linewidth=1)
+plot(ema200, "EMA 200", color=color.new(color.purple, 50), linewidth=2)
+
+// -------------------------------------------------------------------------------
+// VISUAL: SUPPORT/RESISTANCE LINES
+// -------------------------------------------------------------------------------
+
+plot(i_showSR and not na(resistance1) ? resistance1 : na, "Resistance", color=color.new(color.red, 30), style=plot.style_circles, linewidth=2)
+plot(i_showSR and not na(support1) ? support1 : na, "Support", color=color.new(color.green, 30), style=plot.style_circles, linewidth=2)
+
+
+// -------------------------------------------------------------------------------
+// VISUAL: DASHBOARD TABLE
+// Complete trading cockpit in top-right
+// -------------------------------------------------------------------------------
+
+var table dashboard = table.new(position.top_right, 2, 12, bgcolor=color.new(color.black, 85), border_width=1, border_color=color.new(color.white, 70))
+
+if barstate.islast and i_showDashboard
+    // Header
+    table.cell(dashboard, 0, 0, "ARIA SUPREME", text_color=color.orange, text_size=size.normal, bgcolor=color.new(color.orange, 85))
+    table.cell(dashboard, 1, 0, "v1.0", text_color=color.orange, text_size=size.normal, bgcolor=color.new(color.orange, 85))
+    
+    // Signal
+    table.cell(dashboard, 0, 1, "SIGNAL", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 1, signalText, text_color=signalColor, text_size=size.normal)
+    
+    // Confluence Score
+    scoreBarColor = confluenceScore >= 60 ? color.green : confluenceScore <= 40 ? color.red : color.gray
+    table.cell(dashboard, 0, 2, "SCORE", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 2, str.tostring(confluenceScore) + "/100", text_color=scoreBarColor, text_size=size.normal)
+    
+    // Regime
+    table.cell(dashboard, 0, 3, "REGIME", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 3, regimeText, text_color=regimeColor, text_size=size.small)
+    
+    // Momentum
+    momColor = momentumScore >= 60 ? color.green : momentumScore <= 40 ? color.red : color.gray
+    table.cell(dashboard, 0, 4, "MOMENTUM", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 4, str.tostring(momentumScore), text_color=momColor, text_size=size.small)
+    
+    // Smart Money
+    smColor = smartMoneyScore > 20 ? color.green : smartMoneyScore < -20 ? color.red : color.gray
+    table.cell(dashboard, 0, 5, "SMART $", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 5, str.tostring(math.round(smartMoneyScore)), text_color=smColor, text_size=size.small)
+    
+    // VIX Proxy
+    vixColor = vixProxyExtreme ? color.red : vixProxyHigh ? color.orange : vixProxyLow ? color.green : color.gray
+    table.cell(dashboard, 0, 6, "VIX PROXY", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 6, str.tostring(math.round(vixProxy, 1)), text_color=vixColor, text_size=size.small)
+    
+    // Session
+    sessionText = isOpeningChaos ? ">> OPENING" : isLunchChop ? ">> LUNCH" : isClosingVolatile ? "! CLOSING" : isPowerHour ? ">> POWER HR" : "! NORMAL"
+    table.cell(dashboard, 0, 7, "SESSION", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 7, sessionText, text_color=color.white, text_size=size.small)
+    
+    // Expiry Status
+    expiryText = isExpiry ? ">> EXPIRY DAY" : isExpiryEve ? ">> EXPIRY EVE" : ""
+    expiryColor = isExpiry ? color.orange : isExpiryEve ? color.yellow : color.gray
+    table.cell(dashboard, 0, 8, "EXPIRY", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 8, expiryText, text_color=expiryColor, text_size=size.small)
+    
+    // Risk Levels (for longs)
+    table.cell(dashboard, 0, 9, "SL (Long)", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 9, str.tostring(math.round(atrSL_Long, 2)), text_color=color.red, text_size=size.small)
+    
+    table.cell(dashboard, 0, 10, "TGT (Long)", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 10, str.tostring(math.round(atrTarget_Long, 2)), text_color=color.green, text_size=size.small)
+    
+    // Risk:Reward
+    table.cell(dashboard, 0, 11, "R:R", text_color=color.gray, text_size=size.small)
+    table.cell(dashboard, 1, 11, "1:" + str.tostring(i_rrRatio), text_color=color.white, text_size=size.small)
+
+// -------------------------------------------------------------------------------
+// ALERTS
+// -------------------------------------------------------------------------------
+
+// alertcondition(strongLongEntry, title=">> STRONG BUY", message="ARIA SUPREME: STRONG BUY Signal | Score: {{plot_0}}")
+// alertcondition(longEntry, title=">> BUY", message="ARIA SUPREME: BUY Signal | Score: {{plot_0}}")
+// alertcondition(strongShortEntry, title=">> STRONG SELL", message="ARIA SUPREME: STRONG SELL Signal | Score: {{plot_0}}")
+// alertcondition(shortEntry, title=">> SELL", message="ARIA SUPREME: SELL Signal | Score: {{plot_0}}")
+// alertcondition(longExit, title="Exit Long", message="ARIA SUPREME: Exit Long Position")
+// alertcondition(shortExit, title="Exit Short", message="ARIA SUPREME: Exit Short Position")
+// alertcondition(unusualVolume, title="! Unusual Volume", message="ARIA SUPREME: Unusual Volume Detected!")
+// alertcondition(bullishDivergence, title=">> Bullish Divergence", message="ARIA SUPREME: Bullish Divergence Detected")
+// alertcondition(bearishDivergence, title=">> Bearish Divergence", message="ARIA SUPREME: Bearish Divergence Detected")
+
+// -------------------------------------------------------------------------------
+// PLOT CONFLUENCE FOR ALERTS
+// -------------------------------------------------------------------------------
+
+plot(confluenceScore, "Confluence Score", display=display.status_line)
+plot(momentumScore, "Momentum", display=display.status_line)
+plot(smartMoneyScore, "Smart Money", display=display.status_line)
+
+// -------------------------------------------------------------------------------
+// END OF ARIA SUPREME
+// -------------------------------------------------------------------------------

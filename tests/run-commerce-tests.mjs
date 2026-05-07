@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 
 import {
   canonicalizeProductId,
@@ -14,6 +15,11 @@ import {
   buildOrderWhatsAppLink,
   filterOrdersForAdmin,
 } from '../lib/admin/fulfillment.js';
+import {
+  getTradingViewUploadManifest,
+} from '../lib/admin/tradingview-indicators.js';
+
+const supabaseSchemaSql = readFileSync(new URL('../supabase-schema.sql', import.meta.url), 'utf8');
 
 function run(name, fn) {
   try {
@@ -186,6 +192,53 @@ run('csv export includes delivery details for manual and auto orders', () => {
   assert.match(csv, /^order_id,created_at,product_slug,product_name,amount,payment_status,delivery_type,delivery_status,customer_email,customer_phone$/m);
   assert.match(csv, /^ord_manual,2026-05-04T10:30:00.000Z,fear-greed,Fear & Greed Meter,499,paid,manual,pending,manual@paperpe.in,\+91 9000000002$/m);
   assert.match(csv, /^ord_auto,2026-05-04T11:00:00.000Z,aria-supreme,ARIA SUPREME Indicator,2999,paid,auto-download,available,auto@paperpe.in,\+91 9000000001$/m);
+});
+
+run('tradingview upload manifest prefers the approved v2 files and bundle zip', () => {
+  assert.deepEqual(getTradingViewUploadManifest(), [
+    {
+      slug: 'aria-supreme',
+      sourceName: 'aria-supreme.pine',
+      uploadName: 'aria-supreme.pine',
+    },
+    {
+      slug: 'fear-greed',
+      sourceName: 'fear-greed-meter-v2.pine',
+      uploadName: 'fear-greed-meter-v2.pine',
+    },
+    {
+      slug: 'oi-pulse',
+      sourceName: 'oi-pulse-v2.pine',
+      uploadName: 'oi-pulse-v2.pine',
+    },
+    {
+      slug: 'smart-sr',
+      sourceName: 'smart-sr-zones-v2.pine',
+      uploadName: 'smart-sr-zones-v2.pine',
+    },
+    {
+      slug: 'complete-bundle',
+      sourceName: 'complete-bundle.zip',
+      uploadName: 'complete-bundle.zip',
+      bundleEntries: [
+        'aria-supreme.pine',
+        'fear-greed-meter-v2.pine',
+        'oi-pulse-v2.pine',
+        'smart-sr-zones-v2.pine',
+      ],
+    },
+  ]);
+});
+
+run('supabase schema includes the broader public-surface hardening statements', () => {
+  assert.match(supabaseSchemaSql, /DROP EXTENSION IF EXISTS pg_graphql;/);
+  assert.match(supabaseSchemaSql, /REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public, anon, authenticated;/);
+  assert.match(supabaseSchemaSql, /ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;/);
+  assert.match(supabaseSchemaSql, /ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;/);
+  assert.match(supabaseSchemaSql, /ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;/);
+  assert.match(supabaseSchemaSql, /GRANT SELECT ON products TO anon, authenticated;/);
+  assert.match(supabaseSchemaSql, /GRANT SELECT ON orders TO authenticated;/);
+  assert.match(supabaseSchemaSql, /GRANT SELECT, UPDATE ON profiles TO authenticated;/);
 });
 
 console.log('All commerce tests passed.');

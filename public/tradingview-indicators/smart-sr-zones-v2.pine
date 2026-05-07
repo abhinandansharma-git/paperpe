@@ -1,0 +1,489 @@
+// @version=5
+// SMART S/R ZONES v2.0 - Professional Support & Resistance
+// By ARIA (PaperPe) - Production Ready for Indian Markets
+//
+// FEATURES:
+// - Multi-timeframe Confluence
+// - Volume at Level Analysis
+// - Fair Value Gap (FVG) Detection
+// - Order Block Identification
+// - Liquidity Pool Detection
+// - Session-based Pivots
+// - Auto S/R Strength Scoring (S1-S5)
+// - Indian Market Session Support
+// - Professional Dashboard
+// - Comprehensive Alerts
+
+indicator("Smart S/R Zones v2 [ARIA]", overlay=true, shorttitle="S/R v2", max_boxes_count=50, max_lines_count=50, max_labels_count=50)
+
+// ══════════════════════════════════════════════════════════════
+// INPUTS
+// ══════════════════════════════════════════════════════════════
+
+// Core S/R Settings
+grp_core = "Core S/R Settings"
+leftBars = input.int(10, "Left Bars", minval=5, maxval=30, group=grp_core)
+rightBars = input.int(10, "Right Bars", minval=5, maxval=30, group=grp_core)
+zoneWidth = input.float(0.3, "Zone Width %", minval=0.1, maxval=1.0, step=0.05, group=grp_core)
+maxZones = input.int(6, "Max Zones Each Side", minval=2, maxval=10, group=grp_core)
+minTouches = input.int(2, "Min Touches for Strong", minval=1, maxval=5, group=grp_core)
+
+// Multi-Timeframe
+grp_mtf = "Multi-Timeframe"
+useMTF = input.bool(true, "Enable MTF Confluence", group=grp_mtf)
+htfPeriod = input.timeframe("60", "Higher Timeframe", group=grp_mtf)
+
+// Volume Analysis
+grp_vol = "Volume Analysis"
+useVolumeProfile = input.bool(true, "Use Volume at Level", group=grp_vol)
+volLookback = input.int(50, "Volume Lookback", minval=20, maxval=200, group=grp_vol)
+
+// Smart Money Concepts
+grp_smc = "Smart Money Concepts"
+showFVG = input.bool(true, "Show Fair Value Gaps", group=grp_smc)
+showOB = input.bool(true, "Show Order Blocks", group=grp_smc)
+showLiquidity = input.bool(true, "Show Liquidity Pools", group=grp_smc)
+obLookback = input.int(20, "Order Block Lookback", minval=5, maxval=50, group=grp_smc)
+
+// Indian Market
+grp_india = "Indian Market"
+useIndian = input.bool(true, "Enable Indian Mode", group=grp_india)
+mktSession = input.session("0915-1530", "Market Session", group=grp_india)
+showSessionPivots = input.bool(true, "Show Session Pivots", group=grp_india)
+
+// Display
+grp_display = "Display"
+showZones = input.bool(true, "Show S/R Zones", group=grp_display)
+showLines = input.bool(true, "Show Level Lines", group=grp_display)
+showLabels = input.bool(true, "Show Labels", group=grp_display)
+showDash = input.bool(true, "Show Dashboard", group=grp_display)
+showStrength = input.bool(true, "Show Strength Rating", group=grp_display)
+dashPos = input.string("Top Right", "Dashboard Position", options=["Top Right", "Top Left", "Bottom Right", "Bottom Left"], group=grp_display)
+
+// Colors
+grp_colors = "Colors"
+resColor = input.color(color.new(color.red, 70), "Resistance Color", group=grp_colors)
+supColor = input.color(color.new(color.green, 70), "Support Color", group=grp_colors)
+fvgBullColor = input.color(color.new(color.teal, 80), "Bullish FVG", group=grp_colors)
+fvgBearColor = input.color(color.new(color.maroon, 80), "Bearish FVG", group=grp_colors)
+obBullColor = input.color(color.new(color.blue, 85), "Bullish OB", group=grp_colors)
+obBearColor = input.color(color.new(color.purple, 85), "Bearish OB", group=grp_colors)
+
+// ══════════════════════════════════════════════════════════════
+// TYPES
+// ══════════════════════════════════════════════════════════════
+
+type SRLevel
+    float price
+    int touches
+    float volume
+    int strength  // 1-5
+    bool isMTF
+    int barIndex
+
+// ══════════════════════════════════════════════════════════════
+// VARIABLES
+// ══════════════════════════════════════════════════════════════
+
+var array<SRLevel> resistances = array.new<SRLevel>()
+var array<SRLevel> supports = array.new<SRLevel>()
+
+// FVG tracking
+var array<box> fvgBoxes = array.new<box>()
+
+// Order Block tracking
+var array<box> obBoxes = array.new<box>()
+
+zonePercent = zoneWidth / 100
+
+// ══════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+
+// Calculate strength rating (1-5)
+getStrength(touches, hasVolume, hasMTF, isRecent) =>
+    strength = 1
+    strength := touches >= 3 ? strength + 1 : strength
+    strength := touches >= 5 ? strength + 1 : strength
+    strength := hasVolume ? strength + 1 : strength
+    strength := hasMTF ? strength + 1 : strength
+    math.min(strength, 5)
+
+// Get strength label
+getStrengthLabel(s) =>
+    switch s
+        5 => "S5 ★★★★★"
+        4 => "S4 ★★★★"
+        3 => "S3 ★★★"
+        2 => "S2 ★★"
+        => "S1 ★"
+
+// Check if price is near a level
+isNearLevel(price, level, tolerance) =>
+    math.abs(price - level) / level < tolerance
+
+// Get average volume at price level
+getVolumeAtLevel(targetPrice, lookback) =>
+    sumVol = 0.0
+    count = 0
+    for i = 0 to lookback - 1
+        if isNearLevel(close[i], targetPrice, zonePercent * 2)
+            sumVol += volume[i]
+            count += 1
+    count > 0 ? sumVol / count : 0.0
+
+// ══════════════════════════════════════════════════════════════
+// PIVOT DETECTION
+// ══════════════════════════════════════════════════════════════
+
+pivotHigh = ta.pivothigh(high, leftBars, rightBars)
+pivotLow = ta.pivotlow(low, leftBars, rightBars)
+
+// HTF pivots for confluence
+htfHigh = request.security(syminfo.tickerid, htfPeriod, ta.pivothigh(high, leftBars, rightBars))
+htfLow = request.security(syminfo.tickerid, htfPeriod, ta.pivotlow(low, leftBars, rightBars))
+
+// ══════════════════════════════════════════════════════════════
+// S/R LEVEL MANAGEMENT
+// ══════════════════════════════════════════════════════════════
+
+// Add new resistance
+if not na(pivotHigh)
+    existingIdx = -1
+    for i = 0 to array.size(resistances) - 1
+        if array.size(resistances) > i
+            lvl = array.get(resistances, i)
+            if isNearLevel(pivotHigh, lvl.price, zonePercent * 2)
+                existingIdx := i
+                break
+    
+    if existingIdx >= 0
+        // Update existing level
+        lvl = array.get(resistances, existingIdx)
+        lvl.touches += 1
+        lvl.barIndex := bar_index - rightBars
+        volAtLevel = getVolumeAtLevel(pivotHigh, volLookback)
+        avgVol = ta.sma(volume, volLookback)
+        hasHighVol = volAtLevel > avgVol * 1.5
+        hasMTF = useMTF and not na(htfHigh) and isNearLevel(pivotHigh, htfHigh, zonePercent * 3)
+        lvl.strength := getStrength(lvl.touches, hasHighVol, hasMTF, true)
+        lvl.isMTF := hasMTF
+        array.set(resistances, existingIdx, lvl)
+    else
+        // Add new level
+        volAtLevel = getVolumeAtLevel(pivotHigh, volLookback)
+        avgVol = ta.sma(volume, volLookback)
+        hasHighVol = volAtLevel > avgVol * 1.5
+        hasMTF = useMTF and not na(htfHigh) and isNearLevel(pivotHigh, htfHigh, zonePercent * 3)
+        newLvl = SRLevel.new(pivotHigh, 1, volAtLevel, getStrength(1, hasHighVol, hasMTF, true), hasMTF, bar_index - rightBars)
+        array.push(resistances, newLvl)
+        
+        // Limit array size
+        if array.size(resistances) > maxZones
+            array.shift(resistances)
+
+// Add new support
+if not na(pivotLow)
+    existingIdx = -1
+    for i = 0 to array.size(supports) - 1
+        if array.size(supports) > i
+            lvl = array.get(supports, i)
+            if isNearLevel(pivotLow, lvl.price, zonePercent * 2)
+                existingIdx := i
+                break
+    
+    if existingIdx >= 0
+        lvl = array.get(supports, existingIdx)
+        lvl.touches += 1
+        lvl.barIndex := bar_index - rightBars
+        volAtLevel = getVolumeAtLevel(pivotLow, volLookback)
+        avgVol = ta.sma(volume, volLookback)
+        hasHighVol = volAtLevel > avgVol * 1.5
+        hasMTF = useMTF and not na(htfLow) and isNearLevel(pivotLow, htfLow, zonePercent * 3)
+        lvl.strength := getStrength(lvl.touches, hasHighVol, hasMTF, true)
+        lvl.isMTF := hasMTF
+        array.set(supports, existingIdx, lvl)
+    else
+        volAtLevel = getVolumeAtLevel(pivotLow, volLookback)
+        avgVol = ta.sma(volume, volLookback)
+        hasHighVol = volAtLevel > avgVol * 1.5
+        hasMTF = useMTF and not na(htfLow) and isNearLevel(pivotLow, htfLow, zonePercent * 3)
+        newLvl = SRLevel.new(pivotLow, 1, volAtLevel, getStrength(1, hasHighVol, hasMTF, true), hasMTF, bar_index - rightBars)
+        array.push(supports, newLvl)
+        
+        if array.size(supports) > maxZones
+            array.shift(supports)
+
+// ══════════════════════════════════════════════════════════════
+// FAIR VALUE GAPS (FVG)
+// ══════════════════════════════════════════════════════════════
+
+// Bullish FVG: gap between candle 2's high and candle 0's low
+bullFVG = low > high[2] and close[1] > open[1]
+bearFVG = high < low[2] and close[1] < open[1]
+
+// Track new FVGs
+newBullFVG = bullFVG and not bullFVG[1]
+newBearFVG = bearFVG and not bearFVG[1]
+
+if showFVG and newBullFVG
+    fvgTop = low
+    fvgBottom = high[2]
+    if fvgTop > fvgBottom
+        b = box.new(bar_index - 2, fvgTop, bar_index + 10, fvgBottom, bgcolor=fvgBullColor, border_color=color.teal)
+        if array.size(fvgBoxes) > 20
+            oldBox = array.shift(fvgBoxes)
+            box.delete(oldBox)
+        array.push(fvgBoxes, b)
+
+if showFVG and newBearFVG
+    fvgTop = low[2]
+    fvgBottom = high
+    if fvgTop > fvgBottom
+        b = box.new(bar_index - 2, fvgTop, bar_index + 10, fvgBottom, bgcolor=fvgBearColor, border_color=color.maroon)
+        if array.size(fvgBoxes) > 20
+            oldBox = array.shift(fvgBoxes)
+            box.delete(oldBox)
+        array.push(fvgBoxes, b)
+
+// ══════════════════════════════════════════════════════════════
+// ORDER BLOCKS
+// ══════════════════════════════════════════════════════════════
+
+// Bullish OB: last down candle before strong up move
+bullishOB = close[1] < open[1] and close > open and close > high[1] and volume > ta.sma(volume, 20) * 1.5
+bearishOB = close[1] > open[1] and close < open and close < low[1] and volume > ta.sma(volume, 20) * 1.5
+
+newBullOB = bullishOB and not bullishOB[1]
+newBearOB = bearishOB and not bearishOB[1]
+
+if showOB and newBullOB
+    b = box.new(bar_index - 1, high[1], bar_index + 15, low[1], bgcolor=obBullColor, border_color=color.blue)
+    if array.size(obBoxes) > 15
+        oldBox = array.shift(obBoxes)
+        box.delete(oldBox)
+    array.push(obBoxes, b)
+
+if showOB and newBearOB
+    b = box.new(bar_index - 1, high[1], bar_index + 15, low[1], bgcolor=obBearColor, border_color=color.purple)
+    if array.size(obBoxes) > 15
+        oldBox = array.shift(obBoxes)
+        box.delete(oldBox)
+    array.push(obBoxes, b)
+
+// ══════════════════════════════════════════════════════════════
+// LIQUIDITY POOLS (Equal Highs/Lows)
+// ══════════════════════════════════════════════════════════════
+
+// Detect equal highs (liquidity above)
+eqHighs = math.abs(high - high[1]) / high < 0.001 and math.abs(high - high[2]) / high < 0.001
+eqLows = math.abs(low - low[1]) / low < 0.001 and math.abs(low - low[2]) / low < 0.001
+
+// Liquidity sweep detection
+liqSweepHi = high > ta.highest(high[1], 20) and close < high and eqHighs[3]
+liqSweepLo = low < ta.lowest(low[1], 20) and close > low and eqLows[3]
+
+if showLiquidity
+    plotshape(eqHighs and not eqHighs[1], title="Equal Highs", location=location.abovebar, 
+         color=color.new(color.orange, 0), style=shape.square, size=size.tiny, text="EQH")
+    plotshape(eqLows and not eqLows[1], title="Equal Lows", location=location.belowbar, 
+         color=color.new(color.aqua, 0), style=shape.square, size=size.tiny, text="EQL")
+
+// ══════════════════════════════════════════════════════════════
+// SESSION PIVOTS (Indian Market)
+// ══════════════════════════════════════════════════════════════
+
+inSession = not na(time(timeframe.period, mktSession))
+isSessionStart = inSession and not inSession[1]
+isPreMarket = useIndian and hour == 9 and minute < 15
+
+// Daily pivots
+[dailyPP, dailyR1, dailyS1, dailyR2, dailyS2, dailyR3, dailyS3] = request.security(syminfo.tickerid, "D", 
+     [hlc3[1], hlc3[1] * 2 - low[1], hlc3[1] * 2 - high[1], 
+      hlc3[1] + (high[1] - low[1]), hlc3[1] - (high[1] - low[1]),
+      high[1] + 2 * (hlc3[1] - low[1]), low[1] - 2 * (high[1] - hlc3[1])])
+
+// ══════════════════════════════════════════════════════════════
+// NEAREST LEVELS
+// ══════════════════════════════════════════════════════════════
+
+var float nearestRes = na
+var int nearestResStrength = 0
+var float nearestSup = na
+var int nearestSupStrength = 0
+
+if barstate.islast
+    nearestRes := na
+    nearestResStrength := 0
+    nearestSup := na
+    nearestSupStrength := 0
+    
+    // Find nearest resistance above
+    for i = 0 to array.size(resistances) - 1
+        if array.size(resistances) > i
+            lvl = array.get(resistances, i)
+            if lvl.price > close
+                if na(nearestRes) or lvl.price < nearestRes
+                    nearestRes := lvl.price
+                    nearestResStrength := lvl.strength
+    
+    // Find nearest support below
+    for i = 0 to array.size(supports) - 1
+        if array.size(supports) > i
+            lvl = array.get(supports, i)
+            if lvl.price < close
+                if na(nearestSup) or lvl.price > nearestSup
+                    nearestSup := lvl.price
+                    nearestSupStrength := lvl.strength
+
+// ══════════════════════════════════════════════════════════════
+// PLOTTING
+// ══════════════════════════════════════════════════════════════
+
+// Plot S/R zones
+if barstate.islast and showZones
+    // Clear old boxes (handled by max_boxes_count)
+    
+    // Draw resistance zones
+    for i = 0 to math.min(array.size(resistances) - 1, maxZones - 1)
+        if array.size(resistances) > i
+            lvl = array.get(resistances, i)
+            upperZone = lvl.price * (1 + zonePercent)
+            lowerZone = lvl.price * (1 - zonePercent)
+            zoneColor = lvl.strength >= 4 ? color.new(color.red, 70) : lvl.strength >= 3 ? color.new(color.red, 80) : color.new(color.red, 88)
+            
+            box.new(bar_index - 60, upperZone, bar_index + 20, lowerZone, 
+                 bgcolor=zoneColor, border_color=color.new(color.red, 50), border_width=lvl.strength >= 4 ? 2 : 1)
+            
+            if showLabels
+                labelText = showStrength ? getStrengthLabel(lvl.strength) : "R"
+                label.new(bar_index + 5, lvl.price, labelText, color=color.new(color.red, 80), 
+                     textcolor=color.white, style=label.style_label_left, size=size.small)
+    
+    // Draw support zones
+    for i = 0 to math.min(array.size(supports) - 1, maxZones - 1)
+        if array.size(supports) > i
+            lvl = array.get(supports, i)
+            upperZone = lvl.price * (1 + zonePercent)
+            lowerZone = lvl.price * (1 - zonePercent)
+            zoneColor = lvl.strength >= 4 ? color.new(color.green, 70) : lvl.strength >= 3 ? color.new(color.green, 80) : color.new(color.green, 88)
+            
+            box.new(bar_index - 60, upperZone, bar_index + 20, lowerZone,
+                 bgcolor=zoneColor, border_color=color.new(color.green, 50), border_width=lvl.strength >= 4 ? 2 : 1)
+            
+            if showLabels
+                labelText = showStrength ? getStrengthLabel(lvl.strength) : "S"
+                label.new(bar_index + 5, lvl.price, labelText, color=color.new(color.green, 80), 
+                     textcolor=color.white, style=label.style_label_left, size=size.small)
+
+// Plot nearest levels
+plot(showLines ? nearestRes : na, "Nearest Resistance", color=color.red, style=plot.style_linebr, linewidth=2)
+plot(showLines ? nearestSup : na, "Nearest Support", color=color.green, style=plot.style_linebr, linewidth=2)
+
+// Plot daily pivots
+plot(showSessionPivots and useIndian ? dailyPP : na, "Daily PP", color=color.new(color.yellow, 50), style=plot.style_circles)
+plot(showSessionPivots and useIndian ? dailyR1 : na, "R1", color=color.new(color.red, 60), style=plot.style_cross)
+plot(showSessionPivots and useIndian ? dailyS1 : na, "S1", color=color.new(color.green, 60), style=plot.style_cross)
+
+// Session background
+bgcolor(useIndian and isPreMarket ? color.new(color.yellow, 95) : na, title="Pre-Market")
+
+// ══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════════
+
+getDashPosition() =>
+    switch dashPos
+        "Top Right"    => position.top_right
+        "Top Left"     => position.top_left
+        "Bottom Right" => position.bottom_right
+        "Bottom Left"  => position.bottom_left
+
+if barstate.islast and showDash
+    var table dash = table.new(getDashPosition(), 3, 9, bgcolor=color.new(#0a0a0a, 10), 
+         border_width=1, border_color=color.new(color.gray, 70))
+    
+    // Header
+    table.cell(dash, 0, 0, "S/R ZONES v2", text_color=color.white, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 1, 0, syminfo.ticker, text_color=color.yellow, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 2, 0, timeframe.period, text_color=color.gray, text_size=size.small, bgcolor=color.new(#1a1a2e, 0))
+    
+    // Nearest Resistance
+    table.cell(dash, 0, 1, "Resistance", text_color=color.red, text_size=size.tiny)
+    table.cell(dash, 1, 1, na(nearestRes) ? "-" : str.tostring(nearestRes, "#.##"), text_color=color.red, text_size=size.small)
+    table.cell(dash, 2, 1, getStrengthLabel(nearestResStrength), text_color=nearestResStrength >= 4 ? color.yellow : color.gray, text_size=size.tiny)
+    
+    // Nearest Support
+    table.cell(dash, 0, 2, "Support", text_color=color.green, text_size=size.tiny)
+    table.cell(dash, 1, 2, na(nearestSup) ? "-" : str.tostring(nearestSup, "#.##"), text_color=color.green, text_size=size.small)
+    table.cell(dash, 2, 2, getStrengthLabel(nearestSupStrength), text_color=nearestSupStrength >= 4 ? color.yellow : color.gray, text_size=size.tiny)
+    
+    // Distance
+    distToRes = not na(nearestRes) ? ((nearestRes - close) / close) * 100 : na
+    distToSup = not na(nearestSup) ? ((close - nearestSup) / close) * 100 : na
+    table.cell(dash, 0, 3, "Distance", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 3, not na(distToRes) ? "R: " + str.tostring(distToRes, "#.##") + "%" : "-", text_color=distToRes < 0.5 ? color.red : color.gray, text_size=size.tiny)
+    table.cell(dash, 2, 3, not na(distToSup) ? "S: " + str.tostring(distToSup, "#.##") + "%" : "-", text_color=distToSup < 0.5 ? color.green : color.gray, text_size=size.tiny)
+    
+    // Range
+    rangeVal = not na(nearestRes) and not na(nearestSup) ? nearestRes - nearestSup : 0
+    rangePercent = not na(nearestRes) and not na(nearestSup) ? (rangeVal / close) * 100 : 0
+    table.cell(dash, 0, 4, "Range", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 4, str.tostring(rangeVal, "#.##"), text_color=color.white, text_size=size.small)
+    table.cell(dash, 2, 4, str.tostring(rangePercent, "#.##") + "%", text_color=color.gray, text_size=size.tiny)
+    
+    // Position in Range
+    posInRange = not na(nearestRes) and not na(nearestSup) and rangeVal > 0 ? ((close - nearestSup) / rangeVal) * 100 : 50
+    posText = posInRange > 80 ? "Near Resistance" : posInRange < 20 ? "Near Support" : "Mid Range"
+    posColor = posInRange > 80 ? color.red : posInRange < 20 ? color.green : color.gray
+    table.cell(dash, 0, 5, "Position", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 5, str.tostring(posInRange, "#.0") + "%", text_color=posColor, text_size=size.small)
+    table.cell(dash, 2, 5, posText, text_color=posColor, text_size=size.tiny)
+    
+    // Daily Pivot
+    if useIndian
+        table.cell(dash, 0, 6, "Daily PP", text_color=color.yellow, text_size=size.tiny)
+        table.cell(dash, 1, 6, str.tostring(dailyPP, "#.##"), text_color=color.yellow, text_size=size.small)
+        table.cell(dash, 2, 6, close > dailyPP ? "Above" : "Below", text_color=close > dailyPP ? color.green : color.red, text_size=size.tiny)
+    
+    // FVG/OB Status
+    fvgStatus = bullFVG ? "Bull FVG" : bearFVG ? "Bear FVG" : "None"
+    fvgColor = bullFVG ? color.teal : bearFVG ? color.maroon : color.gray
+    table.cell(dash, 0, 7, "FVG", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 7, fvgStatus, text_color=fvgColor, text_size=size.small)
+    table.cell(dash, 2, 7, "", text_color=color.gray, text_size=size.tiny)
+    
+    // Session
+    if useIndian
+        sessionText = isPreMarket ? "PRE-MARKET" : inSession ? "MARKET OPEN" : "CLOSED"
+        sessionColor = inSession ? color.green : isPreMarket ? color.yellow : color.red
+        table.cell(dash, 0, 8, "Session", text_color=color.gray, text_size=size.tiny)
+        table.cell(dash, 1, 8, sessionText, text_color=sessionColor, text_size=size.small)
+        table.cell(dash, 2, 8, "", text_color=color.gray, text_size=size.tiny)
+
+// ══════════════════════════════════════════════════════════════
+// ALERTS
+// ══════════════════════════════════════════════════════════════
+
+// Approaching levels
+approachRes = not na(nearestRes) and high >= nearestRes * 0.995
+approachSup = not na(nearestSup) and low <= nearestSup * 1.005
+breakRes = not na(nearestRes) and close > nearestRes
+breakSup = not na(nearestSup) and close < nearestSup
+
+// Strong level alerts
+strongResApp = approachRes and nearestResStrength >= 4
+strongSupApp = approachSup and nearestSupStrength >= 4
+
+alertcondition(approachRes,  title="Approaching Resistance",       message="S/R v2: Price approaching resistance zone at {{close}}")
+alertcondition(approachSup,  title="Approaching Support",          message="S/R v2: Price approaching support zone at {{close}}")
+alertcondition(breakRes,     title="Resistance Breakout",          message="S/R v2: BREAKOUT above resistance! Price: {{close}}")
+alertcondition(breakSup,     title="Support Breakdown",            message="S/R v2: BREAKDOWN below support! Price: {{close}}")
+alertcondition(strongResApp, title="Strong Resistance Approach",   message="S/R v2: Approaching STRONG resistance (S4+) at {{close}}")
+alertcondition(strongSupApp, title="Strong Support Approach",      message="S/R v2: Approaching STRONG support (S4+) at {{close}}")
+alertcondition(newBullFVG,   title="New Bullish FVG",              message="S/R v2: New bullish Fair Value Gap detected")
+alertcondition(newBearFVG,   title="New Bearish FVG",              message="S/R v2: New bearish Fair Value Gap detected")
+alertcondition(newBullOB,    title="New Bullish Order Block",      message="S/R v2: New bullish Order Block formed")
+alertcondition(newBearOB,    title="New Bearish Order Block",      message="S/R v2: New bearish Order Block formed")
+alertcondition(liqSweepHi,   title="Liquidity Sweep High",         message="S/R v2: Liquidity sweep above equal highs - potential reversal")
+alertcondition(liqSweepLo,   title="Liquidity Sweep Low",          message="S/R v2: Liquidity sweep below equal lows - potential reversal")

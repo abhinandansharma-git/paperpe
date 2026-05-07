@@ -1,6 +1,8 @@
 ﻿-- PaperPe Database Schema
 -- Run this in Supabase SQL Editor
 
+DROP EXTENSION IF EXISTS pg_graphql;
+
 -- 1. Profiles (extends auth.users)
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE,
@@ -88,6 +90,14 @@ CREATE TABLE IF NOT EXISTS coupons (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Performance indexes
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders (user_id);
+CREATE INDEX IF NOT EXISTS idx_orders_product_id ON orders (product_id);
+CREATE INDEX IF NOT EXISTS idx_downloads_order_id ON downloads (order_id);
+CREATE INDEX IF NOT EXISTS idx_downloads_user_id ON downloads (user_id);
+CREATE INDEX IF NOT EXISTS idx_support_tickets_user_id ON support_tickets (user_id);
+CREATE INDEX IF NOT EXISTS idx_ticket_replies_ticket_id ON ticket_replies (ticket_id);
+
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
@@ -130,15 +140,39 @@ CREATE POLICY "Anyone can join waitlist" ON waitlist FOR INSERT WITH CHECK (true
 -- Coupons: Anyone can read active coupons
 CREATE POLICY "Anyone can view active coupons" ON coupons FOR SELECT USING (is_active = true);
 
+-- Schema exposure hardening
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM public, anon, authenticated;
+REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE ALL ON SEQUENCES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE ALL ON SEQUENCES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public REVOKE ALL ON TABLES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public REVOKE ALL ON SEQUENCES FROM public, anon, authenticated;
+ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin IN SCHEMA public REVOKE EXECUTE ON FUNCTIONS FROM public, anon, authenticated;
+
+GRANT SELECT ON products TO anon, authenticated;
+GRANT SELECT ON orders TO authenticated;
+GRANT SELECT, UPDATE ON profiles TO authenticated;
+
 -- Function to create profile on signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
 BEGIN
   INSERT INTO public.profiles (id, email)
   VALUES (NEW.id, NEW.email);
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM public, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.handle_new_user() TO postgres, service_role;
 
 -- Trigger for new user signup
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

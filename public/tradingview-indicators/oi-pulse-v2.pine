@@ -1,0 +1,398 @@
+// @version=5
+// OI PULSE v2.0 - Advanced Open Interest Intelligence
+// By ARIA (PaperPe) - Production Ready for Indian Markets
+//
+// FEATURES:
+// - OI Interpretation (Long/Short Buildup, Unwinding)
+// - Volume-OI Divergence Detection
+// - PCR Trend Proxy
+// - Institutional vs Retail Volume Analysis
+// - Indian Market Session Support (9:15-15:30 IST)
+// - Professional Dashboard with Signal Scoring
+// - Comprehensive Alerts
+
+indicator("OI Pulse v2 [ARIA]", overlay=true, shorttitle="OI Pulse v2")
+
+// ══════════════════════════════════════════════════════════════
+// INPUTS
+// ══════════════════════════════════════════════════════════════
+
+// Core Settings
+grp_core = "Core Settings"
+lookback = input.int(14, "Lookback Period", minval=5, maxval=50, group=grp_core)
+sensitivity = input.float(1.5, "Volume Sensitivity", minval=0.5, maxval=3.0, step=0.1, group=grp_core)
+oiSmoothLen = input.int(5, "OI Signal Smoothing", minval=1, maxval=10, group=grp_core)
+
+// Indian Market Settings
+grp_india = "Indian Market"
+useIndian = input.bool(true, "Enable Indian Market Mode", group=grp_india)
+mktOpen = input.session("0915-1530", "Market Hours (IST)", group=grp_india)
+preMarketStart = input.int(9, "Pre-Market Hour", minval=8, maxval=10, group=grp_india)
+goldenHourEnd = input.int(10, "Golden Hour End", minval=9, maxval=11, group=grp_india)
+lastHourStart = input.int(14, "Last Hour Start", minval=13, maxval=15, group=grp_india)
+
+// Divergence Settings
+grp_div = "Divergence Detection"
+divLookback = input.int(20, "Divergence Lookback", minval=10, maxval=50, group=grp_div)
+divThreshold = input.float(0.7, "Divergence Threshold", minval=0.3, maxval=1.0, step=0.1, group=grp_div)
+
+// PCR Proxy Settings
+grp_pcr = "PCR Proxy"
+pcrLen = input.int(10, "PCR Trend Length", minval=5, maxval=30, group=grp_pcr)
+pcrExtreme = input.float(1.3, "PCR Extreme Level", minval=1.0, maxval=2.0, step=0.1, group=grp_pcr)
+
+// Institutional Analysis
+grp_inst = "Institutional Analysis"
+instVolThresh = input.float(2.5, "Institutional Volume Threshold", minval=1.5, maxval=5.0, step=0.5, group=grp_inst)
+avgTradeFilter = input.float(1.5, "Avg Trade Size Filter", minval=1.0, maxval=3.0, step=0.25, group=grp_inst)
+
+// Visual Settings
+grp_visual = "Display"
+showLabels = input.bool(true, "Show Signal Labels", group=grp_visual)
+showBackground = input.bool(true, "Show Background Color", group=grp_visual)
+showDash = input.bool(true, "Show Dashboard", group=grp_visual)
+dashPos = input.string("Top Right", "Dashboard Position", options=["Top Right", "Top Left", "Bottom Right", "Bottom Left"], group=grp_visual)
+
+// Alert Settings
+grp_alert = "Alerts"
+alertStrongOnly = input.bool(false, "Alert Strong Signals Only", group=grp_alert)
+alertDivergence = input.bool(true, "Alert on Divergence", group=grp_alert)
+alertRegimeChange = input.bool(true, "Alert on Regime Change", group=grp_alert)
+
+// ══════════════════════════════════════════════════════════════
+// CALCULATIONS
+// ══════════════════════════════════════════════════════════════
+
+// Price Analysis
+priceChange = close - close[1]
+priceChangePercent = (priceChange / close[1]) * 100
+priceUp = priceChange > 0
+priceDown = priceChange < 0
+
+// Volume Analysis
+avgVolume = ta.sma(volume, lookback)
+volumeRatio = avgVolume > 0 ? volume / avgVolume : 1.0
+volumeUp = volumeRatio > sensitivity
+volumeDown = volumeRatio < (1 / sensitivity)
+volumeSpike = volumeRatio > instVolThresh
+
+// Trend Detection
+ema9 = ta.ema(close, 9)
+ema21 = ta.ema(close, 21)
+ema50 = ta.ema(close, 50)
+ema200 = ta.ema(close, 200)
+
+uptrend = ema9 > ema21 and ema21 > ema50
+downtrend = ema9 < ema21 and ema21 < ema50
+strongUptrend = uptrend and close > ema200
+strongDowntrend = downtrend and close < ema200
+
+// RSI for confirmation
+rsi = ta.rsi(close, 14)
+rsiOverbought = rsi > 70
+rsiOversold = rsi < 30
+
+// ADX for trend strength
+[diPlus, diMinus, adx] = ta.dmi(14, 14)
+strongTrend = adx > 25
+
+// ══════════════════════════════════════════════════════════════
+// OI SIGNAL LOGIC (Enhanced)
+// ══════════════════════════════════════════════════════════════
+
+// Core OI Patterns
+longBuildup = priceUp and volumeUp          // Price ↑ OI ↑ = New Longs
+shortBuildup = priceDown and volumeUp       // Price ↓ OI ↑ = New Shorts
+shortCovering = priceUp and volumeDown      // Price ↑ OI ↓ = Shorts Exiting
+longUnwinding = priceDown and volumeDown    // Price ↓ OI ↓ = Longs Exiting
+
+// Signal Scoring (0-100)
+bullScore = 0.0
+bearScore = 0.0
+
+// Long Buildup Score
+bullScore := longBuildup ? bullScore + 40 : bullScore
+bullScore := longBuildup and strongUptrend ? bullScore + 20 : bullScore
+bullScore := longBuildup and rsiOversold ? bullScore + 15 : bullScore
+bullScore := longBuildup and strongTrend ? bullScore + 15 : bullScore
+bullScore := shortCovering ? bullScore + 25 : bullScore
+bullScore := shortCovering and uptrend ? bullScore + 10 : bullScore
+
+// Short Buildup Score
+bearScore := shortBuildup ? bearScore + 40 : bearScore
+bearScore := shortBuildup and strongDowntrend ? bearScore + 20 : bearScore
+bearScore := shortBuildup and rsiOverbought ? bearScore + 15 : bearScore
+bearScore := shortBuildup and strongTrend ? bearScore + 15 : bearScore
+bearScore := longUnwinding ? bearScore + 25 : bearScore
+bearScore := longUnwinding and downtrend ? bearScore + 10 : bearScore
+
+// Smooth scores
+smoothBull = ta.ema(bullScore, oiSmoothLen)
+smoothBear = ta.ema(bearScore, oiSmoothLen)
+
+// Net Signal
+signalScore = smoothBull - smoothBear
+prevSignalScore = signalScore[1]
+
+// ══════════════════════════════════════════════════════════════
+// PCR PROXY (Volume-based)
+// ══════════════════════════════════════════════════════════════
+
+// Proxy PCR: ratio of down-day volume to up-day volume
+upDayVol = priceUp ? volume : 0.0
+downDayVol = priceDown ? volume : 0.0
+upVolSum = math.sum(upDayVol, pcrLen)
+downVolSum = math.sum(downDayVol, pcrLen)
+pcrProxy = upVolSum > 0 ? downVolSum / upVolSum : 1.0
+
+// PCR Interpretation
+pcrBullish = pcrProxy > pcrExtreme  // High puts = bearish sentiment (contrarian bullish)
+pcrBearish = pcrProxy < (1 / pcrExtreme)  // Low puts = bullish sentiment (contrarian bearish)
+pcrNeutral = not pcrBullish and not pcrBearish
+
+pcrTrend = ta.sma(pcrProxy, 5)
+pcrRising = pcrTrend > pcrTrend[1]
+pcrFalling = pcrTrend < pcrTrend[1]
+
+// ══════════════════════════════════════════════════════════════
+// DIVERGENCE DETECTION
+// ══════════════════════════════════════════════════════════════
+
+// Price making new highs/lows but volume not confirming
+priceHigh = ta.highest(high, divLookback)
+priceLow = ta.lowest(low, divLookback)
+volHigh = ta.highest(volume, divLookback)
+volLow = ta.lowest(volume, divLookback)
+
+atPriceHigh = high >= priceHigh * (1 - divThreshold/100)
+atPriceLow = low <= priceLow * (1 + divThreshold/100)
+weakVolume = volume < volHigh * divThreshold
+
+// Bearish Divergence: price high but volume weak
+bearishDiv = atPriceHigh and weakVolume and not atPriceHigh[1]
+// Bullish Divergence: price low but volume declining (selling exhaustion)
+bullishDiv = atPriceLow and weakVolume and not atPriceLow[1]
+
+// Divergence signals
+divBuySignal = bullishDiv and rsiOversold
+divSellSignal = bearishDiv and rsiOverbought
+
+// ══════════════════════════════════════════════════════════════
+// INSTITUTIONAL ANALYSIS
+// ══════════════════════════════════════════════════════════════
+
+// Institutional buying: high volume on up days with trend
+instBuying = priceUp and volumeSpike and uptrend
+instSelling = priceDown and volumeSpike and downtrend
+
+// Accumulation/Distribution
+adLine = ta.cum((close - low) - (high - close)) / (high - low) * volume
+adMA = ta.sma(adLine, lookback)
+accumulation = adLine > adMA and priceUp
+distribution = adLine < adMA and priceDown
+
+// ══════════════════════════════════════════════════════════════
+// MARKET REGIME DETECTION
+// ══════════════════════════════════════════════════════════════
+
+// Regime based on combined signals
+bullRegime = smoothBull > 50 and smoothBull > smoothBear and uptrend
+bearRegime = smoothBear > 50 and smoothBear > smoothBull and downtrend
+neutralRegime = not bullRegime and not bearRegime
+
+// Regime change detection
+prevBullRegime = smoothBull[1] > 50 and smoothBull[1] > smoothBear[1]
+prevBearRegime = smoothBear[1] > 50 and smoothBear[1] > smoothBull[1]
+regimeChanged = (bullRegime and prevBearRegime) or (bearRegime and prevBullRegime)
+
+// ══════════════════════════════════════════════════════════════
+// INDIAN MARKET SESSION
+// ══════════════════════════════════════════════════════════════
+
+inSession = not na(time(timeframe.period, mktOpen))
+isPreMarket = useIndian and hour == preMarketStart and minute < 15
+isGoldenHour = useIndian and inSession and hour == 9 and minute >= 15
+isLastHour = useIndian and inSession and hour >= lastHourStart and hour < 15
+
+sessionMult = useIndian ? (isGoldenHour ? 1.2 : isLastHour ? 0.8 : inSession ? 1.0 : 0.5) : 1.0
+
+// Session-specific patterns
+openingBuy = isGoldenHour and longBuildup and volumeSpike
+openingSell = isGoldenHour and shortBuildup and volumeSpike
+closingUnwind = isLastHour and (longUnwinding or shortCovering)
+
+// ══════════════════════════════════════════════════════════════
+// ENTRY SIGNALS
+// ══════════════════════════════════════════════════════════════
+
+// Strong signals (high conviction)
+strongBuy = longBuildup and strongUptrend and volumeSpike and smoothBull > 60 and sessionMult >= 1.0
+strongSell = shortBuildup and strongDowntrend and volumeSpike and smoothBear > 60 and sessionMult >= 1.0
+
+// Regular signals
+buySignal = longBuildup and uptrend and not longBuildup[1] and sessionMult >= 0.8
+sellSignal = shortBuildup and downtrend and not shortBuildup[1] and sessionMult >= 0.8
+
+// Weak signals (lower conviction)
+weakBuy = shortCovering and smoothBull > smoothBear and uptrend
+weakSell = longUnwinding and smoothBear > smoothBull and downtrend
+
+// ══════════════════════════════════════════════════════════════
+// PLOTTING
+// ══════════════════════════════════════════════════════════════
+
+// Background color
+bgColor = showBackground ? 
+     (strongBuy ? color.new(color.green, 85) : 
+      strongSell ? color.new(color.red, 85) : 
+      longBuildup ? color.new(color.green, 92) : 
+      shortBuildup ? color.new(color.red, 92) : 
+      shortCovering ? color.new(color.lime, 94) : 
+      longUnwinding ? color.new(color.orange, 94) : na) : na
+bgcolor(bgColor)
+
+// Session background
+bgcolor(useIndian and isGoldenHour ? color.new(color.yellow, 95) : na, title="Golden Hour")
+bgcolor(useIndian and isLastHour ? color.new(color.purple, 95) : na, title="Last Hour")
+
+// Signal Shapes
+plotshape(strongBuy and showLabels, title="Strong Buy", location=location.belowbar, 
+     color=color.green, style=shape.triangleup, size=size.normal, text="STRONG\nBUY")
+plotshape(strongSell and showLabels, title="Strong Sell", location=location.abovebar, 
+     color=color.red, style=shape.triangledown, size=size.normal, text="STRONG\nSELL")
+
+plotshape(buySignal and not strongBuy and showLabels, title="Buy Signal", 
+     location=location.belowbar, color=color.lime, style=shape.triangleup, size=size.small, text="BUY")
+plotshape(sellSignal and not strongSell and showLabels, title="Sell Signal", 
+     location=location.abovebar, color=color.orange, style=shape.triangledown, size=size.small, text="SELL")
+
+// Divergence markers
+plotshape(divBuySignal and showLabels, title="Bullish Divergence", location=location.belowbar,
+     color=color.aqua, style=shape.diamond, size=size.tiny, text="Bull Div")
+plotshape(divSellSignal and showLabels, title="Bearish Divergence", location=location.abovebar,
+     color=color.fuchsia, style=shape.diamond, size=size.tiny, text="Bear Div")
+
+// Institutional activity
+plotshape(instBuying and showLabels, title="Inst Buying", location=location.belowbar,
+     color=color.teal, style=shape.circle, size=size.tiny)
+plotshape(instSelling and showLabels, title="Inst Selling", location=location.abovebar,
+     color=color.maroon, style=shape.circle, size=size.tiny)
+
+// Bar coloring
+barcolor(strongBuy ? color.green : strongSell ? color.red : 
+     longBuildup ? color.lime : shortBuildup ? color.orange : 
+     shortCovering ? color.new(color.green, 50) : longUnwinding ? color.new(color.red, 50) : na)
+
+// ══════════════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════════════
+
+getDashPosition() =>
+    switch dashPos
+        "Top Right"    => position.top_right
+        "Top Left"     => position.top_left
+        "Bottom Right" => position.bottom_right
+        "Bottom Left"  => position.bottom_left
+
+if barstate.islast and showDash
+    var table dash = table.new(getDashPosition(), 3, 10, bgcolor=color.new(#0a0a0a, 10), 
+         border_width=1, border_color=color.new(color.gray, 70))
+    
+    // Header
+    oiSignal = longBuildup ? "LONG BUILDUP" : shortBuildup ? "SHORT BUILDUP" : 
+               shortCovering ? "SHORT COVERING" : longUnwinding ? "LONG UNWINDING" : "NEUTRAL"
+    oiColor = longBuildup ? color.green : shortBuildup ? color.red : 
+              shortCovering ? color.lime : longUnwinding ? color.orange : color.gray
+    
+    table.cell(dash, 0, 0, "OI PULSE v2", text_color=color.white, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 1, 0, oiSignal, text_color=oiColor, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    table.cell(dash, 2, 0, str.tostring(math.abs(signalScore), "#.0"), text_color=signalScore > 0 ? color.green : color.red, text_size=size.normal, bgcolor=color.new(#1a1a2e, 0))
+    
+    // Bull Score
+    table.cell(dash, 0, 1, "Bull Score", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 1, str.tostring(smoothBull, "#.0"), text_color=smoothBull > 50 ? color.green : color.gray, text_size=size.small)
+    table.cell(dash, 2, 1, smoothBull > 60 ? "STRONG" : smoothBull > 40 ? "Moderate" : "Weak", text_color=smoothBull > 60 ? color.green : color.gray, text_size=size.tiny)
+    
+    // Bear Score
+    table.cell(dash, 0, 2, "Bear Score", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 2, str.tostring(smoothBear, "#.0"), text_color=smoothBear > 50 ? color.red : color.gray, text_size=size.small)
+    table.cell(dash, 2, 2, smoothBear > 60 ? "STRONG" : smoothBear > 40 ? "Moderate" : "Weak", text_color=smoothBear > 60 ? color.red : color.gray, text_size=size.tiny)
+    
+    // Volume
+    table.cell(dash, 0, 3, "Volume", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 3, str.tostring(volumeRatio, "#.##") + "x", text_color=volumeSpike ? color.yellow : volumeUp ? color.green : color.white, text_size=size.small)
+    table.cell(dash, 2, 3, volumeSpike ? "SPIKE!" : volumeUp ? "Above Avg" : volumeDown ? "Below Avg" : "Normal", text_color=volumeSpike ? color.yellow : color.gray, text_size=size.tiny)
+    
+    // PCR Proxy
+    pcrText = pcrBullish ? "HIGH (Contrarian Bull)" : pcrBearish ? "LOW (Contrarian Bear)" : "Neutral"
+    pcrColor = pcrBullish ? color.green : pcrBearish ? color.red : color.gray
+    table.cell(dash, 0, 4, "PCR Proxy", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 4, str.tostring(pcrProxy, "#.##"), text_color=pcrColor, text_size=size.small)
+    table.cell(dash, 2, 4, pcrText, text_color=pcrColor, text_size=size.tiny)
+    
+    // Trend
+    trendText = strongUptrend ? "STRONG UP" : strongDowntrend ? "STRONG DOWN" : uptrend ? "Uptrend" : downtrend ? "Downtrend" : "Sideways"
+    trendColor = strongUptrend ? color.green : strongDowntrend ? color.red : uptrend ? color.lime : downtrend ? color.orange : color.gray
+    table.cell(dash, 0, 5, "Trend", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 5, trendText, text_color=trendColor, text_size=size.small)
+    table.cell(dash, 2, 5, "ADX: " + str.tostring(adx, "#.0"), text_color=strongTrend ? color.white : color.gray, text_size=size.tiny)
+    
+    // Regime
+    regimeText = bullRegime ? "BULLISH" : bearRegime ? "BEARISH" : "NEUTRAL"
+    regimeColor = bullRegime ? color.green : bearRegime ? color.red : color.gray
+    table.cell(dash, 0, 6, "Regime", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 6, regimeText, text_color=regimeColor, text_size=size.small)
+    table.cell(dash, 2, 6, regimeChanged ? "CHANGED!" : "Stable", text_color=regimeChanged ? color.yellow : color.gray, text_size=size.tiny)
+    
+    // Institutional
+    instText = instBuying ? "BUYING" : instSelling ? "SELLING" : accumulation ? "Accumulating" : distribution ? "Distributing" : "None"
+    instColor = instBuying ? color.green : instSelling ? color.red : accumulation ? color.lime : distribution ? color.orange : color.gray
+    table.cell(dash, 0, 7, "Institutional", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 7, instText, text_color=instColor, text_size=size.small)
+    table.cell(dash, 2, 7, "", text_color=color.gray, text_size=size.tiny)
+    
+    // Session (Indian)
+    if useIndian
+        sessionText = isGoldenHour ? "GOLDEN HOUR" : isLastHour ? "LAST HOUR" : isPreMarket ? "PRE-MARKET" : inSession ? "MARKET OPEN" : "CLOSED"
+        sessionColor = isGoldenHour ? color.yellow : isLastHour ? color.purple : inSession ? color.green : color.red
+        table.cell(dash, 0, 8, "Session", text_color=color.gray, text_size=size.tiny)
+        table.cell(dash, 1, 8, sessionText, text_color=sessionColor, text_size=size.small)
+        table.cell(dash, 2, 8, "Mult: " + str.tostring(sessionMult, "#.#"), text_color=color.gray, text_size=size.tiny)
+    
+    // Action
+    actionText = strongBuy ? "STRONG BUY" : strongSell ? "STRONG SELL" : buySignal ? "BUY" : sellSignal ? "SELL" : 
+                 weakBuy ? "Weak Buy" : weakSell ? "Weak Sell" : "HOLD"
+    actionColor = strongBuy or buySignal ? color.green : strongSell or sellSignal ? color.red : color.white
+    table.cell(dash, 0, 9, "Action", text_color=color.gray, text_size=size.tiny)
+    table.cell(dash, 1, 9, actionText, text_color=actionColor, text_size=size.small)
+    table.cell(dash, 2, 9, divBuySignal ? "BULL DIV" : divSellSignal ? "BEAR DIV" : "", text_color=divBuySignal ? color.aqua : color.fuchsia, text_size=size.tiny)
+
+// ══════════════════════════════════════════════════════════════
+// ALERTS
+// ══════════════════════════════════════════════════════════════
+
+// Strong signals
+alertcondition(strongBuy, title="Strong Buy", message="OI PULSE v2: STRONG BUY — Long Buildup with high conviction score")
+alertcondition(strongSell, title="Strong Sell", message="OI PULSE v2: STRONG SELL — Short Buildup with high conviction score")
+
+// Regular signals
+alertcondition(buySignal and not alertStrongOnly, title="Buy Signal", message="OI PULSE v2: BUY — Long Buildup detected on {{ticker}} at {{close}}")
+alertcondition(sellSignal and not alertStrongOnly, title="Sell Signal", message="OI PULSE v2: SELL — Short Buildup detected on {{ticker}} at {{close}}")
+
+// Divergence
+alertcondition(divBuySignal and alertDivergence, title="Bullish Divergence", message="OI PULSE v2: Bullish Divergence — Selling exhaustion detected")
+alertcondition(divSellSignal and alertDivergence, title="Bearish Divergence", message="OI PULSE v2: Bearish Divergence — Buying exhaustion detected")
+
+// Regime change
+alertcondition(regimeChanged and alertRegimeChange, title="Regime Change", message="OI PULSE v2: Market Regime Changed — Adjust strategy")
+
+// Session signals
+alertcondition(openingBuy, title="Opening Buy", message="OI PULSE v2: Opening Hour Long Buildup — Institutional accumulation")
+alertcondition(openingSell, title="Opening Sell", message="OI PULSE v2: Opening Hour Short Buildup — Institutional distribution")
+alertcondition(closingUnwind, title="Closing Unwind", message="OI PULSE v2: Last Hour Unwinding — Position adjustment")
+
+// Volume spike
+alertcondition(volumeSpike and inSession, title="Volume Spike", message="OI PULSE v2: Volume Spike — 2x+ average volume")
+
+// Composite for data window
+plot(signalScore, "Signal Score", display=display.data_window, color=color.new(color.blue, 100))

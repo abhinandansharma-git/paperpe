@@ -1,6 +1,6 @@
 # PaperPe Production Runbook
 
-Last updated: May 4, 2026
+Last updated: May 7, 2026
 
 ## Live Stack
 
@@ -85,3 +85,19 @@ Use `-CleanupSnapshot` if you want the temp folder removed after deployment.
 - The local worktree may be ahead of GitHub if production was deployed from a clean snapshot.
 - `OPERATIONS.md` is an older planning document and should not be treated as the launch-day source of truth.
 - A real live-money purchase should still be run once after any material checkout change.
+
+## Database Hardening Status
+
+- Applied on May 7, 2026:
+  - added the missing foreign-key indexes for `orders`, `downloads`, `support_tickets`, and `ticket_replies`
+  - updated `public.handle_new_user()` to use `SECURITY DEFINER` with `SET search_path = ''`
+  - revoked `EXECUTE` on `public.handle_new_user()` from `public`, `anon`, and `authenticated`
+  - removed `pg_graphql` because the app does not use GraphQL
+  - replaced blanket `anon` / `authenticated` table grants with the minimum live set:
+    - `products`: `SELECT` for `anon`, `authenticated`
+    - `orders`: `SELECT` for `authenticated`
+    - `profiles`: `SELECT`, `UPDATE` for `authenticated`
+
+## Follow-up Note
+
+- If we add direct client-side support-ticket, waitlist, or coupon flows later, we will need to re-grant those tables intentionally instead of relying on broad default access.
