@@ -8,7 +8,13 @@ export const FROM_EMAIL = FROM_TRANSACTIONAL;
 
 export const DEFAULT_REPLY_TO = REPLY_TO_SUPPORT;
 
-type ResendSendPayload = Parameters<Resend['emails']['send']>[0];
+export type TransactionalEmailPayload = {
+  to: string | string[];
+  subject: string;
+  html: string;
+  from?: string;
+  replyTo?: string | string[];
+};
 
 // Lazy init — only creates client when actually needed (avoids build-time error)
 let _resend: Resend | null = null;
@@ -18,12 +24,14 @@ export function getResend(): Resend | null {
   return _resend;
 }
 
-export async function sendTransactionalEmail(payload: Omit<ResendSendPayload, 'from'> & { from?: string }) {
+export async function sendTransactionalEmail(payload: TransactionalEmailPayload) {
   const client = getResend();
   if (!client) return null;
   return client.emails.send({
-    ...payload,
     from: payload.from ?? FROM_TRANSACTIONAL,
+    to: payload.to,
+    subject: payload.subject,
+    html: payload.html,
     replyTo: payload.replyTo ?? DEFAULT_REPLY_TO,
   });
 }
