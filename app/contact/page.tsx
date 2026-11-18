@@ -23,10 +23,6 @@ export default function ContactPage() {
             </a>
           </div>
           <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-5">
-            <p className="text-sm text-gray-400 mb-1">WhatsApp</p>
-            <p className="text-lg font-semibold text-white">+91 99303 24251</p>
-          </div>
-          <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-5">
             <p className="text-sm text-gray-400 mb-1">Support hours</p>
             <p className="text-lg font-semibold text-white">Monday to Saturday, 10:00 AM to 7:00 PM IST</p>
           </div>

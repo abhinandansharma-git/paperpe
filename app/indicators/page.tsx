@@ -97,7 +97,7 @@ const bundle = {
 };
 
 const PENDING_PRODUCT_STORAGE_KEY = 'paperpe:pending-product';
-const SUPPORT_WHATSAPP_LABEL = '+91 99303 24251';
+const SUPPORT_EMAIL = 'hello@paperpe.in';
 
 export default function IndicatorsPage() {
   const [showModal, setShowModal] = useState(false);
@@ -270,7 +270,7 @@ export default function IndicatorsPage() {
             setFormData({ name: '', email: '', phone: '' });
             window.location.assign('/dashboard?payment=success');
           } else {
-            alert(`Payment received! Contact us on WhatsApp (${SUPPORT_WHATSAPP_LABEL}) for delivery.`);
+            alert(`Payment received! Email ${SUPPORT_EMAIL} with your payment details for delivery.`);
           }
         },
       };

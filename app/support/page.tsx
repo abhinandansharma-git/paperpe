@@ -12,7 +12,7 @@ export default function SupportPage() {
         <p className="text-[#00C076] text-sm font-medium mb-3">Support</p>
         <h1 className="text-3xl md:text-4xl font-bold mb-4">Need help with your account or purchase?</h1>
         <p className="text-gray-400 text-lg leading-relaxed mb-8">
-          The fastest way to get help is to email your order ID and registered email address to our support inbox. If your order is still being delivered manually, mention your WhatsApp number too.
+          The fastest way to get help is to email your order ID and registered email address to our support inbox. If your order is still being delivered manually, include the phone number you used at checkout.
         </p>
 
         <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6 mb-4">
@@ -22,14 +22,6 @@ export default function SupportPage() {
           </a>
           <p className="text-gray-500 text-sm mt-4">
             Include your order ID, payment ID, and a short description of the issue so we can resolve it faster.
-          </p>
-        </div>
-
-        <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6 mb-8">
-          <p className="text-sm text-gray-400 mb-2">WhatsApp support</p>
-          <p className="text-xl font-semibold text-white">+91 99303 24251</p>
-          <p className="text-gray-500 text-sm mt-4">
-            Use the same phone number you entered during checkout so we can find your order faster.
           </p>
         </div>
 

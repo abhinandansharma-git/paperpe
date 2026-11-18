@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 
 const SUPPORT_EMAIL = 'hello@paperpe.in';
-const SUPPORT_WHATSAPP_LABEL = '+91 99303 24251';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -184,7 +183,7 @@ export default function DashboardPage() {
               <div className="bg-[#00C076]/10 border border-[#00C076]/20 rounded-2xl p-5">
                 <p className="text-[#00C076] font-semibold mb-1">Payment received successfully.</p>
                 <p className="text-sm text-gray-300">
-                  Your order is in our manual delivery queue right now. We will share your indicator on WhatsApp or email, and you can track the status from this dashboard. Reach us at {SUPPORT_EMAIL} or {SUPPORT_WHATSAPP_LABEL} if you need help.
+                  Your order is in our manual delivery queue right now. We will share your indicator by email, and you can track the status from this dashboard. Reach us at {SUPPORT_EMAIL} if you need help.
                 </p>
               </div>
             )}
