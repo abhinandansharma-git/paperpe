@@ -836,7 +836,7 @@ function OrdersTable({
                             onClick={() => onPrefillEmail(buyerEmail)}
                             className="flex items-center gap-1 text-xs text-[#00C076] hover:text-white transition-colors"
                           >
-                            <Mail className="w-3.5 h-3.5" /> Resend
+                            <Mail className="w-3.5 h-3.5" /> PaperPe mail
                           </button>
                         )}
                       </div>
