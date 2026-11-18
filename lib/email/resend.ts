@@ -27,11 +27,12 @@ export function getResend(): Resend | null {
 export async function sendTransactionalEmail(payload: TransactionalEmailPayload) {
   const client = getResend();
   if (!client) return null;
-  return client.emails.send({
+  const out = await client.emails.send({
     from: payload.from ?? FROM_TRANSACTIONAL,
     to: payload.to,
     subject: payload.subject,
     html: payload.html,
     replyTo: payload.replyTo ?? DEFAULT_REPLY_TO,
   });
+  return out;
 }

@@ -55,6 +55,13 @@ export default function AdminPage() {
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Manual email (Resend)
+  const [emailTo, setEmailTo] = useState('');
+  const [emailFrom, setEmailFrom] = useState<'support' | 'hello' | 'office'>('support');
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [emailSending, setEmailSending] = useState(false);
+
   // Toast
   const [toast, setToast] = useState<{ msg: string; type: 'ok' | 'err' } | null>(null);
 
@@ -74,6 +81,43 @@ export default function AdminPage() {
   };
 
   const authHeaders = () => ({ Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' });
+
+  const sendAdminEmail = async () => {
+    if (!emailTo.trim() || !emailSubject.trim() || !emailMessage.trim()) {
+      showToast('To, subject, and message are required', 'err');
+      return;
+    }
+    setEmailSending(true);
+    try {
+      const res = await fetch('/api/admin/send-email', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({
+          to: emailTo.trim(),
+          from: emailFrom,
+          subject: emailSubject.trim(),
+          message: emailMessage.trim(),
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        showToast(json.error || 'Send failed', 'err');
+        return;
+      }
+      showToast(`Sent (Resend id ${json.id?.slice(0, 8)}…)`);
+      setEmailSubject('');
+      setEmailMessage('');
+    } catch {
+      showToast('Send failed', 'err');
+    } finally {
+      setEmailSending(false);
+    }
+  };
+
+  const prefillEmailTo = (address: string) => {
+    if (address) setEmailTo(address);
+    setActiveTab('email');
+  };
 
   const fetchData = async () => {
     setRefreshing(true);
@@ -273,7 +317,7 @@ export default function AdminPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
         {/* Tabs */}
         <div className="flex gap-1 bg-[#161B22] border border-[#21262D] rounded-xl p-1 mb-8 w-fit overflow-x-auto">
-          {['overview', 'orders', 'users', 'products'].map(tab => (
+          {['overview', 'orders', 'users', 'products', 'email'].map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)}
               className={`px-5 py-2 rounded-lg text-sm font-medium capitalize transition-all whitespace-nowrap ${
                 activeTab === tab ? 'bg-[#0D1117] text-white shadow' : 'text-gray-400 hover:text-white'
@@ -303,7 +347,7 @@ export default function AdminPage() {
                 <h2 className="font-semibold text-white">Recent Orders</h2>
                 <button onClick={() => setActiveTab('orders')} className="text-[#00C076] text-xs hover:underline">View all</button>
               </div>
-              <OrdersTable orders={(orders || []).slice(0, 10)} onUpdateFulfillment={updateOrderFulfillment} />
+              <OrdersTable orders={(orders || []).slice(0, 10)} onUpdateFulfillment={updateOrderFulfillment} onPrefillEmail={prefillEmailTo} />
             </div>
           </div>
         )}
@@ -364,6 +408,7 @@ export default function AdminPage() {
             <OrdersTable
               orders={filteredOrders}
               onUpdateFulfillment={updateOrderFulfillment}
+              onPrefillEmail={prefillEmailTo}
               emptyMessage={orders?.length ? 'No orders match the current filters' : 'No orders yet'}
             />
           </div>
@@ -398,6 +443,69 @@ export default function AdminPage() {
                 </table>
               </div>
             )}
+          </div>
+        )}
+
+        {/* Send email */}
+        {activeTab === 'email' && (
+          <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6 max-w-2xl">
+            <div className="flex items-center gap-2 mb-1">
+              <Mail className="w-5 h-5 text-[#00C076]" />
+              <h2 className="font-semibold text-white text-lg">Send email (Resend)</h2>
+            </div>
+            <p className="text-gray-500 text-sm mb-6">
+              Sends from your @paperpe.in address via Resend. Replies go to support@paperpe.in (Gmail via ImprovMX).
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-gray-400 block mb-1.5">From</label>
+                <select
+                  value={emailFrom}
+                  onChange={(e) => setEmailFrom(e.target.value as 'support' | 'hello' | 'office')}
+                  className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                >
+                  <option value="support">PaperPe &lt;support@paperpe.in&gt;</option>
+                  <option value="hello">PaperPe &lt;hello@paperpe.in&gt;</option>
+                  <option value="office">PaperPe &lt;office@paperpe.in&gt;</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-gray-400 block mb-1.5">To</label>
+                <input
+                  type="email"
+                  value={emailTo}
+                  onChange={(e) => setEmailTo(e.target.value)}
+                  placeholder="customer@example.com"
+                  className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400 block mb-1.5">Subject</label>
+                <input
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-400 block mb-1.5">Message</label>
+                <textarea
+                  value={emailMessage}
+                  onChange={(e) => setEmailMessage(e.target.value)}
+                  rows={8}
+                  className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-2.5 text-sm text-white focus:border-[#00C076] outline-none resize-y min-h-[120px]"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={sendAdminEmail}
+                disabled={emailSending || !token}
+                className="flex items-center justify-center gap-2 w-full sm:w-auto bg-[#00C076] hover:bg-[#00a865] disabled:opacity-50 text-[#0D1117] font-semibold px-6 py-2.5 rounded-xl text-sm transition-colors"
+              >
+                {emailSending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+                {emailSending ? 'Sending…' : 'Send email'}
+              </button>
+            </div>
           </div>
         )}
 
@@ -591,10 +699,12 @@ export default function AdminPage() {
 function OrdersTable({
   orders,
   onUpdateFulfillment,
+  onPrefillEmail,
   emptyMessage = 'No orders yet',
 }: {
   orders: any[];
   onUpdateFulfillment: (orderId: string, fulfillmentStatus: 'pending' | 'delivered') => Promise<void>;
+  onPrefillEmail?: (email: string) => void;
   emptyMessage?: string;
 }) {
   const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
@@ -627,7 +737,8 @@ function OrdersTable({
             const deliveryStatus = getOrderDeliveryStatus(order);
             const whatsAppLink = buildOrderWhatsAppLink(order);
             const mailtoLink = buildOrderMailtoLink(order);
-            const buyerLabel = order.user?.full_name || order.customer_email || order.user?.email || 'Unknown buyer';
+            const buyerEmail = order.customer_email || order.user?.email || '';
+            const buyerLabel = order.user?.full_name || buyerEmail || 'Unknown buyer';
 
             return (
               <tr key={order.id} className="hover:bg-[#0D1117]/50">
@@ -718,6 +829,15 @@ function OrdersTable({
                           >
                             <Mail className="w-3.5 h-3.5" /> Email
                           </a>
+                        )}
+                        {buyerEmail && onPrefillEmail && (
+                          <button
+                            type="button"
+                            onClick={() => onPrefillEmail(buyerEmail)}
+                            className="flex items-center gap-1 text-xs text-[#00C076] hover:text-white transition-colors"
+                          >
+                            <Mail className="w-3.5 h-3.5" /> Resend
+                          </button>
                         )}
                       </div>
                     )}

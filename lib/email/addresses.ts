@@ -21,3 +21,12 @@ export const EMAIL = {
 
 export const PUBLIC_CONTACT_EMAIL = EMAIL.hello;
 export const REPLY_TO_SUPPORT = EMAIL.support;
+
+/** Admin manual send — Resend From header */
+export const ADMIN_FROM_OPTIONS = {
+  support: `PaperPe <${EMAIL.support}>`,
+  hello: `PaperPe <${EMAIL.hello}>`,
+  office: `PaperPe <${EMAIL.office}>`,
+} as const;
+
+export type AdminFromKey = keyof typeof ADMIN_FROM_OPTIONS;
