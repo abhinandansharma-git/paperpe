@@ -134,7 +134,7 @@ export function purchaseEmail({
       </div>
       <p style="color:#6B7280;font-size:13px;">
         Need help setting up the indicator? Reply to this email or contact
-        <a href="mailto:hello@paperpe.in" style="color:#00C076;">hello@paperpe.in</a>
+        <a href="mailto:support@paperpe.in" style="color:#00C076;">support@paperpe.in</a>
       </p>
     </div>
     <div style="${footerStyle}">

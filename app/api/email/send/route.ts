@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getResend, FROM_EMAIL } from '@/lib/email/resend';
+import { sendTransactionalEmail } from '@/lib/email/resend';
 import { welcomeEmail, purchaseEmail, newsletterEmail, promoEmail } from '@/lib/email/templates';
 
 const ADMIN_EMAIL = 'data.abhinandan73@gmail.com';
@@ -63,8 +63,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Unknown email type' }, { status: 400 });
     }
 
-    const result = await getResend()?.emails.send({
-      from: FROM_EMAIL,
+    const result = await sendTransactionalEmail({
       to,
       subject: template.subject,
       html: template.html,

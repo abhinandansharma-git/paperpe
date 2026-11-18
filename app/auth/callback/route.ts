@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
-import { getResend, FROM_EMAIL } from '@/lib/email/resend';
+import { sendTransactionalEmail } from '@/lib/email/resend';
 import { welcomeEmail } from '@/lib/email/templates';
 
 export async function GET(request: Request) {
@@ -29,8 +29,7 @@ export async function GET(request: Request) {
         if (isNew) {
           const name = user.user_metadata?.full_name?.split(' ')[0] || user.email?.split('@')[0] || 'Trader';
           const template = welcomeEmail({ name });
-          await getResend()?.emails.send({
-            from: FROM_EMAIL,
+          await sendTransactionalEmail({
             to: user.email!,
             subject: template.subject,
             html: template.html,

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
-import { getResend, FROM_EMAIL } from '@/lib/email/resend';
+import { sendTransactionalEmail } from '@/lib/email/resend';
 import { purchaseEmail } from '@/lib/email/templates';
 import { getProductCatalogEntry } from '@/lib/commerce/catalog.js';
 import { buildVerifiedOrderInsert } from '@/lib/commerce/checkout.js';
@@ -102,8 +102,7 @@ export async function POST(req: NextRequest) {
           amount: resolvedAmount,
           orderId: order?.id || razorpay_order_id,
         });
-        await getResend()?.emails.send({
-          from: FROM_EMAIL,
+        await sendTransactionalEmail({
           to: normalizedEmail,
           subject: template.subject,
           html: template.html,
