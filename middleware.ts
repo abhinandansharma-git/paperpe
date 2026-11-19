@@ -97,14 +97,7 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // ── Protect /admin at edge ──
-  if (pathname.startsWith('/admin')) {
-    // Check for Supabase auth cookie
-    const hasCookie = req.cookies.getAll().some(c => c.name.includes('auth-token'));
-    if (!hasCookie) {
-      return NextResponse.redirect(new URL('/login?redirect=/admin', req.url));
-    }
-  }
+  // /admin auth is enforced client-side (Supabase session in browser localStorage).
 
   // ── Block direct access to API internals ──
   if (pathname.startsWith('/api/admin')) {
