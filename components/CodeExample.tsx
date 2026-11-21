@@ -60,8 +60,8 @@ console.log(\`P&L: ₹\${position.pnl}\`);`;
               </div>
 
               {/* Code content */}
-              <div className="p-6 bg-[#0A0E1A] font-mono text-sm overflow-x-auto">
-                <pre className="text-slate-300">
+              <div className="overflow-x-auto bg-neutral-50 p-6 font-mono text-sm">
+                <pre className="text-neutral-800">
                   <code>
                     {code.split('\n').map((line, i) => (
                       <div key={i} className="leading-relaxed">

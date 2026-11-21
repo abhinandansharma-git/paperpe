@@ -56,39 +56,18 @@ export default function ChartsPage() {
   const candleWidth = 100 / candleData.length;
 
   return (
-    <div className="min-h-screen bg-[#0a0e17] flex flex-col">
-      {/* Header */}
-      <header className="border-b border-white/5 px-4 py-2 flex items-center justify-between bg-[#0d1117]">
-        <div className="flex items-center gap-6">
-          <Link href="/dashboard" className="text-lg font-bold text-white">PaperPe</Link>
-          <nav className="hidden md:flex items-center gap-4 text-sm">
-            <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-            <Link href="/charts" className="text-white font-medium">Charts</Link>
-            <Link href="/options" className="text-slate-400 hover:text-white">Options</Link>
-            <Link href="/screener" className="text-slate-400 hover:text-white">Screener</Link>
-          </nav>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-[#0D1117]/5">
-            <Settings className="w-4 h-4" />
-          </button>
-          <button className="p-2 text-slate-400 hover:text-white rounded hover:bg-[#0D1117]/5">
-            <Maximize2 className="w-4 h-4" />
-          </button>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Toolbar */}
-      <div className="border-b border-white/5 px-4 py-2 flex items-center gap-4 bg-[#0d1117]/50">
+      <div className="border-b border-neutral-200 px-4 py-2 flex items-center gap-4 bg-neutral-50">
         {/* Symbol Selector */}
-        <button className="flex items-center gap-2 px-3 py-1.5 bg-[#0D1117]/5 rounded hover:bg-[#0D1117]/10">
-          <span className="text-white font-medium">{selectedSymbol}</span>
-          <ChevronDown className="w-4 h-4 text-slate-400" />
+        <button className="flex items-center gap-2 px-3 py-1.5 bg-neutral-50 rounded hover:bg-neutral-100">
+          <span className="text-neutral-900 font-medium">{selectedSymbol}</span>
+          <ChevronDown className="w-4 h-4 text-neutral-500" />
         </button>
 
         {/* Price Info */}
         <div className="flex items-center gap-3">
-          <span className="text-xl font-bold text-white">₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+          <span className="text-xl font-bold text-neutral-900">₹{currentPrice.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
           <span className={`flex items-center gap-1 text-sm ${change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
             {change >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
             {change >= 0 ? '+' : ''}{change.toFixed(2)}%
@@ -102,7 +81,7 @@ export default function ChartsPage() {
               key={tf}
               onClick={() => setTimeframe(tf)}
               className={`px-3 py-1 rounded text-sm ${
-                timeframe === tf ? 'bg-[#00C076] text-white' : 'text-slate-400 hover:text-white hover:bg-[#0D1117]/5'
+                timeframe === tf ? 'bg-[#00C076] text-white' : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100'
               }`}
             >
               {tf}
@@ -112,11 +91,11 @@ export default function ChartsPage() {
 
         {/* Indicators */}
         <div className="flex items-center gap-2 ml-auto">
-          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-[#0D1117]/5 rounded">
+          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 rounded">
             <TrendingUp className="w-4 h-4" />
             Indicators
           </button>
-          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-slate-400 hover:text-white hover:bg-[#0D1117]/5 rounded">
+          <button className="flex items-center gap-1 px-3 py-1.5 text-sm text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 rounded">
             <BarChart2 className="w-4 h-4" />
             Compare
           </button>
@@ -127,13 +106,13 @@ export default function ChartsPage() {
       <div className="flex-1 flex">
         {/* Chart */}
         <div className="flex-1 p-4">
-          <div className="h-full bg-[#0d1117] rounded-lg border border-white/5 overflow-hidden flex flex-col">
+          <div className="flex h-full flex-col overflow-hidden rounded-3xl border border-neutral-200 bg-white text-neutral-900">
             {/* Candlestick Chart */}
             <div className="flex-1 p-4 relative">
               <svg viewBox="0 0 100 80" className="w-full h-full" preserveAspectRatio="none">
                 {/* Grid lines */}
                 {[0, 20, 40, 60, 80].map(y => (
-                  <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="0.2" />
+                  <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="rgba(0,0,0,0.06)" strokeWidth="0.2" />
                 ))}
                 
                 {/* Candlesticks */}
@@ -171,7 +150,7 @@ export default function ChartsPage() {
               </svg>
 
               {/* Price Labels */}
-              <div className="absolute right-2 top-0 bottom-0 flex flex-col justify-between py-4 text-xs text-slate-500">
+              <div className="absolute right-2 top-0 bottom-0 flex flex-col justify-between py-4 text-xs text-neutral-500">
                 <span>₹{maxPrice.toFixed(0)}</span>
                 <span>₹{((maxPrice + minPrice) / 2).toFixed(0)}</span>
                 <span>₹{minPrice.toFixed(0)}</span>
@@ -179,7 +158,7 @@ export default function ChartsPage() {
             </div>
 
             {/* Volume Chart */}
-            <div className="h-20 p-4 pt-0 border-t border-white/5">
+            <div className="h-20 border-t border-neutral-200 p-4 pt-0">
               <svg viewBox="0 0 100 20" className="w-full h-full" preserveAspectRatio="none">
                 {candleData.map((candle, i) => {
                   const x = i * candleWidth;
@@ -202,25 +181,25 @@ export default function ChartsPage() {
         </div>
 
         {/* Sidebar */}
-        <div className="w-64 border-l border-white/5 bg-[#0d1117]/50 p-4 hidden lg:block">
-          <h3 className="text-sm font-medium text-white mb-4">Quick Trade</h3>
+        <div className="w-64 border-l border-neutral-200 bg-neutral-50 p-4 hidden lg:block">
+          <h3 className="text-sm font-medium text-neutral-900 mb-4">Quick Trade</h3>
           
           <div className="space-y-3">
-            <div className="flex rounded-lg bg-[#0a0e17] p-1">
+            <div className="flex rounded-lg bg-white p-1">
               <button className="flex-1 py-2 rounded-md font-medium text-sm bg-[#00C076]/100 text-white">
                 BUY
               </button>
-              <button className="flex-1 py-2 rounded-md font-medium text-sm text-slate-400 hover:text-white">
+              <button className="flex-1 py-2 rounded-md font-medium text-sm text-neutral-500 hover:text-neutral-900">
                 SELL
               </button>
             </div>
 
             <div>
-              <label className="text-xs text-slate-500 block mb-1">Quantity</label>
+              <label className="text-xs text-neutral-500 block mb-1">Quantity</label>
               <input
                 type="number"
                 defaultValue="50"
-                className="w-full bg-[#0a0e17] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#00C076]"
+                className="w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-neutral-900 text-sm focus:outline-none focus:border-[#00C076]"
               />
             </div>
 
@@ -229,20 +208,20 @@ export default function ChartsPage() {
             </button>
           </div>
 
-          <div className="mt-6 pt-6 border-t border-white/5">
-            <h3 className="text-sm font-medium text-white mb-4">Market Depth</h3>
+          <div className="mt-6 pt-6 border-t border-neutral-200">
+            <h3 className="text-sm font-medium text-neutral-900 mb-4">Market Depth</h3>
             <div className="space-y-1 text-xs">
               {[5, 4, 3, 2, 1].map(i => (
                 <div key={`bid-${i}`} className="flex items-center">
                   <div className="flex-1 h-4 bg-[#00C076]/100/20 rounded-l" style={{ width: `${60 + i * 8}%` }} />
-                  <span className="w-16 text-right text-slate-400">{22450 + i * 5}</span>
+                  <span className="w-16 text-right text-neutral-500">{22450 + i * 5}</span>
                 </div>
               ))}
               <div className="h-px bg-[#00C076] my-2" />
               {[1, 2, 3, 4, 5].map(i => (
                 <div key={`ask-${i}`} className="flex items-center">
                   <div className="flex-1 h-4 bg-red-500/100/20 rounded-l" style={{ width: `${70 - i * 6}%` }} />
-                  <span className="w-16 text-right text-slate-400">{22460 + i * 5}</span>
+                  <span className="w-16 text-right text-neutral-500">{22460 + i * 5}</span>
                 </div>
               ))}
             </div>

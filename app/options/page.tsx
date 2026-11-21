@@ -25,22 +25,7 @@ export default function OptionsPage() {
   const maxOI = Math.max(...mockOptionChain.strikes.flatMap(s => [s.ceOI, s.peOI]));
 
   return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      {/* Header */}
-      <header className="border-b border-white/5 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <Link href="/dashboard" className="text-xl font-bold text-white">PaperPe</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-              <Link href="/charts" className="text-slate-400 hover:text-white">Charts</Link>
-              <Link href="/options" className="text-white font-medium">Options</Link>
-              <Link href="/screener" className="text-slate-400 hover:text-white">Screener</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto p-6">
         {/* Controls */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
@@ -48,7 +33,7 @@ export default function OptionsPage() {
             <select
               value={selectedSymbol}
               onChange={(e) => setSelectedSymbol(e.target.value)}
-              className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-[#00C076]"
+              className="bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-2 text-neutral-900 focus:outline-none focus:border-[#00C076]"
             >
               <option value="NIFTY">NIFTY</option>
               <option value="BANKNIFTY">BANKNIFTY</option>
@@ -56,8 +41,8 @@ export default function OptionsPage() {
             </select>
 
             <div className="flex items-center gap-2">
-              <span className="text-slate-400 text-sm">Spot:</span>
-              <span className="text-white font-bold text-lg">₹{mockOptionChain.spotPrice.toLocaleString('en-IN')}</span>
+              <span className="text-neutral-500 text-sm">Spot:</span>
+              <span className="text-neutral-900 font-bold text-lg">₹{mockOptionChain.spotPrice.toLocaleString('en-IN')}</span>
               <span className="text-[#00C076] text-sm flex items-center gap-1">
                 <ArrowUpRight className="w-4 h-4" />+1.24%
               </span>
@@ -72,7 +57,7 @@ export default function OptionsPage() {
                 className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                   selectedExpiry === exp
                     ? 'bg-[#00C076] text-white'
-                    : 'bg-[#141820] text-slate-400 hover:text-white'
+                    : 'bg-neutral-50 text-neutral-500 hover:text-neutral-900'
                 }`}
               >
                 {exp}
@@ -82,22 +67,22 @@ export default function OptionsPage() {
         </div>
 
         {/* Option Chain Table */}
-        <div className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden">
+        <div className="bg-neutral-50 rounded-xl border border-neutral-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-white/10">
+                <tr className="border-b border-neutral-200">
                   <th colSpan={5} className="bg-[#00C076]/100/10 text-[#00C076] p-3 text-center">CALLS</th>
-                  <th className="bg-slate-800 text-white p-3">Strike</th>
+                  <th className="bg-neutral-100 text-neutral-900 p-3">Strike</th>
                   <th colSpan={5} className="bg-red-500/100/10 text-red-400 p-3 text-center">PUTS</th>
                 </tr>
-                <tr className="text-xs text-slate-500 border-b border-white/5">
+                <tr className="text-xs text-neutral-500 border-b border-neutral-200">
                   <th className="p-3 text-left">OI</th>
                   <th className="p-3 text-left">Chng OI</th>
                   <th className="p-3 text-right">LTP</th>
                   <th className="p-3 text-right">IV</th>
                   <th className="p-3">OI Bar</th>
-                  <th className="p-3 text-center bg-slate-800/50"></th>
+                  <th className="p-3 text-center bg-neutral-50"></th>
                   <th className="p-3">OI Bar</th>
                   <th className="p-3 text-left">IV</th>
                   <th className="p-3 text-left">LTP</th>
@@ -115,13 +100,13 @@ export default function OptionsPage() {
                   return (
                     <tr
                       key={row.strike}
-                      className={`border-b border-white/5 hover:bg-[#0D1117]/5 transition-colors ${
+                      className={`border-b border-neutral-200 hover:bg-neutral-100 transition-colors ${
                         isATM ? 'bg-[#00C076]/10' : ''
                       }`}
                     >
                       {/* CALLS */}
                       <td className={`p-3 text-sm ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
-                        <span className="text-white">{(row.ceOI / 1000).toFixed(0)}K</span>
+                        <span className="text-neutral-900">{(row.ceOI / 1000).toFixed(0)}K</span>
                       </td>
                       <td className={`p-3 text-sm ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
                         <span className={row.ceCOI >= 0 ? 'text-[#00C076]' : 'text-red-400'}>
@@ -129,13 +114,13 @@ export default function OptionsPage() {
                         </span>
                       </td>
                       <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
-                        <span className="text-white font-medium">₹{row.ceLTP.toFixed(2)}</span>
+                        <span className="text-neutral-900 font-medium">₹{row.ceLTP.toFixed(2)}</span>
                       </td>
                       <td className={`p-3 text-sm text-right ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
-                        <span className="text-slate-400">{row.ceIV}%</span>
+                        <span className="text-neutral-500">{row.ceIV}%</span>
                       </td>
                       <td className={`p-3 ${isITM_CE ? 'bg-[#00C076]/100/5' : ''}`}>
-                        <div className="w-20 h-3 bg-slate-800 rounded overflow-hidden">
+                        <div className="w-20 h-3 bg-neutral-100 rounded overflow-hidden">
                           <div
                             className="h-full bg-[#00C076]/100/50"
                             style={{ width: `${ceOIWidth}%` }}
@@ -144,14 +129,14 @@ export default function OptionsPage() {
                       </td>
 
                       {/* STRIKE */}
-                      <td className={`p-3 text-center font-bold ${isATM ? 'text-[#00C076] text-lg' : 'text-white'} bg-slate-800/50`}>
+                      <td className={`p-3 text-center font-bold ${isATM ? 'text-[#00C076] text-lg' : 'text-white'} bg-neutral-50`}>
                         {row.strike}
                         {isATM && <span className="text-xs text-orange-400 block">ATM</span>}
                       </td>
 
                       {/* PUTS */}
                       <td className={`p-3 ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
-                        <div className="w-20 h-3 bg-slate-800 rounded overflow-hidden flex justify-end">
+                        <div className="w-20 h-3 bg-neutral-100 rounded overflow-hidden flex justify-end">
                           <div
                             className="h-full bg-red-500/100/50"
                             style={{ width: `${peOIWidth}%` }}
@@ -159,10 +144,10 @@ export default function OptionsPage() {
                         </div>
                       </td>
                       <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
-                        <span className="text-slate-400">{row.peIV}%</span>
+                        <span className="text-neutral-500">{row.peIV}%</span>
                       </td>
                       <td className={`p-3 text-sm ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
-                        <span className="text-white font-medium">₹{row.peLTP.toFixed(2)}</span>
+                        <span className="text-neutral-900 font-medium">₹{row.peLTP.toFixed(2)}</span>
                       </td>
                       <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
                         <span className={row.peCOI >= 0 ? 'text-[#00C076]' : 'text-red-400'}>
@@ -170,7 +155,7 @@ export default function OptionsPage() {
                         </span>
                       </td>
                       <td className={`p-3 text-sm text-right ${!isITM_CE ? 'bg-red-500/100/5' : ''}`}>
-                        <span className="text-white">{(row.peOI / 1000).toFixed(0)}K</span>
+                        <span className="text-neutral-900">{(row.peOI / 1000).toFixed(0)}K</span>
                       </td>
                     </tr>
                   );
@@ -182,19 +167,19 @@ export default function OptionsPage() {
 
         {/* OI Summary */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
-            <h3 className="text-slate-400 text-sm mb-2">Total Call OI</h3>
+          <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-6">
+            <h3 className="text-neutral-500 text-sm mb-2">Total Call OI</h3>
             <div className="text-2xl font-bold text-[#00C076]">1.38 Cr</div>
             <div className="text-sm text-[#00C076]/70 mt-1">+12.5L added</div>
           </div>
-          <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
-            <h3 className="text-slate-400 text-sm mb-2">Total Put OI</h3>
+          <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-6">
+            <h3 className="text-neutral-500 text-sm mb-2">Total Put OI</h3>
             <div className="text-2xl font-bold text-red-400">1.04 Cr</div>
             <div className="text-sm text-red-400/70 mt-1">+5.5L added</div>
           </div>
-          <div className="bg-[#141820] rounded-xl border border-white/5 p-6">
-            <h3 className="text-slate-400 text-sm mb-2">PCR (OI)</h3>
-            <div className="text-2xl font-bold text-white">0.75</div>
+          <div className="bg-neutral-50 rounded-xl border border-neutral-200 p-6">
+            <h3 className="text-neutral-500 text-sm mb-2">PCR (OI)</h3>
+            <div className="text-2xl font-bold text-neutral-900">0.75</div>
             <div className="text-sm text-[#00C076] mt-1 flex items-center gap-1">
               <TrendingUp className="w-4 h-4" /> Bullish Bias
             </div>

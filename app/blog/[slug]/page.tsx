@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowLeft, Clock, Tag, ArrowRight, ChevronRight, TrendingUp } from 'lucide-react';
+import { Clock, Tag, ArrowRight, ChevronRight, TrendingUp } from 'lucide-react';
 import { getPostBySlug, allPosts } from '../posts';
 import { notFound } from 'next/navigation';
 
@@ -11,7 +11,7 @@ interface PageProps {
 
 function formatInline(text: string): string {
   return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#e2e8f0;font-weight:700">$1</strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong style="color:#171717;font-weight:700">$1</strong>')
     .replace(/\*(.+?)\*/g, '<em style="color:#94a3b8">$1</em>')
     .replace(/`(.+?)`/g, '<code style="background:rgba(0,192,118,0.1);color:#00C076;padding:2px 7px;border-radius:5px;font-size:0.88em;font-family:monospace">$1</code>');
 }
@@ -32,9 +32,9 @@ function renderContent(content: string) {
       sectionCount++;
       elements.push(
         <h2 key={i} style={{
-          fontSize: 26, fontWeight: 800, color: '#e2e8f0',
+          fontSize: 26, fontWeight: 800, color: '#171717',
           marginTop: 56, marginBottom: 16, letterSpacing: '-0.02em',
-          paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.06)',
+          paddingBottom: 12, borderBottom: '1px solid #e5e5e5',
         }}>
           {line.replace('## ', '')}
         </h2>
@@ -166,34 +166,21 @@ export default function BlogPostPage({ params }: PageProps) {
   const relatedPosts = [...related, ...others].slice(0, 2);
 
   return (
-    <div style={{ background: '#0D1117', color: '#e2e8f0', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ background: '#ffffff', color: '#171717', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
 
       <style>{`
         @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
         .fade-up { animation: fadeUp 0.6s ease both; }
-        .related-card { background:#161B22; border:1px solid #21262D; border-radius:16px; padding:20px; text-decoration:none; color:inherit; display:block; transition:all 0.2s; }
+        .related-card { background:#ffffff; border:1px solid #e5e5e5; border-radius:16px; padding:20px; text-decoration:none; color:inherit; display:block; transition:all 0.2s; }
         .related-card:hover { border-color:rgba(0,192,118,0.3); transform:translateY(-2px); }
-        .nav-link { color:#64748b; text-decoration:none; font-size:14px; transition:color 0.2s; }
-        .nav-link:hover { color:#e2e8f0; }
+        .nav-link { color:#737373; text-decoration:none; font-size:14px; transition:color 0.2s; }
+        .nav-link:hover { color:#171717; }
         .inline-cta { display:inline-flex; align-items:center; gap:6px; color:#00C076; font-weight:600; font-size:14px; text-decoration:none; padding:6px 14px; border:1px solid rgba(0,192,118,0.25); border-radius:8px; transition:all 0.2s; background:rgba(0,192,118,0.05); }
         .inline-cta:hover { background:rgba(0,192,118,0.12); border-color:rgba(0,192,118,0.4); }
       `}</style>
 
-      {/* ── Navbar ─────────────────────────────── */}
-      <nav style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(13,17,23,0.9)', backdropFilter: 'blur(20px)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '13px 24px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, background: '#00C076', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#0D1117', fontSize: 15, boxShadow: '0 0 14px rgba(0,192,118,0.3)' }}>P</div>
-            <span style={{ fontWeight: 800, fontSize: 17, color: '#e2e8f0' }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
-          </Link>
-          <Link href="/blog" className="nav-link" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <ArrowLeft size={15} /> All Articles
-          </Link>
-        </div>
-      </nav>
-
       {/* ── Hero ────────────────────────────────── */}
-      <section style={{ padding: '60px 24px 48px', borderBottom: '1px solid rgba(255,255,255,0.06)', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ padding: '60px 24px 48px', borderBottom: '1px solid #e5e5e5', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 700, height: 300, background: 'radial-gradient(ellipse, rgba(0,192,118,0.05) 0%, transparent 65%)', pointerEvents: 'none' }} />
         <div style={{ maxWidth: 760, margin: '0 auto', position: 'relative' }}>
 
@@ -232,7 +219,7 @@ export default function BlogPostPage({ params }: PageProps) {
         <div style={{ background: 'rgba(0,192,118,0.05)', border: '1px solid rgba(0,192,118,0.15)', borderRadius: 14, padding: '16px 20px', marginBottom: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <TrendingUp size={18} color="#00C076" />
-            <span style={{ fontSize: 14, color: '#94a3b8' }}>Practice what you learn — <span style={{ color: '#e2e8f0', fontWeight: 600 }}>₹10 Lakh virtual capital, zero risk</span></span>
+            <span style={{ fontSize: 14, color: '#94a3b8' }}>Practice what you learn — <span style={{ color: '#171717', fontWeight: 600 }}>₹10 Lakh virtual capital, zero risk</span></span>
           </div>
           <Link href="/" className="inline-cta">
             Start Free <ArrowRight size={13} />
@@ -259,7 +246,7 @@ export default function BlogPostPage({ params }: PageProps) {
               <Link href="/" style={{ background: '#00C076', color: '#0D1117', padding: '13px 28px', borderRadius: 12, fontWeight: 800, fontSize: 15, textDecoration: 'none', boxShadow: '0 0 30px rgba(0,192,118,0.35)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                 Join Waitlist — Free <ArrowRight size={16} />
               </Link>
-              <Link href="/blog" style={{ color: '#64748b', border: '1px solid #21262D', padding: '13px 24px', borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}>
+              <Link href="/blog" style={{ color: '#64748b', border: '1px solid #e5e5e5', padding: '13px 24px', borderRadius: 12, fontWeight: 600, fontSize: 15, textDecoration: 'none' }}>
                 More Articles
               </Link>
             </div>
@@ -269,7 +256,7 @@ export default function BlogPostPage({ params }: PageProps) {
         {/* Related posts */}
         {relatedPosts.length > 0 && (
           <div style={{ marginTop: 56 }}>
-            <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 20, color: '#e2e8f0' }}>More Articles</h3>
+            <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 20, color: '#171717' }}>More Articles</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 14 }}>
               {relatedPosts.map(rel => (
                 <Link key={rel.slug} href={`/blog/${rel.slug}`} className="related-card">
@@ -277,7 +264,7 @@ export default function BlogPostPage({ params }: PageProps) {
                     <span style={{ fontSize: 11, background: 'rgba(0,192,118,0.1)', color: '#00C076', padding: '3px 9px', borderRadius: 999, fontWeight: 600 }}>{rel.category}</span>
                     <span style={{ fontSize: 12, color: '#374151', display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={11} /> {rel.readTime}</span>
                   </div>
-                  <h4 style={{ fontWeight: 700, fontSize: 15, color: '#e2e8f0', lineHeight: 1.4, marginBottom: 6 }}>{rel.title}</h4>
+                  <h4 style={{ fontWeight: 700, fontSize: 15, color: '#171717', lineHeight: 1.4, marginBottom: 6 }}>{rel.title}</h4>
                   <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.6, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{rel.excerpt}</p>
                 </Link>
               ))}
@@ -291,7 +278,7 @@ export default function BlogPostPage({ params }: PageProps) {
         <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
           <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
             <div style={{ width: 28, height: 28, background: '#00C076', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: '#0D1117', fontSize: 13 }}>P</div>
-            <span style={{ fontWeight: 700, fontSize: 15, color: '#e2e8f0' }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
+            <span style={{ fontWeight: 700, fontSize: 15, color: '#171717' }}>Paper<span style={{ color: '#00C076' }}>Pe</span></span>
           </Link>
           <p style={{ fontSize: 13, color: '#374151' }}>India&apos;s paper trading platform for MCX &amp; F&amp;O.</p>
           <div style={{ display: 'flex', gap: 20 }}>

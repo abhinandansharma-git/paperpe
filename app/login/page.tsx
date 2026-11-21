@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { ArrowLeft, Mail, Lock, Loader2 } from 'lucide-react';
+import { Mail, Lock, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -53,26 +53,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#161B22] flex flex-col">
-      {/* Header */}
-      <header className="border-b border-[#21262D] bg-[#0D1117]">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white">P</div>
-            <span className="font-semibold text-xl text-white">PaperPe</span>
-          </Link>
-          <Link href="/" className="text-gray-500 hover:text-[#00C076] flex items-center gap-1 text-sm">
-            <ArrowLeft className="w-4 h-4" /> Back
-          </Link>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-neutral-50 flex flex-col">
       {/* Login Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          <div className="bg-[#0D1117] rounded-2xl shadow-sm border border-[#21262D] p-8">
-            <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
-            <p className="text-gray-500 mb-8">Sign in to access your purchases</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-neutral-200 p-8">
+            <h1 className="text-2xl font-bold text-neutral-900 mb-2">Welcome back</h1>
+            <p className="text-neutral-500 mb-8">Sign in to access your purchases</p>
 
             {error && (
               <div className="bg-red-500/10 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-sm">
@@ -84,7 +71,7 @@ export default function LoginPage() {
             <button
               onClick={handleGoogleLogin}
               disabled={googleLoading}
-              className="w-full flex items-center justify-center gap-3 border border-[#21262D] hover:border-[#21262D] hover:bg-[#161B22] text-gray-300 py-3 rounded-xl font-medium transition-all mb-6"
+              className="w-full flex items-center justify-center gap-3 border border-neutral-200 hover:border-neutral-200 hover:bg-neutral-100 text-neutral-600 py-3 rounded-xl font-medium transition-all mb-6"
             >
               {googleLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -101,45 +88,45 @@ export default function LoginPage() {
 
             <div className="flex items-center gap-3 mb-6">
               <div className="flex-1 h-px bg-gray-200"></div>
-              <span className="text-gray-400 text-sm">or</span>
+              <span className="text-neutral-500 text-sm">or</span>
               <div className="flex-1 h-px bg-gray-200"></div>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <label className="block text-sm font-medium text-neutral-600 mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full pl-12 pr-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
+                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
+                <label className="block text-sm font-medium text-neutral-600 mb-2">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
-                    className="w-full pl-12 pr-4 py-3 border border-[#21262D] rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
+                    className="w-full pl-12 pr-4 py-3 border border-neutral-200 rounded-xl focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/20"
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" className="rounded border-[#21262D]" />
-                  <span className="text-gray-400">Remember me</span>
+                  <input type="checkbox" className="rounded border-neutral-200" />
+                  <span className="text-neutral-500">Remember me</span>
                 </label>
                 <Link href="/forgot-password" className="text-[#00C076] hover:text-[#00C076]">
                   Forgot password?
@@ -159,7 +146,7 @@ export default function LoginPage() {
               </button>
             </form>
 
-            <p className="text-center text-gray-500 text-sm mt-6">
+            <p className="text-center text-neutral-500 text-sm mt-6">
               Don&apos;t have an account?{' '}
               <Link href="/signup" className="text-[#00C076] hover:text-[#00C076] font-medium">
                 Sign up

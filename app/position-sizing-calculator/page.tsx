@@ -41,38 +41,38 @@ export default function PositionSizingCalculator() {
   ];
 
   const inputStyle: React.CSSProperties = {
-    background: '#161b22', border: '1px solid #30363d', borderRadius: 8,
-    color: '#e6edf3', padding: '10px 14px', fontSize: 15, width: '100%', outline: 'none',
+    background: '#fafafa', border: '1px solid #d4d4d4', borderRadius: 8,
+    color: '#171717', padding: '10px 14px', fontSize: 15, width: '100%', outline: 'none',
   };
-  const labelStyle: React.CSSProperties = { fontSize: 12, color: '#8b949e', marginBottom: 4, display: 'block' };
+  const labelStyle: React.CSSProperties = { fontSize: 12, color: '#737373', marginBottom: 4, display: 'block' };
 
   const barWidth = Math.min(marginUsedPct, 100);
   const barColor = marginUsedPct > 10 ? '#f85149' : marginUsedPct > 5 ? '#f0883e' : '#00C076';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0D1117', color: '#e6edf3', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <nav style={{ borderBottom: '1px solid #21262d', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#171717', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <nav style={{ borderBottom: '1px solid #e5e5e5', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
         <Link href="/" style={{ color: '#00C076', fontWeight: 700, fontSize: 18, textDecoration: 'none' }}>PaperPe</Link>
-        <span style={{ color: '#30363d' }}>›</span>
-        <span style={{ color: '#8b949e', fontSize: 14 }}>Position Sizing Calculator</span>
+        <span style={{ color: '#d4d4d4' }}>›</span>
+        <span style={{ color: '#737373', fontSize: 14 }}>Position Sizing Calculator</span>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 12 }}>
-          <Link href="/brokerage-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
-          <Link href="/options-pl-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Options P&amp;L</Link>
-          <Link href="/events" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Events</Link>
+          <Link href="/brokerage-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
+          <Link href="/options-pl-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Options P&amp;L</Link>
+          <Link href="/events" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Events</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '40px 24px' }}>
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 8px' }}>Position Sizing Calculator</h1>
-          <p style={{ color: '#8b949e', margin: 0, fontSize: 15 }}>
+          <p style={{ color: '#737373', margin: 0, fontSize: 15 }}>
             Stop guessing how many lots to trade. This calculator tells you the exact size based on your account and risk tolerance — the single most important number in trading.
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
           {/* Inputs */}
-          <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 24 }}>
+          <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, padding: 24 }}>
             <h2 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 20px' }}>Your Details</h2>
 
             <div style={{ marginBottom: 16 }}>
@@ -83,7 +83,7 @@ export default function PositionSizingCalculator() {
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Risk Per Trade (%)</label>
               <input type="number" value={riskPct} onChange={e => setRiskPct(e.target.value)} style={inputStyle} min="0.1" max="100" step="0.5" />
-              <div style={{ fontSize: 12, color: riskPct > '5' ? '#f85149' : '#8b949e', marginTop: 4 }}>
+              <div style={{ fontSize: 12, color: riskPct > '5' ? '#f85149' : '#737373', marginTop: 4 }}>
                 {riskPct > '5' ? '⚠ High risk — professional traders use 1–2%' : 'Recommended: 1–2% per trade'}
               </div>
             </div>
@@ -106,7 +106,7 @@ export default function PositionSizingCalculator() {
             <div style={{ marginBottom: 0 }}>
               <label style={labelStyle}>Option Premium (₹ per unit)</label>
               <input type="number" value={premium} onChange={e => setPremium(e.target.value)} style={inputStyle} min="0" step="0.5" />
-              <div style={{ fontSize: 12, color: '#8b949e', marginTop: 4 }}>
+              <div style={{ fontSize: 12, color: '#737373', marginTop: 4 }}>
                 1 lot = {lotSize} units × ₹{premium} = {fmt(costPerLot)}
               </div>
             </div>
@@ -121,21 +121,21 @@ export default function PositionSizingCalculator() {
                 borderRadius: 12, padding: 24,
               }}>
                 <div style={{ fontSize: 13, color: '#f85149', fontWeight: 600, marginBottom: 8 }}>⚠ Cannot trade 1 lot safely</div>
-                <div style={{ fontSize: 14, color: '#8b949e', lineHeight: 1.7 }}>
-                  Your {risk}% risk budget is <strong style={{ color: '#e6edf3' }}>₹{Math.round(maxLossRupees).toLocaleString('en-IN')}</strong>,
-                  but 1 lot of {instrument} at ₹{prem} costs <strong style={{ color: '#e6edf3' }}>₹{Math.round(costPerLot).toLocaleString('en-IN')}</strong>.
+                <div style={{ fontSize: 14, color: '#737373', lineHeight: 1.7 }}>
+                  Your {risk}% risk budget is <strong style={{ color: '#171717' }}>₹{Math.round(maxLossRupees).toLocaleString('en-IN')}</strong>,
+                  but 1 lot of {instrument} at ₹{prem} costs <strong style={{ color: '#171717' }}>₹{Math.round(costPerLot).toLocaleString('en-IN')}</strong>.
                 </div>
                 <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
-                    📈 <strong style={{ color: '#e6edf3' }}>Option A:</strong> You need a{' '}
+                  <div style={{ background: '#fafafa', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#737373' }}>
+                    📈 <strong style={{ color: '#171717' }}>Option A:</strong> You need a{' '}
                     <strong style={{ color: '#00C076' }}>₹{Math.round(minAccountFor1Lot).toLocaleString('en-IN')}</strong> account for 1 lot at this premium
                   </div>
-                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
-                    💡 <strong style={{ color: '#e6edf3' }}>Option B:</strong> Trade options priced at{' '}
+                  <div style={{ background: '#fafafa', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#737373' }}>
+                    💡 <strong style={{ color: '#171717' }}>Option B:</strong> Trade options priced at{' '}
                     <strong style={{ color: '#00C076' }}>₹{Math.floor(maxAffordablePremium)} or less</strong> per unit (OTM options)
                   </div>
-                  <div style={{ background: '#161b22', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#8b949e' }}>
-                    ⚡ <strong style={{ color: '#e6edf3' }}>Option C:</strong> Increase risk % — but stay below 5% per trade
+                  <div style={{ background: '#fafafa', borderRadius: 8, padding: '10px 14px', fontSize: 13, color: '#737373' }}>
+                    ⚡ <strong style={{ color: '#171717' }}>Option C:</strong> Increase risk % — but stay below 5% per trade
                   </div>
                 </div>
               </div>
@@ -144,34 +144,34 @@ export default function PositionSizingCalculator() {
                 background: 'rgba(0,192,118,0.08)', border: '1px solid rgba(0,192,118,0.3)',
                 borderRadius: 12, padding: 24, textAlign: 'center',
               }}>
-                <div style={{ fontSize: 13, color: '#8b949e', marginBottom: 8 }}>Maximum Lots to Trade</div>
+                <div style={{ fontSize: 13, color: '#737373', marginBottom: 8 }}>Maximum Lots to Trade</div>
                 <div style={{ fontSize: 56, fontWeight: 800, color: '#00C076', lineHeight: 1 }}>{maxLots}</div>
-                <div style={{ fontSize: 13, color: '#8b949e', marginTop: 8 }}>lots of {instrument}</div>
+                <div style={{ fontSize: 13, color: '#737373', marginTop: 8 }}>lots of {instrument}</div>
               </div>
             )}
 
             {/* Stats */}
-            <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 20 }}>
+            <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, padding: 20 }}>
               {[
                 ['Max loss per trade', fmt(maxLossRupees)],
                 ['Capital at risk', fmt(actualRisk)],
                 ['Capital untouched', fmt(remainingCapital)],
                 ['% of account risked', pct(actualRisk, account)],
               ].map(([label, val]) => (
-                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #21262d' }}>
-                  <span style={{ fontSize: 13, color: '#8b949e' }}>{label}</span>
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#e6edf3' }}>{val}</span>
+                <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e5e5e5' }}>
+                  <span style={{ fontSize: 13, color: '#737373' }}>{label}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#171717' }}>{val}</span>
                 </div>
               ))}
             </div>
 
             {/* Risk bar */}
-            <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 20 }}>
+            <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, padding: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, color: '#8b949e' }}>Account risk level</span>
+                <span style={{ fontSize: 13, color: '#737373' }}>Account risk level</span>
                 <span style={{ fontSize: 13, fontWeight: 600, color: barColor }}>{marginUsedPct.toFixed(1)}%</span>
               </div>
-              <div style={{ background: '#21262d', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+              <div style={{ background: '#e5e5e5', borderRadius: 4, height: 8, overflow: 'hidden' }}>
                 <div style={{ width: `${barWidth}%`, height: '100%', background: barColor, borderRadius: 4, transition: 'all 0.3s' }} />
               </div>
               <div style={{ fontSize: 12, color: barColor, marginTop: 6 }}>
@@ -183,25 +183,25 @@ export default function PositionSizingCalculator() {
         </div>
 
         {/* Comparison table */}
-        <div style={{ marginTop: 24, background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 24 }}>
+        <div style={{ marginTop: 24, background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, padding: 24 }}>
           <h3 style={{ margin: '0 0 16px', fontSize: 15, fontWeight: 600 }}>Risk Level Comparison</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
             {levels.map(({ label, lots: l }) => (
               <div key={label} style={{
-                background: '#0D1117', borderRadius: 8, padding: 16, textAlign: 'center',
-                border: `1px solid ${l > 0 && l === maxLots ? '#00C076' : '#21262d'}`,
+                background: '#ffffff', borderRadius: 8, padding: 16, textAlign: 'center',
+                border: `1px solid ${l > 0 && l === maxLots ? '#00C076' : '#e5e5e5'}`,
               }}>
-                <div style={{ fontSize: 12, color: '#8b949e', marginBottom: 6 }}>{label}</div>
+                <div style={{ fontSize: 12, color: '#737373', marginBottom: 6 }}>{label}</div>
                 {l > 0 ? (
                   <>
-                    <div style={{ fontSize: 24, fontWeight: 700, color: l === maxLots ? '#00C076' : '#e6edf3' }}>{l}</div>
-                    <div style={{ fontSize: 12, color: '#8b949e' }}>lots</div>
-                    <div style={{ fontSize: 11, color: '#8b949e', marginTop: 4 }}>{fmt(l * costPerLot)} max loss</div>
+                    <div style={{ fontSize: 24, fontWeight: 700, color: l === maxLots ? '#00C076' : '#171717' }}>{l}</div>
+                    <div style={{ fontSize: 12, color: '#737373' }}>lots</div>
+                    <div style={{ fontSize: 11, color: '#737373', marginTop: 4 }}>{fmt(l * costPerLot)} max loss</div>
                   </>
                 ) : (
                   <>
                     <div style={{ fontSize: 18, fontWeight: 700, color: '#f85149' }}>—</div>
-                    <div style={{ fontSize: 11, color: '#8b949e', marginTop: 4 }}>Underfunded</div>
+                    <div style={{ fontSize: 11, color: '#737373', marginTop: 4 }}>Underfunded</div>
                   </>
                 )}
               </div>
@@ -210,7 +210,7 @@ export default function PositionSizingCalculator() {
         </div>
 
         <div style={{ marginTop: 24, background: 'rgba(0,192,118,0.05)', border: '1px solid rgba(0,192,118,0.15)', borderRadius: 12, padding: 20 }}>
-          <p style={{ margin: 0, fontSize: 14, color: '#8b949e', lineHeight: 1.6 }}>
+          <p style={{ margin: 0, fontSize: 14, color: '#737373', lineHeight: 1.6 }}>
             <strong style={{ color: '#00C076' }}>The 2% rule:</strong> Risk no more than 2% of your account per trade. On ₹1 lakh, that is ₹2,000 max loss per trade.
             This keeps you in the game long enough to develop skill. Most traders who blow accounts are risking 20–40% per trade without realising it.
             Practice sizing trades correctly on{' '}

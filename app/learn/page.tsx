@@ -82,22 +82,7 @@ export default function LearnPage() {
     : courses.filter(c => c.level === selectedLevel);
 
   return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      {/* Header */}
-      <header className="border-b border-white/5 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <Link href="/dashboard" className="text-xl font-bold text-white">PaperPe</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-              <Link href="/charts" className="text-slate-400 hover:text-white">Charts</Link>
-              <Link href="/options" className="text-slate-400 hover:text-white">Options</Link>
-              <Link href="/learn" className="text-white font-medium">Learn</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       {/* Hero */}
       <div className="bg-gradient-to-b from-[#00C076]/10 to-transparent py-16 px-6">
         <div className="max-w-7xl mx-auto">
@@ -105,10 +90,10 @@ export default function LearnPage() {
             <BookOpen className="w-4 h-4" />
             Learning Center
           </div>
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-4">
             Learn to Trade Like a Pro
           </h1>
-          <p className="text-xl text-slate-400 max-w-2xl">
+          <p className="text-xl text-neutral-500 max-w-2xl">
             Free courses and articles to help you master the markets. Learn at your own pace, practice risk-free.
           </p>
         </div>
@@ -123,10 +108,10 @@ export default function LearnPage() {
             { icon: Clock, label: 'Hours of Content', value: '20+' },
             { icon: Star, label: 'Avg Rating', value: '4.8' },
           ].map((stat, i) => (
-            <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
+            <div key={i} className="bg-neutral-50 rounded-xl p-5 border border-neutral-200">
               <stat.icon className="w-5 h-5 text-[#00C076] mb-3" />
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <div className="text-sm text-slate-500">{stat.label}</div>
+              <div className="text-2xl font-bold text-neutral-900">{stat.value}</div>
+              <div className="text-sm text-neutral-500">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -134,7 +119,7 @@ export default function LearnPage() {
         {/* Courses Section */}
         <div className="mb-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Featured Courses</h2>
+            <h2 className="text-2xl font-bold text-neutral-900">Featured Courses</h2>
             <div className="flex items-center gap-2">
               {['All', 'Beginner', 'Intermediate', 'Advanced'].map(level => (
                 <button
@@ -143,7 +128,7 @@ export default function LearnPage() {
                   className={`px-4 py-2 rounded-lg text-sm transition-colors ${
                     selectedLevel === level
                       ? 'bg-[#00C076] text-white'
-                      : 'bg-[#0D1117]/5 text-slate-400 hover:text-white'
+                      : 'bg-neutral-100 text-neutral-500 hover:text-neutral-900'
                   }`}
                 >
                   {level}
@@ -156,7 +141,7 @@ export default function LearnPage() {
             {filteredCourses.map((course) => (
               <div
                 key={course.id}
-                className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden group hover:border-[#00C076]/50 transition-all cursor-pointer"
+                className="bg-neutral-50 rounded-xl border border-neutral-200 overflow-hidden group hover:border-[#00C076]/50 transition-all cursor-pointer"
               >
                 <div className="h-32 bg-gradient-to-br from-[#00C076]/20 to-blue-500/20 flex items-center justify-center text-5xl">
                   {course.image}
@@ -170,26 +155,26 @@ export default function LearnPage() {
                     }`}>
                       {course.level}
                     </span>
-                    <span className="text-slate-500 text-xs flex items-center gap-1">
+                    <span className="text-neutral-500 text-xs flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {course.duration}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-[#00C076] transition-colors">
+                  <h3 className="text-lg font-semibold text-neutral-900 mb-2 group-hover:text-[#00C076] transition-colors">
                     {course.title}
                   </h3>
-                  <p className="text-slate-400 text-sm mb-4 line-clamp-2">
+                  <p className="text-neutral-500 text-sm mb-4 line-clamp-2">
                     {course.description}
                   </p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4 text-sm text-slate-500">
+                    <div className="flex items-center gap-4 text-sm text-neutral-500">
                       <span>{course.lessons} lessons</span>
                       <span className="flex items-center gap-1">
                         <Users className="w-3 h-3" />
                         {course.enrolled.toLocaleString()}
                       </span>
                     </div>
-                    <button className="p-2 rounded-full bg-[#00C076]/20 text-[#00C076] group-hover:bg-[#00C076] group-hover:text-white transition-all">
+                    <button className="p-2 rounded-full bg-[#00C076]/20 text-[#00C076] group-hover:bg-[#00C076] group-hover:text-neutral-900 transition-all">
                       <Play className="w-4 h-4" />
                     </button>
                   </div>
@@ -201,24 +186,24 @@ export default function LearnPage() {
 
         {/* Articles Section */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-6">Latest Articles</h2>
+          <h2 className="text-2xl font-bold text-neutral-900 mb-6">Latest Articles</h2>
           <div className="grid md:grid-cols-2 gap-4">
             {articles.map((article, i) => (
               <div
                 key={i}
-                className="bg-[#141820] rounded-xl p-5 border border-white/5 flex items-center justify-between group hover:border-[#00C076]/50 transition-all cursor-pointer"
+                className="bg-neutral-50 rounded-xl p-5 border border-neutral-200 flex items-center justify-between group hover:border-[#00C076]/50 transition-all cursor-pointer"
               >
                 <div>
                   <span className="text-xs text-[#00C076] mb-1 block">{article.category}</span>
-                  <h3 className="text-white font-medium group-hover:text-[#00C076] transition-colors">
+                  <h3 className="text-neutral-900 font-medium group-hover:text-[#00C076] transition-colors">
                     {article.title}
                   </h3>
-                  <span className="text-sm text-slate-500 flex items-center gap-1 mt-2">
+                  <span className="text-sm text-neutral-500 flex items-center gap-1 mt-2">
                     <Clock className="w-3 h-3" />
                     {article.readTime} read
                   </span>
                 </div>
-                <ChevronRight className="w-5 h-5 text-slate-500 group-hover:text-[#00C076] transition-colors" />
+                <ChevronRight className="w-5 h-5 text-neutral-500 group-hover:text-[#00C076] transition-colors" />
               </div>
             ))}
           </div>

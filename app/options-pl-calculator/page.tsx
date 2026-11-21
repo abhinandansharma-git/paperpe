@@ -54,42 +54,42 @@ export default function OptionsPLCalculator() {
   }, [strikeN, step]);
 
   const inputStyle: React.CSSProperties = {
-    background: '#161b22', border: '1px solid #30363d', borderRadius: 8,
-    color: '#e6edf3', padding: '10px 14px', fontSize: 15, width: '100%', outline: 'none',
+    background: '#fafafa', border: '1px solid #d4d4d4', borderRadius: 8,
+    color: '#171717', padding: '10px 14px', fontSize: 15, width: '100%', outline: 'none',
   };
-  const labelStyle: React.CSSProperties = { fontSize: 12, color: '#8b949e', marginBottom: 4, display: 'block' };
+  const labelStyle: React.CSSProperties = { fontSize: 12, color: '#737373', marginBottom: 4, display: 'block' };
 
   const toggleBtn = (active: boolean, danger?: boolean): React.CSSProperties => ({
     flex: 1, padding: '9px', borderRadius: 8, fontSize: 14, fontWeight: 500, cursor: 'pointer',
-    background: active ? (danger ? 'rgba(248,81,73,0.15)' : 'rgba(0,192,118,0.15)') : '#0D1117',
-    color: active ? (danger ? '#f85149' : '#00C076') : '#8b949e',
-    border: active ? `1px solid ${danger ? '#f85149' : '#00C076'}` : '1px solid #30363d',
+    background: active ? (danger ? 'rgba(248,81,73,0.15)' : 'rgba(0,192,118,0.15)') : '#f5f5f5',
+    color: active ? (danger ? '#f85149' : '#00C076') : '#737373',
+    border: active ? `1px solid ${danger ? '#f85149' : '#00C076'}` : '1px solid #d4d4d4',
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0D1117', color: '#e6edf3', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <nav style={{ borderBottom: '1px solid #21262d', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#171717', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <nav style={{ borderBottom: '1px solid #e5e5e5', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
         <Link href="/" style={{ color: '#00C076', fontWeight: 700, fontSize: 18, textDecoration: 'none' }}>PaperPe</Link>
-        <span style={{ color: '#30363d' }}>›</span>
-        <span style={{ color: '#8b949e', fontSize: 14 }}>Options P&amp;L Calculator</span>
+        <span style={{ color: '#d4d4d4' }}>›</span>
+        <span style={{ color: '#737373', fontSize: 14 }}>Options P&amp;L Calculator</span>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 12 }}>
-          <Link href="/brokerage-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
-          <Link href="/position-sizing-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Position Sizing</Link>
-          <Link href="/events" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Events</Link>
+          <Link href="/brokerage-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
+          <Link href="/position-sizing-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Position Sizing</Link>
+          <Link href="/events" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Events</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 24px' }}>
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 8px' }}>Options P&amp;L Calculator</h1>
-          <p style={{ color: '#8b949e', margin: 0, fontSize: 15 }}>
+          <p style={{ color: '#737373', margin: 0, fontSize: 15 }}>
             See your exact profit or loss at every NIFTY level before you place the trade. Know your worst case, breakeven, and best case upfront.
           </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '340px 1fr', gap: 24 }}>
           {/* Inputs */}
-          <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, padding: 24, height: 'fit-content' }}>
+          <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, padding: 24, height: 'fit-content' }}>
             <h2 style={{ fontSize: 16, fontWeight: 600, margin: '0 0 20px' }}>Trade Setup</h2>
 
             <div style={{ marginBottom: 16 }}>
@@ -128,7 +128,7 @@ export default function OptionsPLCalculator() {
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Number of Lots</label>
               <input type="number" value={lots} onChange={e => setLots(e.target.value)} style={inputStyle} min="1" />
-              <div style={{ fontSize: 12, color: '#8b949e', marginTop: 4 }}>
+              <div style={{ fontSize: 12, color: '#737373', marginTop: 4 }}>
                 {lotSize} units/lot × {lotsN} = {qty} units | Capital: ₹{(premiumN * qty).toLocaleString('en-IN')}
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function OptionsPLCalculator() {
               border: `1px solid ${calcPnl(currentN) >= 0 ? 'rgba(0,192,118,0.3)' : 'rgba(248,81,73,0.3)'}`,
               borderRadius: 12, padding: 24,
             }}>
-              <div style={{ fontSize: 13, color: '#8b949e', marginBottom: 4 }}>
+              <div style={{ fontSize: 13, color: '#737373', marginBottom: 4 }}>
                 P&amp;L if {instrument} expires at {currentN.toLocaleString('en-IN')}
               </div>
               <div style={{ fontSize: 36, fontWeight: 800, color: liveColor }}>
@@ -155,19 +155,19 @@ export default function OptionsPLCalculator() {
               </div>
               <div style={{ display: 'flex', gap: 24, marginTop: 12 }}>
                 <div>
-                  <div style={{ fontSize: 11, color: '#8b949e' }}>Breakeven</div>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: '#e6edf3' }}>
+                  <div style={{ fontSize: 11, color: '#737373' }}>Breakeven</div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: '#171717' }}>
                     {breakeven.toLocaleString('en-IN')}
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: '#8b949e' }}>Max Loss</div>
+                  <div style={{ fontSize: 11, color: '#737373' }}>Max Loss</div>
                   <div style={{ fontSize: 15, fontWeight: 600, color: '#f85149' }}>
                     {tradeType === 'buy' ? fmt(-premiumN * qty) : 'Unlimited'}
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: '#8b949e' }}>Max Profit</div>
+                  <div style={{ fontSize: 11, color: '#737373' }}>Max Profit</div>
                   <div style={{ fontSize: 15, fontWeight: 600, color: '#00C076' }}>
                     {tradeType === 'sell' ? fmt(premiumN * qty) : 'Unlimited'}
                   </div>
@@ -176,18 +176,18 @@ export default function OptionsPLCalculator() {
             </div>
 
             {/* P&L Table */}
-            <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, overflow: 'hidden' }}>
-              <div style={{ padding: '14px 20px', borderBottom: '1px solid #21262d', display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, overflow: 'hidden' }}>
+              <div style={{ padding: '14px 20px', borderBottom: '1px solid #e5e5e5', display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: 14, fontWeight: 600 }}>P&amp;L at Expiry</span>
-                <span style={{ fontSize: 12, color: '#8b949e' }}>{instrument} level → your outcome</span>
+                <span style={{ fontSize: 12, color: '#737373' }}>{instrument} level → your outcome</span>
               </div>
               <div style={{ maxHeight: 360, overflowY: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
-                    <tr style={{ background: '#0D1117' }}>
-                      <th style={{ padding: '10px 20px', textAlign: 'left', fontSize: 12, color: '#8b949e', fontWeight: 500 }}>{instrument} Level</th>
-                      <th style={{ padding: '10px 20px', textAlign: 'right', fontSize: 12, color: '#8b949e', fontWeight: 500 }}>P&amp;L</th>
-                      <th style={{ padding: '10px 20px', textAlign: 'right', fontSize: 12, color: '#8b949e', fontWeight: 500 }}>Return</th>
+                    <tr style={{ background: '#ffffff' }}>
+                      <th style={{ padding: '10px 20px', textAlign: 'left', fontSize: 12, color: '#737373', fontWeight: 500 }}>{instrument} Level</th>
+                      <th style={{ padding: '10px 20px', textAlign: 'right', fontSize: 12, color: '#737373', fontWeight: 500 }}>P&amp;L</th>
+                      <th style={{ padding: '10px 20px', textAlign: 'right', fontSize: 12, color: '#737373', fontWeight: 500 }}>Return</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -200,7 +200,7 @@ export default function OptionsPLCalculator() {
                       const rowBg = isBreakeven ? 'rgba(240,136,62,0.08)' :
                         isCurrent ? 'rgba(0,192,118,0.05)' : 'transparent';
                       return (
-                        <tr key={level} style={{ background: rowBg, borderBottom: '1px solid #21262d' }}>
+                        <tr key={level} style={{ background: rowBg, borderBottom: '1px solid #e5e5e5' }}>
                           <td style={{ padding: '9px 20px', fontSize: 13 }}>
                             {level.toLocaleString('en-IN')}
                             {isBreakeven && <span style={{ marginLeft: 8, fontSize: 11, color: '#f0883e', background: 'rgba(240,136,62,0.15)', padding: '1px 6px', borderRadius: 4 }}>Breakeven</span>}
@@ -223,7 +223,7 @@ export default function OptionsPLCalculator() {
         </div>
 
         <div style={{ marginTop: 24, background: 'rgba(0,192,118,0.05)', border: '1px solid rgba(0,192,118,0.15)', borderRadius: 12, padding: 20 }}>
-          <p style={{ margin: 0, fontSize: 14, color: '#8b949e', lineHeight: 1.6 }}>
+          <p style={{ margin: 0, fontSize: 14, color: '#737373', lineHeight: 1.6 }}>
             <strong style={{ color: '#00C076' }}>Before every trade:</strong> Know your worst case, breakeven, and realistic target.
             Most traders skip this step and are surprised when they see the numbers live.
             Once you know your P&amp;L profile, practice executing the trade with real market prices on{' '}

@@ -66,7 +66,7 @@ export default function AuthCallbackPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#161B22] flex flex-col items-center justify-center px-6 text-center">
+      <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center px-6 text-center">
         <p className="text-red-400 mb-4 max-w-md text-sm">{error}</p>
         <Link href="/login" className="text-[#00C076] font-medium">
           Back to login
@@ -76,7 +76,7 @@ export default function AuthCallbackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#161B22] flex flex-col items-center justify-center gap-3 text-gray-400">
+    <div className="min-h-screen bg-neutral-50 flex flex-col items-center justify-center gap-3 text-neutral-500">
       <Loader2 className="w-8 h-8 animate-spin text-[#00C076]" />
       <p className="text-sm">Signing you in…</p>
     </div>

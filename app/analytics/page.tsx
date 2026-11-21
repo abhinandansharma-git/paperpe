@@ -38,27 +38,14 @@ export default function AnalyticsPage() {
   const maxPnl = Math.max(...monthlyData.map(Math.abs));
 
   return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      <header className="border-b border-white/5 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-              <Link href="/analytics" className="text-white font-medium">Analytics</Link>
-              <Link href="/leaderboard" className="text-slate-400 hover:text-white">Leaderboard</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white">Trading Analytics</h1>
-            <p className="text-slate-400">Deep insights into your trading performance</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">Trading Analytics</h1>
+            <p className="text-neutral-500">Deep insights into your trading performance</p>
           </div>
-          <select className="bg-[#0D1117]/5 border border-white/10 rounded-lg px-4 py-2 text-white">
+          <select className="bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-2 text-neutral-900">
             <option>Last 30 Days</option>
             <option>Last 90 Days</option>
             <option>This Year</option>
@@ -71,41 +58,41 @@ export default function AnalyticsPage() {
             { icon: Target, label: 'Win Rate', value: '64.5%', color: 'text-[#00C076]', bg: 'bg-[#00C076]/10' },
             { icon: Activity, label: 'Total Trades', value: '118', color: 'text-purple-400', bg: 'bg-purple-500/100/10' },
             { icon: Zap, label: 'Best Streak', value: '12 days', color: 'text-orange-400', bg: 'bg-[#00C076]/10' }].map((stat, i) => (
-            <div key={i} className="bg-[#141820] rounded-xl p-5 border border-white/5">
+            <div key={i} className="bg-neutral-50 rounded-xl p-5 border border-neutral-200">
               <div className={`w-10 h-10 rounded-lg ${stat.bg} flex items-center justify-center mb-3`}><stat.icon className={`w-5 h-5 ${stat.color}`} /></div>
               <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-              <div className="text-sm text-slate-500">{stat.label}</div>
+              <div className="text-sm text-neutral-500">{stat.label}</div>
             </div>
           ))}
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2 bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[#00C076]" />Monthly P&L</h3>
+          <div className="lg:col-span-2 bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-6 flex items-center gap-2"><BarChart3 className="w-5 h-5 text-[#00C076]" />Monthly P&L</h3>
             <div className="flex items-end justify-between h-48 gap-2">
               {monthlyData.map((pnl, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center">
                   <div className="w-full flex flex-col items-center justify-end h-40">
                     <div className={`w-full rounded-t ${pnl >= 0 ? 'bg-[#00C076]/100' : 'bg-red-500/100'}`} style={{ height: `${(Math.abs(pnl) / maxPnl) * 100}%` }}></div>
                   </div>
-                  <span className="text-xs text-slate-500 mt-2">{months[i]}</span>
+                  <span className="text-xs text-neutral-500 mt-2">{months[i]}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2"><PieChart className="w-5 h-5 text-purple-400" />By Instrument</h3>
+          <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2"><PieChart className="w-5 h-5 text-purple-400" />By Instrument</h3>
             <div className="space-y-4">
               {tradesByInstrument.map((item, i) => (
                 <div key={i}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-white font-medium">{item.name}</span>
+                    <span className="text-neutral-900 font-medium">{item.name}</span>
                     <span className={item.pnl >= 0 ? 'text-[#00C076]' : 'text-red-400'}>₹{item.pnl.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-2 bg-[#0D1117]/5 rounded-full overflow-hidden"><div className="h-full bg-[#00C076] rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
-                    <span className="text-xs text-slate-500">{item.winRate}%</span>
+                    <div className="flex-1 h-2 bg-neutral-50 rounded-full overflow-hidden"><div className="h-full bg-[#00C076] rounded-full" style={{ width: `${item.winRate}%` }}></div></div>
+                    <span className="text-xs text-neutral-500">{item.winRate}%</span>
                   </div>
                 </div>
               ))}
@@ -114,43 +101,43 @@ export default function AnalyticsPage() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2"><Clock className="w-5 h-5 text-orange-400" />Performance by Time</h3>
+          <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2"><Clock className="w-5 h-5 text-orange-400" />Performance by Time</h3>
             <div className="space-y-3">
               {tradesByTime.map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <span className="text-slate-400 text-sm w-24">{item.time}</span>
-                  <div className="flex-1 h-6 bg-[#0D1117]/5 rounded-lg overflow-hidden relative">
+                  <span className="text-neutral-500 text-sm w-24">{item.time}</span>
+                  <div className="flex-1 h-6 bg-neutral-50 rounded-lg overflow-hidden relative">
                     <div className={`h-full rounded-lg ${item.winRate >= 60 ? 'bg-[#00C076]/100/50' : item.winRate >= 50 ? 'bg-yellow-500/100/50' : 'bg-red-500/100/50'}`} style={{ width: `${item.winRate}%` }}></div>
-                    <span className="absolute inset-0 flex items-center justify-center text-xs text-white font-medium">{item.winRate}% ({item.trades} trades)</span>
+                    <span className="absolute inset-0 flex items-center justify-center text-xs text-neutral-900 font-medium">{item.winRate}% ({item.trades} trades)</span>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="text-sm text-slate-500 mt-4">💡 Your best hours: 10:00-11:00 AM and 2:00-3:00 PM</p>
+            <p className="text-sm text-neutral-500 mt-4">💡 Your best hours: 10:00-11:00 AM and 2:00-3:00 PM</p>
           </div>
 
-          <div className="bg-[#141820] rounded-xl p-6 border border-white/5">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-yellow-500" />Achievements</h3>
+          <div className="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+            <h3 className="text-lg font-semibold text-neutral-900 mb-4 flex items-center gap-2"><Award className="w-5 h-5 text-yellow-500" />Achievements</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {achievements.map((ach, i) => (
-                <div key={i} className={`p-3 rounded-xl text-center ${ach.earned ? 'bg-yellow-500/100/10 border border-yellow-500/30' : 'bg-[#0D1117]/5 border border-white/5 opacity-50'}`}>
+                <div key={i} className={`p-3 rounded-xl text-center ${ach.earned ? 'bg-yellow-500/100/10 border border-yellow-500/30' : 'bg-neutral-100 border border-neutral-200 opacity-50'}`}>
                   <div className="text-2xl mb-1">{ach.icon}</div>
-                  <div className="text-xs text-slate-400">{ach.name}</div>
+                  <div className="text-xs text-neutral-500">{ach.name}</div>
                 </div>
               ))}
             </div>
-            <p className="text-sm text-slate-500 mt-4">4/8 achievements unlocked</p>
+            <p className="text-sm text-neutral-500 mt-4">4/8 achievements unlocked</p>
           </div>
         </div>
 
         <div className="bg-gradient-to-r from-[#00C076]/20 to-purple-500/20 rounded-xl p-6 border border-[#00C076]/30">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-bold text-white mb-1">Export Your Trade Journal</h3>
-              <p className="text-slate-300">Download detailed reports in PDF or Excel format</p>
+              <h3 className="text-xl font-bold text-neutral-900 mb-1">Export Your Trade Journal</h3>
+              <p className="text-neutral-600">Download detailed reports in PDF or Excel format</p>
             </div>
-            <button className="px-6 py-3 bg-[#0D1117]/10 hover:bg-[#0D1117]/20 text-white rounded-xl font-medium transition-colors">Export Report</button>
+            <button className="px-6 py-3 bg-neutral-100 hover:bg-neutral-100 text-neutral-900 rounded-xl font-medium transition-colors">Export Report</button>
           </div>
         </div>
       </main>

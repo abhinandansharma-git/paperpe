@@ -35,35 +35,20 @@ export default function ScreenerPage() {
   });
 
   return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      {/* Header */}
-      <header className="border-b border-white/5 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <Link href="/dashboard" className="text-xl font-bold text-white">PaperPe</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-              <Link href="/charts" className="text-slate-400 hover:text-white">Charts</Link>
-              <Link href="/options" className="text-slate-400 hover:text-white">Options</Link>
-              <Link href="/screener" className="text-white font-medium">Screener</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto p-6">
         {/* Quick Scanners */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {scanners.map((scanner, i) => (
             <button
               key={i}
-              className={`bg-[#141820] rounded-xl p-4 border border-white/5 hover:border-${scanner.color}-500/50 transition-all group`}
+              className={`bg-neutral-50 rounded-xl p-4 border border-neutral-200 hover:border-${scanner.color}-500/50 transition-all group`}
             >
               <div className="flex items-center justify-between mb-2">
                 <scanner.icon className={`w-5 h-5 text-${scanner.color}-500`} />
                 <span className={`text-2xl font-bold text-${scanner.color}-400`}>{scanner.count}</span>
               </div>
-              <div className="text-sm text-slate-400 group-hover:text-white transition-colors">{scanner.name}</div>
+              <div className="text-sm text-neutral-500 group-hover:text-neutral-900 transition-colors">{scanner.name}</div>
             </button>
           ))}
         </div>
@@ -71,19 +56,19 @@ export default function ScreenerPage() {
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-4 mb-6">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
             <input
               type="text"
               placeholder="Search stocks..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#141820] border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-white placeholder:text-slate-500 focus:outline-none focus:border-[#00C076]"
+              className="w-full bg-neutral-50 border border-neutral-200 rounded-lg pl-10 pr-4 py-2.5 text-neutral-900 placeholder:text-neutral-500 focus:outline-none focus:border-[#00C076]"
             />
           </div>
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            className="bg-[#141820] border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-[#00C076]"
+            className="bg-neutral-50 border border-neutral-200 rounded-lg px-4 py-2.5 text-neutral-900 focus:outline-none focus:border-[#00C076]"
           >
             <option value="All">All Sectors</option>
             <option value="IT">IT</option>
@@ -92,18 +77,18 @@ export default function ScreenerPage() {
             <option value="Metals">Metals</option>
             <option value="Telecom">Telecom</option>
           </select>
-          <button className="flex items-center gap-2 px-4 py-2.5 bg-[#141820] border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-white/20">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-neutral-50 border border-neutral-200 rounded-lg text-neutral-500 hover:text-neutral-900 hover:border-neutral-200">
             <Filter className="w-4 h-4" />
             More Filters
           </button>
         </div>
 
         {/* Screener Table */}
-        <div className="bg-[#141820] rounded-xl border border-white/5 overflow-hidden">
+        <div className="bg-neutral-50 rounded-xl border border-neutral-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="text-left text-xs text-slate-500 border-b border-white/5 bg-[#0D1117]/5">
+                <tr className="text-left text-xs text-neutral-500 border-b border-neutral-200 bg-neutral-50">
                   <th className="p-4"></th>
                   <th className="p-4">Symbol</th>
                   <th className="p-4">Sector</th>
@@ -118,20 +103,20 @@ export default function ScreenerPage() {
               </thead>
               <tbody>
                 {filteredData.map((stock, i) => (
-                  <tr key={i} className="border-b border-white/5 hover:bg-[#0D1117]/5 transition-colors">
+                  <tr key={i} className="border-b border-neutral-200 hover:bg-neutral-50 transition-colors">
                     <td className="p-4">
-                      <button className="text-slate-500 hover:text-[#00C076]">
+                      <button className="text-neutral-500 hover:text-[#00C076]">
                         <Star className="w-4 h-4" />
                       </button>
                     </td>
                     <td className="p-4">
-                      <span className="font-medium text-white">{stock.symbol}</span>
+                      <span className="font-medium text-neutral-900">{stock.symbol}</span>
                     </td>
                     <td className="p-4">
-                      <span className="text-slate-400 text-sm">{stock.sector}</span>
+                      <span className="text-neutral-500 text-sm">{stock.sector}</span>
                     </td>
                     <td className="p-4 text-right">
-                      <span className="text-white font-medium">₹{stock.price.toLocaleString('en-IN')}</span>
+                      <span className="text-neutral-900 font-medium">₹{stock.price.toLocaleString('en-IN')}</span>
                     </td>
                     <td className="p-4 text-right">
                       <span className={`flex items-center justify-end gap-1 ${stock.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
@@ -139,12 +124,12 @@ export default function ScreenerPage() {
                         {stock.change >= 0 ? '+' : ''}{stock.change}%
                       </span>
                     </td>
-                    <td className="p-4 text-right text-slate-300">{stock.volume}</td>
+                    <td className="p-4 text-right text-neutral-600">{stock.volume}</td>
                     <td className="p-4 text-center">
                       <span className={`px-2 py-1 rounded text-xs ${
                         stock.rsi > 70 ? 'bg-red-500/100/20 text-red-400' :
                         stock.rsi < 30 ? 'bg-[#00C076]/100/20 text-[#00C076]' :
-                        'bg-slate-500/20 text-slate-400'
+                        'bg-slate-500/20 text-neutral-500'
                       }`}>
                         {stock.rsi}
                       </span>
@@ -153,7 +138,7 @@ export default function ScreenerPage() {
                       <span className={`px-2 py-1 rounded text-xs ${
                         stock.macd === 'Buy' ? 'bg-[#00C076]/100/20 text-[#00C076]' :
                         stock.macd === 'Sell' ? 'bg-red-500/100/20 text-red-400' :
-                        'bg-slate-500/20 text-slate-400'
+                        'bg-slate-500/20 text-neutral-500'
                       }`}>
                         {stock.macd}
                       </span>
@@ -162,7 +147,7 @@ export default function ScreenerPage() {
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                         stock.signal === 'Bullish' || stock.signal === 'Strong Buy' ? 'bg-[#00C076]/100/20 text-[#00C076]' :
                         stock.signal === 'Bearish' ? 'bg-red-500/100/20 text-red-400' :
-                        'bg-slate-500/20 text-slate-400'
+                        'bg-slate-500/20 text-neutral-500'
                       }`}>
                         {stock.signal}
                       </span>

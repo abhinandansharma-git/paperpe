@@ -36,32 +36,19 @@ const upcomingEvents = [
 
 export default function NewsPage() {
   return (
-    <div className="min-h-screen bg-[#0a0e17]">
-      <header className="border-b border-white/5 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-            <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
-            <nav className="hidden md:flex items-center gap-6">
-              <Link href="/dashboard" className="text-slate-400 hover:text-white">Dashboard</Link>
-              <Link href="/news" className="text-white font-medium">News</Link>
-              <Link href="/screener" className="text-slate-400 hover:text-white">Screener</Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white">
       <main className="max-w-7xl mx-auto px-6 py-8">
         <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-3"><Newspaper className="w-8 h-8 text-[#00C076]" />Market News</h1>
-          <p className="text-slate-400 mt-1">Stay updated with market-moving events</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 flex items-center gap-3"><Newspaper className="w-8 h-8 text-[#00C076]" />Market News</h1>
+          <p className="text-neutral-500 mt-1">Stay updated with market-moving events</p>
         </div>
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
           {Object.entries(marketBrief).map(([key, data]) => (
-            <div key={key} className="bg-[#141820] rounded-xl p-4 border border-white/5">
-              <div className="text-sm text-slate-500 uppercase mb-1">{key}</div>
+            <div key={key} className="bg-neutral-50 rounded-xl p-4 border border-neutral-200">
+              <div className="text-sm text-neutral-500 uppercase mb-1">{key}</div>
               <div className="flex items-end justify-between">
-                <span className="text-xl font-bold text-white">{data.value.toLocaleString()}</span>
+                <span className="text-xl font-bold text-neutral-900">{data.value.toLocaleString()}</span>
                 <span className={`flex items-center gap-1 text-sm ${data.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>
                   {data.change >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
                   {data.change >= 0 ? '+' : ''}{data.change}%
@@ -74,56 +61,56 @@ export default function NewsPage() {
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-white flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-500" />Latest News</h2>
+              <h2 className="text-xl font-semibold text-neutral-900 flex items-center gap-2"><Zap className="w-5 h-5 text-yellow-500" />Latest News</h2>
               <div className="flex gap-2">
                 <button className="px-3 py-1 bg-[#00C076]/20 text-[#00C076] rounded text-sm">All</button>
-                <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Stocks</button>
-                <button className="px-3 py-1 bg-[#0D1117]/5 text-slate-400 rounded text-sm">Global</button>
+                <button className="px-3 py-1 bg-neutral-50 text-neutral-500 rounded text-sm">Stocks</button>
+                <button className="px-3 py-1 bg-neutral-50 text-neutral-500 rounded text-sm">Global</button>
               </div>
             </div>
             {topNews.map((news) => (
-              <div key={news.id} className="bg-[#141820] rounded-xl p-5 border border-white/5 hover:border-[#00C076]/30 transition-colors cursor-pointer">
+              <div key={news.id} className="bg-neutral-50 rounded-xl p-5 border border-neutral-200 hover:border-[#00C076]/30 transition-colors cursor-pointer">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${news.impact === 'positive' ? 'bg-emerald-400' : news.impact === 'negative' ? 'bg-red-400' : 'bg-slate-400'}`}></div>
-                    <span className="px-2 py-0.5 bg-[#0D1117]/10 rounded text-xs text-slate-400">{news.sector}</span>
-                    <span className="text-xs text-slate-500 flex items-center gap-1"><Clock className="w-3 h-3" />{news.time}</span>
+                    <span className="px-2 py-0.5 bg-neutral-100 rounded text-xs text-neutral-500">{news.sector}</span>
+                    <span className="text-xs text-neutral-500 flex items-center gap-1"><Clock className="w-3 h-3" />{news.time}</span>
                   </div>
                   <span className="text-xs text-slate-600">{news.source}</span>
                 </div>
-                <h3 className="text-white font-medium mb-2">{news.title}</h3>
-                <p className="text-sm text-slate-400">{news.summary}</p>
+                <h3 className="text-neutral-900 font-medium mb-2">{news.title}</h3>
+                <p className="text-sm text-neutral-500">{news.summary}</p>
               </div>
             ))}
           </div>
 
           <div className="space-y-6">
-            <div className="bg-[#141820] rounded-xl p-5 border border-white/5">
-              <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><BarChart2 className="w-5 h-5 text-purple-400" />Sector Performance</h3>
+            <div className="bg-neutral-50 rounded-xl p-5 border border-neutral-200">
+              <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2"><BarChart2 className="w-5 h-5 text-purple-400" />Sector Performance</h3>
               <div className="space-y-3">
                 {sectorMovers.map((sector, i) => (
                   <div key={i} className="flex items-center justify-between">
-                    <span className="text-slate-300">{sector.name}</span>
+                    <span className="text-neutral-600">{sector.name}</span>
                     <div className="text-right">
                       <div className={`font-medium ${sector.change >= 0 ? 'text-[#00C076]' : 'text-red-400'}`}>{sector.change >= 0 ? '+' : ''}{sector.change}%</div>
-                      <div className="text-xs text-slate-500">{sector.top}</div>
+                      <div className="text-xs text-neutral-500">{sector.top}</div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-[#141820] rounded-xl p-5 border border-white/5">
-              <h3 className="font-semibold text-white mb-4 flex items-center gap-2"><Globe className="w-5 h-5 text-[#00C076]" />Upcoming Events</h3>
+            <div className="bg-neutral-50 rounded-xl p-5 border border-neutral-200">
+              <h3 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2"><Globe className="w-5 h-5 text-[#00C076]" />Upcoming Events</h3>
               <div className="space-y-3">
                 {upcomingEvents.map((event, i) => (
                   <div key={i} className="flex items-start gap-3">
                     <div className="w-12 text-center">
-                      <div className="text-xs text-slate-500">{event.date}</div>
+                      <div className="text-xs text-neutral-500">{event.date}</div>
                     </div>
                     <div className="flex-1">
-                      <div className="text-white text-sm">{event.event}</div>
-                      {event.time !== '-' && <div className="text-xs text-slate-500">{event.time}</div>}
+                      <div className="text-neutral-900 text-sm">{event.event}</div>
+                      {event.time !== '-' && <div className="text-xs text-neutral-500">{event.time}</div>}
                     </div>
                   </div>
                 ))}
@@ -131,8 +118,8 @@ export default function NewsPage() {
             </div>
 
             <div className="bg-gradient-to-br from-[#00C076]/20 to-purple-500/20 rounded-xl p-5 border border-[#00C076]/30">
-              <h3 className="font-semibold text-white mb-2">Morning Brief</h3>
-              <p className="text-sm text-slate-300 mb-4">Get daily market summary at 8:30 AM</p>
+              <h3 className="font-semibold text-neutral-900 mb-2">Morning Brief</h3>
+              <p className="text-sm text-neutral-600 mb-4">Get daily market summary at 8:30 AM</p>
               <button className="w-full py-2 bg-[#00C076] hover:bg-[#00a865] text-white rounded-lg font-medium text-sm">Enable Notifications</button>
             </div>
           </div>

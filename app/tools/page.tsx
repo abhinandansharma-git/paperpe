@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Calculator, TrendingUp, BarChart3, Shield, ExternalLink, ArrowLeft, Sparkles, ChevronRight } from 'lucide-react';
+import { Calculator, TrendingUp, BarChart3, Shield, ExternalLink, Sparkles, ChevronRight } from 'lucide-react';
 
 const ourTools = [
   {
@@ -53,31 +53,18 @@ const externalTools = [
 
 export default function ToolsPage() {
   return (
-    <div className="min-h-screen bg-[#0D1117] text-white">
-      {/* Header */}
-      <header className="border-b border-[#21262D] bg-[#0D1117] sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#00C076] rounded-lg flex items-center justify-center font-bold text-[#0D1117] text-sm">P</div>
-            <span className="font-semibold text-lg">PaperPe</span>
-          </Link>
-          <Link href="/" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition-colors">
-            <ArrowLeft className="w-4 h-4" /> Home
-          </Link>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-white text-neutral-900">
       {/* Hero */}
-      <section className="relative py-14 px-6 border-b border-[#21262D] overflow-hidden">
+      <section className="relative py-14 px-6 border-b border-neutral-200 overflow-hidden">
         <div className="absolute inset-0 bg-mesh" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-sm font-medium mb-6 animate-fade-in-up">
             <Sparkles className="w-3.5 h-3.5" /> 100% Free — No Login Required
           </div>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 animate-fade-in-up" style={{animationDelay:'0.1s'}}>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-neutral-900 mb-4 animate-fade-in-up" style={{animationDelay:'0.1s'}}>
             Trading <span className="text-gradient">Calculators</span>
           </h1>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto animate-fade-in-up" style={{animationDelay:'0.2s'}}>
+          <p className="text-lg text-neutral-500 max-w-2xl mx-auto animate-fade-in-up" style={{animationDelay:'0.2s'}}>
             The tools every Indian F&O trader needs. Options pricing, position sizing, brokerage comparison, margin requirements — all free, forever.
           </p>
         </div>
@@ -86,7 +73,7 @@ export default function ToolsPage() {
       {/* Tools Grid */}
       <section className="py-14 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-6">PaperPe Tools</h2>
+          <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-widest mb-6">PaperPe Tools</h2>
           <div className="grid md:grid-cols-2 gap-5">
             {ourTools.map((tool) => (
               <Link key={tool.href} href={tool.href} className="group">
@@ -97,17 +84,17 @@ export default function ToolsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="font-semibold text-white group-hover:text-[#00C076] transition-colors">{tool.name}</h3>
+                        <h3 className="font-semibold text-neutral-900 group-hover:text-[#00C076] transition-colors">{tool.name}</h3>
                         <span className="text-xs px-2 py-0.5 rounded-full border" style={{ color: tool.color, borderColor: `${tool.color}40`, background: `${tool.color}10` }}>{tool.tag}</span>
                       </div>
-                      <p className="text-gray-400 text-sm leading-relaxed mb-4">{tool.desc}</p>
+                      <p className="text-neutral-500 text-sm leading-relaxed mb-4">{tool.desc}</p>
                       <div className="flex flex-wrap gap-1.5">
                         {tool.features.map((f) => (
-                          <span key={f} className="text-xs bg-[#0D1117] text-gray-400 px-2 py-1 rounded-lg border border-[#21262D]">{f}</span>
+                          <span key={f} className="text-xs bg-white text-neutral-500 px-2 py-1 rounded-lg border border-neutral-200">{f}</span>
                         ))}
                       </div>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-gray-400 flex-shrink-0 mt-0.5 transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-gray-600 group-hover:text-neutral-500 flex-shrink-0 mt-0.5 transition-colors" />
                   </div>
                 </div>
               </Link>
@@ -117,18 +104,18 @@ export default function ToolsPage() {
       </section>
 
       {/* External Resources */}
-      <section className="py-14 px-6 border-t border-[#21262D]">
+      <section className="py-14 px-6 border-t border-neutral-200">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-2">Recommended Resources</h2>
-          <p className="text-gray-500 text-sm mb-6">External tools we recommend for Indian traders</p>
+          <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-widest mb-2">Recommended Resources</h2>
+          <p className="text-neutral-500 text-sm mb-6">External tools we recommend for Indian traders</p>
           <div className="grid md:grid-cols-3 gap-4">
             {externalTools.map((tool) => (
               <a key={tool.url} href={tool.url} target="_blank" rel="noopener noreferrer"
-                className="bg-[#161B22] border border-[#21262D] hover:border-[#30363D] rounded-xl p-4 flex items-start gap-3 transition-all group">
-                <ExternalLink className="w-4 h-4 text-gray-500 group-hover:text-gray-300 flex-shrink-0 mt-0.5 transition-colors" />
+                className="bg-neutral-50 border border-neutral-200 hover:border-neutral-300 rounded-xl p-4 flex items-start gap-3 transition-all group">
+                <ExternalLink className="w-4 h-4 text-neutral-500 group-hover:text-neutral-900 flex-shrink-0 mt-0.5 transition-colors" />
                 <div>
-                  <h3 className="font-medium text-white text-sm">{tool.name}</h3>
-                  <p className="text-gray-500 text-xs mt-0.5">{tool.desc}</p>
+                  <h3 className="font-medium text-neutral-900 text-sm">{tool.name}</h3>
+                  <p className="text-neutral-500 text-xs mt-0.5">{tool.desc}</p>
                 </div>
               </a>
             ))}
@@ -137,10 +124,10 @@ export default function ToolsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-14 px-6 border-t border-[#21262D]">
+      <section className="py-14 px-6 border-t border-neutral-200">
         <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-white mb-3">Need professional-grade signals?</h2>
-          <p className="text-gray-400 mb-6">Check out our premium TradingView indicators — battle-tested for Indian markets.</p>
+          <h2 className="text-2xl font-bold text-neutral-900 mb-3">Need professional-grade signals?</h2>
+          <p className="text-neutral-500 mb-6">Check out our premium TradingView indicators — battle-tested for Indian markets.</p>
           <Link href="/indicators" className="inline-flex items-center gap-2 bg-[#00C076] hover:bg-[#00a865] text-[#0D1117] font-bold px-6 py-3 rounded-xl transition-colors">
             View Indicators <ChevronRight className="w-4 h-4" />
           </Link>

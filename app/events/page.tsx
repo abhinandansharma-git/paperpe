@@ -52,10 +52,10 @@ const TYPE_CONFIG = {
   fomc:   { color: '#58a6ff', bg: 'rgba(88,166,255,0.12)',  label: 'FOMC' },
   expiry: { color: '#f0883e', bg: 'rgba(240,136,62,0.12)',  label: 'Expiry' },
   budget: { color: '#bc8cff', bg: 'rgba(188,140,255,0.12)', label: 'Budget' },
-  other:  { color: '#8b949e', bg: 'rgba(139,148,158,0.12)', label: 'Holiday' },
+  other:  { color: '#737373', bg: 'rgba(139,148,158,0.12)', label: 'Holiday' },
 };
 
-const IMPACT_COLOR = { high: '#f85149', medium: '#f0883e', low: '#8b949e' };
+const IMPACT_COLOR = { high: '#f85149', medium: '#f0883e', low: '#737373' };
 
 const today = new Date().toISOString().split('T')[0];
 
@@ -86,35 +86,35 @@ export default function EventsCalendar() {
 
   const filterBtnStyle = (active: boolean): React.CSSProperties => ({
     padding: '7px 16px', borderRadius: 8, fontSize: 13, fontWeight: 500, cursor: 'pointer',
-    background: active ? 'rgba(0,192,118,0.15)' : '#161b22',
-    color: active ? '#00C076' : '#8b949e',
-    border: active ? '1px solid rgba(0,192,118,0.4)' : '1px solid #30363d',
+    background: active ? 'rgba(0,192,118,0.15)' : '#f5f5f5',
+    color: active ? '#00C076' : '#737373',
+    border: active ? '1px solid rgba(0,192,118,0.4)' : '1px solid #d4d4d4',
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#0D1117', color: '#e6edf3', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <nav style={{ borderBottom: '1px solid #21262d', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div style={{ minHeight: '100vh', background: '#ffffff', color: '#171717', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <nav style={{ borderBottom: '1px solid #e5e5e5', padding: '14px 24px', display: 'flex', alignItems: 'center', gap: 16 }}>
         <Link href="/" style={{ color: '#00C076', fontWeight: 700, fontSize: 18, textDecoration: 'none' }}>PaperPe</Link>
-        <span style={{ color: '#30363d' }}>›</span>
-        <span style={{ color: '#8b949e', fontSize: 14 }}>F&amp;O Events Calendar</span>
+        <span style={{ color: '#d4d4d4' }}>›</span>
+        <span style={{ color: '#737373', fontSize: 14 }}>F&amp;O Events Calendar</span>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 12 }}>
-          <Link href="/brokerage-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
-          <Link href="/position-sizing-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Position Sizing</Link>
-          <Link href="/options-pl-calculator" style={{ color: '#8b949e', fontSize: 13, textDecoration: 'none' }}>Options P&amp;L</Link>
+          <Link href="/brokerage-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Brokerage</Link>
+          <Link href="/position-sizing-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Position Sizing</Link>
+          <Link href="/options-pl-calculator" style={{ color: '#737373', fontSize: 13, textDecoration: 'none' }}>Options P&amp;L</Link>
         </div>
       </nav>
 
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '40px 24px' }}>
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 8px' }}>F&amp;O Events Calendar 2026</h1>
-          <p style={{ color: '#8b949e', margin: 0, fontSize: 15 }}>
+          <p style={{ color: '#737373', margin: 0, fontSize: 15 }}>
             RBI policy dates, FOMC meetings, monthly expiries, and market holidays. Bookmark this page — check it before every trade.
           </p>
         </div>
 
         {/* Upcoming high-impact events */}
         <div style={{ marginBottom: 32 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12, color: '#8b949e' }}>⚡ Next High-Impact Events</h2>
+          <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 12, color: '#737373' }}>⚡ Next High-Impact Events</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
             {next5.map(e => {
               const days = daysFromNow(e.date);
@@ -125,12 +125,12 @@ export default function EventsCalendar() {
                     <span style={{ fontSize: 11, fontWeight: 600, color: cfg.color, background: `${cfg.color}20`, padding: '2px 8px', borderRadius: 4 }}>
                       {cfg.label}
                     </span>
-                    <span style={{ fontSize: 11, color: days <= 7 ? '#f85149' : '#8b949e' }}>
+                    <span style={{ fontSize: 11, color: days <= 7 ? '#f85149' : '#737373' }}>
                       {days === 0 ? 'Today' : days === 1 ? 'Tomorrow' : `${days} days`}
                     </span>
                   </div>
                   <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>{e.label}</div>
-                  <div style={{ fontSize: 12, color: '#8b949e' }}>{formatDate(e.date)}</div>
+                  <div style={{ fontSize: 12, color: '#737373' }}>{formatDate(e.date)}</div>
                 </div>
               );
             })}
@@ -147,9 +147,9 @@ export default function EventsCalendar() {
         </div>
 
         {/* Events list */}
-        <div style={{ background: '#161b22', border: '1px solid #21262d', borderRadius: 12, overflow: 'hidden' }}>
+        <div style={{ background: '#fafafa', border: '1px solid #e5e5e5', borderRadius: 12, overflow: 'hidden' }}>
           {upcoming.length === 0 && (
-            <div style={{ padding: 32, textAlign: 'center', color: '#8b949e' }}>No upcoming events in this category</div>
+            <div style={{ padding: 32, textAlign: 'center', color: '#737373' }}>No upcoming events in this category</div>
           )}
           {upcoming.map((e, i) => {
             const days = daysFromNow(e.date);
@@ -158,16 +158,16 @@ export default function EventsCalendar() {
             return (
               <div key={e.date + e.label} style={{
                 padding: '16px 24px',
-                borderBottom: i < upcoming.length - 1 ? '1px solid #21262d' : 'none',
+                borderBottom: i < upcoming.length - 1 ? '1px solid #e5e5e5' : 'none',
                 background: isSoon ? 'rgba(248,81,73,0.03)' : 'transparent',
                 display: 'flex', alignItems: 'center', gap: 16,
               }}>
                 {/* Date */}
                 <div style={{ minWidth: 80, textAlign: 'center' }}>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: isSoon ? '#f85149' : '#e6edf3' }}>
+                  <div style={{ fontSize: 20, fontWeight: 700, color: isSoon ? '#f85149' : '#171717' }}>
                     {new Date(e.date).getDate()}
                   </div>
-                  <div style={{ fontSize: 11, color: '#8b949e' }}>
+                  <div style={{ fontSize: 11, color: '#737373' }}>
                     {new Date(e.date).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}
                   </div>
                 </div>
@@ -182,7 +182,7 @@ export default function EventsCalendar() {
                 {/* Details */}
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{e.label}</div>
-                  {e.note && <div style={{ fontSize: 12, color: '#8b949e' }}>{e.note}</div>}
+                  {e.note && <div style={{ fontSize: 12, color: '#737373' }}>{e.note}</div>}
                 </div>
 
                 {/* Impact + days */}
@@ -190,7 +190,7 @@ export default function EventsCalendar() {
                   <div style={{ fontSize: 11, color: IMPACT_COLOR[e.impact], background: `${IMPACT_COLOR[e.impact]}15`, padding: '2px 8px', borderRadius: 4, marginBottom: 4, display: 'inline-block' }}>
                     {e.impact} impact
                   </div>
-                  <div style={{ fontSize: 12, color: isSoon ? '#f85149' : '#8b949e', display: 'block' }}>
+                  <div style={{ fontSize: 12, color: isSoon ? '#f85149' : '#737373', display: 'block' }}>
                     {days === 0 ? '🔴 Today' : days === 1 ? '🟡 Tomorrow' : `${days}d away`}
                   </div>
                 </div>
@@ -202,7 +202,7 @@ export default function EventsCalendar() {
         {/* Info box */}
         <div style={{ marginTop: 24, background: 'rgba(0,192,118,0.05)', border: '1px solid rgba(0,192,118,0.15)', borderRadius: 12, padding: 20 }}>
           <h3 style={{ margin: '0 0 10px', fontSize: 14, fontWeight: 600, color: '#00C076' }}>Why event dates matter more than most traders realise</h3>
-          <p style={{ margin: 0, fontSize: 14, color: '#8b949e', lineHeight: 1.7 }}>
+          <p style={{ margin: 0, fontSize: 14, color: '#737373', lineHeight: 1.7 }}>
             RBI and FOMC events cause IV spikes before the announcement and IV crush immediately after.
             Options bought the day before at elevated IV often lose value even when the market moves your way.
             The traders who profit on event days are usually the ones who planned 3–5 days in advance — not the ones reacting on the day.

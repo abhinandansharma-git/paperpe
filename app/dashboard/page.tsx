@@ -89,31 +89,31 @@ export default function DashboardPage() {
   const hasDownload = (order: any) => Boolean(order.product?.file_url);
 
   if (loading) return (
-    <div className="min-h-screen bg-[#0D1117] flex items-center justify-center">
+    <div className="min-h-screen bg-white flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-[#00C076]" />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-white">
+    <div className="min-h-screen bg-white text-neutral-900">
       {/* Header */}
-      <header className="border-b border-[#21262D] bg-[#0D1117] sticky top-0 z-50">
+      <header className="border-b border-neutral-200 bg-white sticky top-16 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-[#00C076] rounded-lg flex items-center justify-center font-bold text-[#0D1117] text-sm">P</div>
             <span className="font-semibold text-lg">PaperPe</span>
           </Link>
           <div className="flex items-center gap-4">
-            <button className="text-gray-400 hover:text-white transition-colors">
+            <button className="text-neutral-500 hover:text-neutral-900 transition-colors">
               <Bell className="w-5 h-5" />
             </button>
-            <div className="flex items-center gap-2 bg-[#161B22] border border-[#21262D] rounded-xl px-3 py-1.5">
+            <div className="flex items-center gap-2 bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-1.5">
               <div className="w-6 h-6 bg-[#00C076]/20 rounded-full flex items-center justify-center">
                 <User className="w-3 h-3 text-[#00C076]" />
               </div>
-              <span className="text-sm text-gray-300">{profile?.full_name || user?.email?.split('@')[0]}</span>
+              <span className="text-sm text-neutral-600">{profile?.full_name || user?.email?.split('@')[0]}</span>
             </div>
-            <button onClick={handleLogout} className="text-gray-400 hover:text-red-400 transition-colors">
+            <button onClick={handleLogout} className="text-neutral-500 hover:text-red-400 transition-colors">
               <LogOut className="w-5 h-5" />
             </button>
           </div>
@@ -126,25 +126,25 @@ export default function DashboardPage() {
           {/* Sidebar */}
           <div className="col-span-1 md:col-span-3">
             {/* Profile Card */}
-            <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-5 mb-4">
+            <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-5 mb-4">
               <div className="flex flex-col items-center text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#00C076] to-[#0070f3] rounded-full flex items-center justify-center text-2xl font-bold text-white mb-3">
                   {(profile?.full_name || user?.email || 'U')[0].toUpperCase()}
                 </div>
-                <h3 className="font-semibold text-white">{profile?.full_name || 'Trader'}</h3>
-                <p className="text-gray-400 text-xs mt-1">{user?.email}</p>
+                <h3 className="font-semibold text-neutral-900">{profile?.full_name || 'Trader'}</h3>
+                <p className="text-neutral-500 text-xs mt-1">{user?.email}</p>
                 <div className="mt-3 px-3 py-1 bg-[#00C076]/10 border border-[#00C076]/20 rounded-full text-[#00C076] text-xs">
                   Member since {memberSince}
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 mt-4">
-                <div className="bg-[#0D1117] rounded-xl p-3 text-center">
-                  <p className="text-lg font-bold text-white">{paidOrders.length}</p>
-                  <p className="text-xs text-gray-400">Purchases</p>
+                <div className="bg-white rounded-xl p-3 text-center">
+                  <p className="text-lg font-bold text-neutral-900">{paidOrders.length}</p>
+                  <p className="text-xs text-neutral-500">Purchases</p>
                 </div>
-                <div className="bg-[#0D1117] rounded-xl p-3 text-center">
+                <div className="bg-white rounded-xl p-3 text-center">
                   <p className="text-lg font-bold text-[#00C076]">₹10L</p>
-                  <p className="text-xs text-gray-400">Virtual</p>
+                  <p className="text-xs text-neutral-500">Virtual</p>
                 </div>
               </div>
             </div>
@@ -163,14 +163,14 @@ export default function DashboardPage() {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                     activeTab === item.id
                       ? 'bg-[#00C076]/10 text-[#00C076] border border-[#00C076]/20'
-                      : 'text-gray-400 hover:bg-[#161B22] hover:text-white'
+                      : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900'
                   }`}
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
                 </button>
               ))}
-              <Link href="/support" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-400 hover:bg-[#161B22] hover:text-white transition-all">
+              <Link href="/support" className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 transition-all">
                 <HelpCircle className="w-4 h-4" />
                 Support
               </Link>
@@ -182,7 +182,7 @@ export default function DashboardPage() {
             {paymentSuccess && (
               <div className="bg-[#00C076]/10 border border-[#00C076]/20 rounded-2xl p-5">
                 <p className="text-[#00C076] font-semibold mb-1">Payment received successfully.</p>
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-neutral-600">
                   Your order is in our manual delivery queue right now. We will share your indicator by email, and you can track the status from this dashboard. Reach us at {SUPPORT_EMAIL} if you need help.
                 </p>
               </div>
@@ -199,22 +199,22 @@ export default function DashboardPage() {
                     { label: 'Total Trades', value: '0', icon: Activity, color: '#3b82f6', sub: 'Start trading' },
                     { label: 'Win Rate', value: '0%', icon: Trophy, color: '#f59e0b', sub: 'Make your first trade' },
                   ].map((stat) => (
-                    <div key={stat.label} className="bg-[#161B22] border border-[#21262D] rounded-2xl p-4">
+                    <div key={stat.label} className="bg-neutral-50 border border-neutral-200 rounded-2xl p-4">
                       <div className="flex items-center justify-between mb-3">
-                        <span className="text-gray-400 text-xs">{stat.label}</span>
+                        <span className="text-neutral-500 text-xs">{stat.label}</span>
                         <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: `${stat.color}20` }}>
                           <stat.icon className="w-3.5 h-3.5" style={{ color: stat.color }} />
                         </div>
                       </div>
-                      <p className="text-xl font-bold text-white">{stat.value}</p>
-                      <p className="text-xs text-gray-500 mt-1">{stat.sub}</p>
+                      <p className="text-xl font-bold text-neutral-900">{stat.value}</p>
+                      <p className="text-xs text-neutral-500 mt-1">{stat.sub}</p>
                     </div>
                   ))}
                 </div>
 
                 {/* Quick Actions */}
-                <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
-                  <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
+                <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6">
+                  <h2 className="font-semibold text-neutral-900 mb-4 flex items-center gap-2">
                     <Zap className="w-4 h-4 text-[#00C076]" />
                     Quick Actions
                   </h2>
@@ -228,35 +228,35 @@ export default function DashboardPage() {
                       <Link
                         key={action.label}
                         href={action.href}
-                        className="flex items-center justify-between bg-[#0D1117] border border-[#21262D] hover:border-opacity-60 rounded-xl p-3 text-sm font-medium text-gray-300 hover:text-white transition-all group"
+                        className="flex items-center justify-between bg-white border border-neutral-200 hover:border-opacity-60 rounded-xl p-3 text-sm font-medium text-neutral-600 hover:text-neutral-900 transition-all group"
                         style={{ '--hover-color': action.color } as any}
                       >
                         {action.label}
-                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gray-400" />
+                        <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-neutral-500" />
                       </Link>
                     ))}
                   </div>
                 </div>
 
                 {/* Recent Purchases */}
-                <div className="bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden">
-                  <div className="p-5 border-b border-[#21262D] flex items-center justify-between">
-                    <h2 className="font-semibold text-white">Recent Purchases</h2>
+                <div className="bg-neutral-50 border border-neutral-200 rounded-2xl overflow-hidden">
+                  <div className="p-5 border-b border-neutral-200 flex items-center justify-between">
+                    <h2 className="font-semibold text-neutral-900">Recent Purchases</h2>
                     <button onClick={() => setActiveTab('purchases')} className="text-[#00C076] text-xs hover:underline">View all</button>
                   </div>
                   {paidOrders.length === 0 ? (
                     <div className="p-10 text-center">
                       <ShoppingBag className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-                      <p className="text-gray-400 text-sm">No purchases yet</p>
+                      <p className="text-neutral-500 text-sm">No purchases yet</p>
                       <Link href="/indicators" className="inline-block mt-3 text-[#00C076] text-sm hover:underline">Browse indicators →</Link>
                     </div>
                   ) : (
-                    <div className="divide-y divide-[#21262D]">
+                    <div className="divide-y divide-neutral-200">
                       {paidOrders.slice(0, 3).map(order => (
                         <div key={order.id} className="p-4 flex items-center justify-between">
                           <div>
-                            <p className="font-medium text-white text-sm">{order.product?.name}</p>
-                            <p className="text-gray-500 text-xs">
+                            <p className="font-medium text-neutral-900 text-sm">{order.product?.name}</p>
+                            <p className="text-neutral-500 text-xs">
                               {new Date(order.created_at).toLocaleDateString('en-IN')}
                               {order.fulfillment_status === 'delivered'
                                 ? ' • Delivered manually'
@@ -268,12 +268,12 @@ export default function DashboardPage() {
                           <div className="flex items-center gap-3">
                             <span className="text-[#00C076] text-sm font-medium">₹{order.amount}</span>
                             {hasDownload(order) ? (
-                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-1.5 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all">
+                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-1.5 bg-white border border-neutral-200 hover:border-[#00C076]/40 text-neutral-600 hover:text-neutral-900 px-3 py-1.5 rounded-lg text-xs transition-all">
                                 <Download className="w-3.5 h-3.5" />
                                 Download
                               </Link>
                             ) : (
-                              <Link href="/support" className="flex items-center gap-1.5 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-3 py-1.5 rounded-lg text-xs transition-all">
+                              <Link href="/support" className="flex items-center gap-1.5 bg-white border border-neutral-200 hover:border-[#00C076]/40 text-neutral-600 hover:text-neutral-900 px-3 py-1.5 rounded-lg text-xs transition-all">
                                 <HelpCircle className="w-3.5 h-3.5" />
                                 Delivery status
                               </Link>
@@ -289,34 +289,34 @@ export default function DashboardPage() {
 
             {/* Purchases Tab */}
             {activeTab === 'purchases' && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-2xl overflow-hidden">
-                <div className="p-5 border-b border-[#21262D]">
-                  <h2 className="font-semibold text-white">All Purchases ({paidOrders.length})</h2>
+              <div className="bg-neutral-50 border border-neutral-200 rounded-2xl overflow-hidden">
+                <div className="p-5 border-b border-neutral-200">
+                  <h2 className="font-semibold text-neutral-900">All Purchases ({paidOrders.length})</h2>
                 </div>
                 {paidOrders.length === 0 ? (
                   <div className="p-16 text-center">
                     <Package className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                    <h3 className="font-medium text-white mb-2">No purchases yet</h3>
-                    <p className="text-gray-400 text-sm mb-6">Your purchased indicators will appear here</p>
+                    <h3 className="font-medium text-neutral-900 mb-2">No purchases yet</h3>
+                    <p className="text-neutral-500 text-sm mb-6">Your purchased indicators will appear here</p>
                     <Link href="/indicators" className="inline-flex items-center gap-2 bg-[#00C076] hover:bg-[#00a865] text-[#0D1117] font-semibold px-6 py-2.5 rounded-xl transition-colors">
                       Browse Indicators
                     </Link>
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#21262D]">
+                  <div className="divide-y divide-neutral-200">
                     {paidOrders.map(order => (
-                        <div key={order.id} className="p-5 flex items-center justify-between hover:bg-[#0D1117]/50 transition-colors">
+                        <div key={order.id} className="p-5 flex items-center justify-between hover:bg-neutral-50 transition-colors">
                           <div className="flex items-center gap-4">
                             <div className="w-10 h-10 bg-[#00C076]/10 rounded-xl flex items-center justify-center">
                               <Star className="w-5 h-5 text-[#00C076]" />
                             </div>
                             <div>
-                              <p className="font-medium text-white">{order.product?.name}</p>
-                              <p className="text-gray-400 text-sm">{order.product?.description?.slice(0, 60)}...</p>
-                              <p className="text-gray-500 text-xs mt-1">
+                              <p className="font-medium text-neutral-900">{order.product?.name}</p>
+                              <p className="text-neutral-500 text-sm">{order.product?.description?.slice(0, 60)}...</p>
+                              <p className="text-neutral-500 text-xs mt-1">
                                 Purchased {new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                               </p>
-                              <p className="text-gray-500 text-xs mt-1">
+                              <p className="text-neutral-500 text-xs mt-1">
                                 {hasDownload(order)
                                   ? 'File ready for download'
                                   : order.fulfillment_status === 'delivered'
@@ -329,7 +329,7 @@ export default function DashboardPage() {
                             <div className="text-right">
                               <p className="text-[#00C076] font-semibold">₹{order.amount}</p>
                               <span className="inline-block px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded-full">Paid</span>
-                              <p className="text-gray-500 text-xs mt-1">
+                              <p className="text-neutral-500 text-xs mt-1">
                                 {hasDownload(order)
                                   ? 'Download enabled'
                                   : order.fulfillment_status === 'delivered'
@@ -338,12 +338,12 @@ export default function DashboardPage() {
                               </p>
                             </div>
                             {hasDownload(order) ? (
-                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-sm transition-all">
+                              <Link href={`/api/download/${order.id}`} className="flex items-center gap-2 bg-white border border-neutral-200 hover:border-[#00C076]/40 text-neutral-600 hover:text-neutral-900 px-4 py-2 rounded-xl text-sm transition-all">
                                 <Download className="w-4 h-4" />
                                 Download
                               </Link>
                             ) : (
-                              <Link href="/support" className="flex items-center gap-2 bg-[#0D1117] border border-[#21262D] hover:border-[#00C076]/40 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-sm transition-all">
+                              <Link href="/support" className="flex items-center gap-2 bg-white border border-neutral-200 hover:border-[#00C076]/40 text-neutral-600 hover:text-neutral-900 px-4 py-2 rounded-xl text-sm transition-all">
                                 <HelpCircle className="w-4 h-4" />
                                 Get support
                               </Link>
@@ -359,11 +359,11 @@ export default function DashboardPage() {
             {/* Portfolio Tab */}
             {activeTab === 'portfolio' && (
               <div className="space-y-4">
-                <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
+                <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6">
                   <div className="flex items-center justify-between mb-6">
                     <div>
-                      <p className="text-gray-400 text-sm">Virtual Portfolio Balance</p>
-                      <p className="text-4xl font-bold text-white mt-1">₹10,00,000</p>
+                      <p className="text-neutral-500 text-sm">Virtual Portfolio Balance</p>
+                      <p className="text-4xl font-bold text-neutral-900 mt-1">₹10,00,000</p>
                       <p className="text-[#00C076] text-sm mt-1">+₹0.00 (0.00%) today</p>
                     </div>
                     <div className="w-16 h-16 bg-[#00C076]/10 rounded-2xl flex items-center justify-center">
@@ -376,17 +376,17 @@ export default function DashboardPage() {
                       { label: 'Available', value: '₹10,00,000' },
                       { label: 'Total P&L', value: '₹0' },
                     ].map(item => (
-                      <div key={item.label} className="bg-[#0D1117] rounded-xl p-3 text-center">
-                        <p className="text-gray-400 text-xs">{item.label}</p>
-                        <p className="text-white font-semibold mt-1">{item.value}</p>
+                      <div key={item.label} className="bg-white rounded-xl p-3 text-center">
+                        <p className="text-neutral-500 text-xs">{item.label}</p>
+                        <p className="text-neutral-900 font-semibold mt-1">{item.value}</p>
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-10 text-center">
+                <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-10 text-center">
                   <TrendingUp className="w-12 h-12 text-gray-600 mx-auto mb-4" />
-                  <h3 className="font-semibold text-white mb-2">No trades yet</h3>
-                  <p className="text-gray-400 text-sm mb-6">Start paper trading to see your portfolio here</p>
+                  <h3 className="font-semibold text-neutral-900 mb-2">No trades yet</h3>
+                  <p className="text-neutral-500 text-sm mb-6">Start paper trading to see your portfolio here</p>
                   <Link href="/trade" className="inline-flex items-center gap-2 bg-[#00C076] hover:bg-[#00a865] text-[#0D1117] font-bold px-6 py-2.5 rounded-xl transition-colors">
                     Start Trading
                   </Link>
@@ -396,32 +396,32 @@ export default function DashboardPage() {
 
             {/* Profile Tab */}
             {activeTab === 'profile' && (
-              <div className="bg-[#161B22] border border-[#21262D] rounded-2xl p-6">
-                <h2 className="font-semibold text-white mb-6">Profile Settings</h2>
+              <div className="bg-neutral-50 border border-neutral-200 rounded-2xl p-6">
+                <h2 className="font-semibold text-neutral-900 mb-6">Profile Settings</h2>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">Full Name</label>
+                    <label className="block text-neutral-500 text-sm mb-2">Full Name</label>
                     <input
                       value={profileForm.fullName}
                       onChange={(e) => setProfileForm((current) => ({ ...current, fullName: e.target.value }))}
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00C076]"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-neutral-900 text-sm focus:outline-none focus:border-[#00C076]"
                       placeholder="Your full name"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">Email</label>
+                    <label className="block text-neutral-500 text-sm mb-2">Email</label>
                     <input
                       value={user?.email || ''}
                       readOnly
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm opacity-70"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-neutral-900 text-sm opacity-70"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">Phone</label>
+                    <label className="block text-neutral-500 text-sm mb-2">Phone</label>
                     <input
                       value={profileForm.phone}
                       onChange={(e) => setProfileForm((current) => ({ ...current, phone: e.target.value }))}
-                      className="w-full bg-[#0D1117] border border-[#21262D] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00C076]"
+                      className="w-full bg-white border border-neutral-200 rounded-xl px-4 py-3 text-neutral-900 text-sm focus:outline-none focus:border-[#00C076]"
                       placeholder="Your phone number"
                     />
                   </div>

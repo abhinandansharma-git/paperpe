@@ -6,13 +6,6 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-const NAV = [
-  { href: '/indicators', label: 'Indicators' },
-  { href: '/tools', label: 'Tools' },
-  { href: '/learn', label: 'Learn' },
-  { href: '/about', label: 'About' },
-];
-
 const TAPE = 'NIFTY 50  24,352  −2.1%    ·    BANKNIFTY  52,180  −1.8%    ·    GOLDM  78,450  +1.2%    ·    SILVERM  89,200  −0.8%    ·    CRUDEOILM  6,890  +3.5%    ·    ';
 
 const CHAPTERS = [
@@ -87,7 +80,7 @@ function PortfolioScreen() {
       </svg>
       <div className="mt-2 grid grid-cols-4 gap-1">
         {['1D', '1W', '1M', '3M'].map((label, i) => (
-          <span key={label} className={`rounded-full py-1 text-center text-[10px] ${i === 0 ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-500'}`}>{label}</span>
+          <span key={label} className={`rounded-full py-1 text-center text-[10px] ${i === 0 ? 'bg-white text-neutral-900 shadow-sm' : 'bg-neutral-100 text-neutral-500'}`}>{label}</span>
         ))}
       </div>
       <div className="mt-3 flex-1 space-y-1.5">
@@ -101,13 +94,13 @@ function PortfolioScreen() {
           </div>
         ))}
       </div>
-      <div className="mt-3 flex items-center justify-between rounded-2xl bg-neutral-950 px-3 py-2.5 text-white">
+      <div className="mt-3 flex items-center justify-between rounded-2xl border border-neutral-200 bg-neutral-50 px-3 py-2.5">
         <div>
-          <p className="text-[10px] text-white/50">Available</p>
+          <p className="text-[10px] text-neutral-400">Available</p>
           <p className="text-sm font-medium">₹4,62,110</p>
         </div>
         <div className="text-right">
-          <p className="text-[10px] text-white/50">Used margin</p>
+          <p className="text-[10px] text-neutral-400">Used margin</p>
           <p className="text-sm font-medium">54%</p>
         </div>
       </div>
@@ -132,7 +125,7 @@ function PositionsScreen() {
           <span>₹5,25,340</span>
         </div>
         <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
-          <div className="h-full w-[54%] rounded-full bg-neutral-900" />
+          <div className="h-full w-[54%] rounded-full bg-emerald-500" />
         </div>
       </div>
       <div className="mt-3 flex-1 space-y-2">
@@ -303,8 +296,8 @@ function StickyStory() {
   const chapter = CHAPTERS[active];
 
   return (
-    <div ref={containerRef} className="relative h-[280vh] border-y border-neutral-100">
-      <div className="sticky top-16 flex h-[calc(100vh-4rem)] items-center">
+    <div ref={containerRef} className="relative h-[280vh] border-y border-neutral-200/80 bg-white">
+      <div className="sticky top-[4.25rem] flex h-[calc(100vh-4.25rem)] items-center">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <AnimatePresence mode="wait">
@@ -313,11 +306,11 @@ function StickyStory() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.4, ease: EASE }}
+                transition={{ duration: 0.55, ease: EASE }}
               >
-                <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">{chapter.kicker}</p>
-                <h2 className="mt-3 max-w-xl text-4xl font-medium leading-[1.05] tracking-tight md:text-5xl">{chapter.title}</h2>
-                <p className="mt-5 max-w-md text-lg text-neutral-500">{chapter.body}</p>
+                <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-emerald-600">{chapter.kicker}</p>
+                <h2 className="mt-4 max-w-xl text-4xl font-medium leading-[1] tracking-[-0.03em] md:text-5xl">{chapter.title}</h2>
+                <p className="mt-5 max-w-md text-[17px] font-normal leading-7 text-neutral-500">{chapter.body}</p>
               </motion.div>
             </AnimatePresence>
             <div className="mt-8 flex gap-2">
@@ -329,31 +322,32 @@ function StickyStory() {
 
           <div className="relative mx-auto h-[660px] w-[340px] [perspective:1600px]">
             <motion.div
-              animate={{ rotateY: active === 0 ? -18 : active === 1 ? -8 : 12, rotateX: 8 }}
-              transition={{ type: 'spring', stiffness: 70, damping: 16 }}
+              animate={{ rotateY: active === 0 ? -14 : active === 1 ? -6 : 10, rotateX: 6 }}
+              transition={{ type: 'spring', stiffness: 48, damping: 18 }}
               className="relative h-full w-full"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="absolute left-6 top-6 h-[620px] w-[290px] rounded-[2.8rem] bg-neutral-300" style={{ transform: 'translateZ(-36px)' }} />
-              <div className="absolute left-3 top-3 h-[620px] w-[290px] rounded-[2.8rem] bg-neutral-800" style={{ transform: 'translateZ(-18px)' }} />
-              <div className="relative h-[620px] w-[290px] overflow-hidden rounded-[2.7rem] border-[9px] border-neutral-950 bg-white shadow-[0_30px_50px_-20px_rgba(0,0,0,0.55)]">
-                <div className="absolute left-1/2 top-2 z-10 h-5 w-24 -translate-x-1/2 rounded-full bg-neutral-950" />
+              <div className="absolute left-5 top-5 h-[620px] w-[290px] rounded-[2.9rem] bg-neutral-300/80" style={{ transform: 'translateZ(-28px)' }} />
+              <div className="relative h-[620px] w-[290px] overflow-hidden rounded-[2.6rem] border-[10px] border-neutral-900 bg-white shadow-[0_1px_0_rgba(255,255,255,0.25)_inset,0_30px_70px_-28px_rgba(0,0,0,0.45)]">
+                <div className="absolute left-1/2 top-2.5 z-10 h-[18px] w-[92px] -translate-x-1/2 rounded-full bg-neutral-950" />
+                <div className="absolute -left-[12px] top-28 h-8 w-[3px] rounded-l bg-neutral-700" />
+                <div className="absolute -right-[12px] top-36 h-14 w-[3px] rounded-r bg-neutral-700" />
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={screens[active].id}
-                    initial={{ opacity: 0, y: 18 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -18 }}
-                    transition={{ duration: 0.4, ease: EASE }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: 0.55, ease: EASE }}
                     className="h-full"
                   >
                     {screens[active].content}
                   </motion.div>
                 </AnimatePresence>
-                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(118deg,rgba(255,255,255,0.28),transparent_22%,transparent_68%,rgba(255,255,255,0.08))]" />
-                <div className="absolute bottom-1.5 left-1/2 z-10 h-1 w-24 -translate-x-1/2 rounded-full bg-neutral-900/80" />
+                <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(115deg,rgba(255,255,255,0.35),transparent_26%,transparent_70%,rgba(255,255,255,0.06))]" />
+                <div className="absolute bottom-2 left-1/2 z-10 h-1 w-24 -translate-x-1/2 rounded-full bg-neutral-900/80" />
               </div>
-              <div className="absolute -bottom-2 left-8 h-10 w-[230px] rounded-full bg-black/25 blur-2xl" style={{ transform: 'translateZ(-40px)' }} />
+              <div className="absolute -bottom-3 left-10 h-8 w-[220px] rounded-full bg-neutral-900/15 blur-2xl" style={{ transform: 'translateZ(-40px)' }} />
             </motion.div>
           </div>
         </div>
@@ -373,7 +367,7 @@ function FaqList() {
             key={item.q}
             type="button"
             onClick={() => setOpen(isOpen ? -1 : i)}
-            className="block w-full py-5 text-left"
+            className="block w-full py-5 text-left transition-colors hover:text-neutral-600"
           >
             <span className="flex items-center justify-between gap-6 text-lg font-medium">
               {item.q}
@@ -390,21 +384,6 @@ function FaqList() {
 export default function PaperPeHome() {
   return (
     <main className="bg-white text-neutral-900">
-      <header className="sticky top-0 z-30 border-b border-black/5 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <Link href="/" className="text-[17px] font-semibold tracking-tight">PaperPe</Link>
-          <nav className="hidden items-center gap-8 text-sm text-neutral-500 md:flex">
-            {NAV.map((item) => (
-              <Link key={item.href} href={item.href} className="hover:text-neutral-900">{item.label}</Link>
-            ))}
-          </nav>
-          <div className="flex items-center gap-2">
-            <Link href="/login" className="hidden px-3 py-2 text-sm font-medium sm:inline">Log in</Link>
-            <Link href="/signup" className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white">Sign up</Link>
-          </div>
-        </div>
-      </header>
-
       <div className="overflow-hidden border-b border-neutral-100 bg-neutral-50 py-2 text-xs text-neutral-500">
         <motion.div
           animate={{ x: ['0%', '-50%'] }}
@@ -418,21 +397,21 @@ export default function PaperPeHome() {
 
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(0,192,118,0.07),transparent_50%)]" />
-        <div className="mx-auto max-w-6xl px-6 py-20 md:py-28">
+        <div className="mx-auto max-w-6xl px-6 py-24 md:py-32">
           <div className="grid items-center gap-14 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: EASE }}>
-              <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">Paper trade. Real skills.</p>
-              <h1 className="mt-4 text-5xl font-medium leading-[0.95] tracking-tight md:text-6xl lg:text-7xl">
+              <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-emerald-600">Paper trade. Real skills.</p>
+              <h1 className="mt-5 text-5xl font-medium leading-[0.96] tracking-[-0.035em] text-neutral-950 md:text-6xl lg:text-[4.6rem]">
                 Trade Gold, Nifty & Crude Oil risk free.
               </h1>
-              <p className="mt-5 max-w-md text-lg text-neutral-500">
+              <p className="mt-6 max-w-md text-[17px] font-normal leading-7 text-neutral-500">
                 Practice with ₹10 lakh virtual capital. MCX and F&O prices, a real P&L, and no money leaving your account.
               </p>
-              <div className="mt-8 flex items-center gap-5">
-                <Link href="/signup" className="rounded-full bg-black px-6 py-3 text-sm font-medium text-white">Start paper trading</Link>
-                <Link href="/indicators" className="text-sm font-medium underline underline-offset-4">Explore platform</Link>
+              <div className="mt-9 flex items-center gap-6">
+                <Link href="/signup" className="inline-flex items-center rounded-full bg-neutral-950 px-7 py-3.5 text-sm font-medium tracking-tight text-white shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)] transition duration-200 hover:-translate-y-0.5 hover:bg-neutral-800">Start paper trading</Link>
+                <Link href="/indicators" className="text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-950 hover:decoration-neutral-900">Explore platform</Link>
               </div>
-              <p className="mt-4 text-xs text-neutral-400">Free practice account · Calculators need no login · Indicator prices are listed below</p>
+              <p className="mt-5 text-xs tracking-wide text-neutral-400">Free practice account · Calculators need no login · Indicator prices are listed below</p>
             </motion.div>
 
             <div className="[perspective:1400px]">
@@ -443,16 +422,16 @@ export default function PaperPeHome() {
               className="relative"
               style={{ transformStyle: 'preserve-3d' }}
             >
-              <div className="absolute -bottom-7 left-10 right-6 h-12 rounded-full bg-black/15 blur-2xl" />
-              <div className="relative rounded-[2rem] border border-neutral-200/80 bg-white/90 p-7 shadow-[0_30px_70px_-24px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-              <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[linear-gradient(125deg,rgba(255,255,255,0.7),transparent_36%)]" />
-              <div className="flex items-center justify-between text-sm text-neutral-400">
-                <span>Portfolio value</span>
-                <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs text-emerald-700">Sample</span>
+              <div className="absolute -bottom-8 left-8 right-8 h-16 rounded-full bg-neutral-900/10 blur-2xl" />
+              <div className="relative rounded-[1.75rem] border border-neutral-200/90 bg-white p-8 shadow-[0_1px_1px_rgba(0,0,0,0.04),0_28px_70px_-32px_rgba(0,0,0,0.28)] md:p-9">
+              <div className="pointer-events-none absolute inset-0 rounded-[1.75rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.7),transparent_42%)]" />
+              <div className="relative flex items-center justify-between">
+                <span className="text-xs font-medium uppercase tracking-[0.14em] text-neutral-400">Portfolio value</span>
+                <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-medium tracking-wide text-emerald-700">Sample</span>
               </div>
-              <p className="mt-3 text-4xl font-medium tracking-tight md:text-5xl">₹<CountUp to={987450} /></p>
-              <p className="mt-1 text-lg font-medium text-[#00C076]">+₹<CountUp to={12680} /> <span className="text-sm font-normal">↑ 1.30%</span></p>
-              <div className="relative mt-6 h-28">
+              <p className="relative mt-4 text-5xl font-medium leading-none tracking-[-0.04em] text-neutral-950">₹<CountUp to={987450} /></p>
+              <p className="relative mt-3 text-lg font-medium tracking-tight text-[#00C076]">+₹<CountUp to={12680} /> <span className="text-sm font-normal text-emerald-700/80">↑ 1.30%</span></p>
+              <div className="relative mt-8 h-28">
                 <motion.svg viewBox="0 0 400 100" className="h-full w-full overflow-visible">
                   <defs>
                     <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
@@ -473,14 +452,14 @@ export default function PaperPeHome() {
                   />
                 </motion.svg>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-xl bg-neutral-50 px-3 py-2">
-                  <p className="text-xs text-neutral-400">NIFTY</p>
-                  <p className="font-medium text-emerald-600">+₹6,240</p>
+              <div className="relative mt-6 grid grid-cols-2 gap-3 text-sm">
+                <div className="rounded-2xl bg-neutral-50 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-neutral-400">NIFTY</p>
+                  <p className="mt-1 font-medium tracking-tight text-emerald-600">+₹6,240</p>
                 </div>
-                <div className="rounded-xl bg-neutral-50 px-3 py-2">
-                  <p className="text-xs text-neutral-400">GOLDM</p>
-                  <p className="font-medium text-emerald-600">+₹6,440</p>
+                <div className="rounded-2xl bg-neutral-50 px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-neutral-400">GOLDM</p>
+                  <p className="mt-1 font-medium tracking-tight text-emerald-600">+₹6,440</p>
                 </div>
               </div>
               </div>
@@ -490,8 +469,8 @@ export default function PaperPeHome() {
         </div>
       </section>
 
-      <section className="border-y border-neutral-100 py-12">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
+      <section className="border-y border-neutral-200/80 bg-[#f7f7f8] py-16 md:py-20">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-10 px-6 md:grid-cols-4">
           {[
             { value: '₹10L', label: 'Virtual starting capital' },
             { value: 'NSE + MCX', label: 'Index F&O and commodities' },
@@ -499,8 +478,8 @@ export default function PaperPeHome() {
             { value: '6', label: 'Free calculators' },
           ].map((stat) => (
             <div key={stat.label}>
-              <p className="text-3xl font-medium tracking-tight">{stat.value}</p>
-              <p className="mt-1 text-sm text-neutral-500">{stat.label}</p>
+              <p className="text-3xl font-medium leading-none tracking-[-0.03em] text-neutral-950">{stat.value}</p>
+              <p className="mt-2 text-sm leading-5 text-neutral-500">{stat.label}</p>
             </div>
           ))}
         </div>
@@ -508,87 +487,87 @@ export default function PaperPeHome() {
 
       <StickyStory />
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
+      <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">Markets</p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-medium tracking-tight md:text-5xl">The contracts Indian traders actually lose money on.</h2>
-          <p className="mt-4 max-w-xl text-neutral-500">Practice them here first. Same names, same lot language, virtual capital.</p>
+          <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-emerald-600">Markets</p>
+          <h2 className="mt-4 max-w-2xl text-4xl font-medium leading-[1] tracking-[-0.03em] md:text-5xl">The contracts Indian traders actually lose money on.</h2>
+          <p className="mt-4 max-w-xl text-[17px] leading-7 text-neutral-500">Practice them here first. Same names, same lot language, virtual capital.</p>
         </Reveal>
         <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {INSTRUMENTS.map((item, i) => (
             <Reveal key={item.name} delay={i * 0.05}>
-              <div className="h-full rounded-3xl border border-neutral-200 p-6">
-                <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">{item.market}</p>
-                <h3 className="mt-3 text-3xl font-medium tracking-tight">{item.name}</h3>
+              <div className="h-full rounded-3xl border border-neutral-200/90 bg-white p-6 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-24px_rgba(0,0,0,0.25)]">
+                <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400">{item.market}</p>
+                <h3 className="mt-3 text-3xl font-medium leading-none tracking-[-0.03em]">{item.name}</h3>
                 <p className="mt-3 text-sm leading-6 text-neutral-500">{item.note}</p>
               </div>
             </Reveal>
           ))}
           <Reveal delay={0.2}>
-            <Link href="/signup" className="flex h-full flex-col justify-between rounded-3xl bg-neutral-950 p-6 text-white">
-              <p className="text-xs font-medium uppercase tracking-wider text-emerald-400">Practice book</p>
+            <Link href="/signup" className="flex h-full flex-col justify-between rounded-3xl border border-neutral-200 bg-[#f7f7f8] p-6 transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_40px_-24px_rgba(0,0,0,0.25)]">
+              <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-emerald-600">Practice book</p>
               <div>
-                <h3 className="text-3xl font-medium tracking-tight">Open the account.</h3>
-                <p className="mt-3 text-sm text-white/60">₹10 lakh to lose on paper, and a journal that remembers it.</p>
+                <h3 className="text-3xl font-medium leading-none tracking-[-0.03em]">Open the account.</h3>
+                <p className="mt-3 text-sm text-neutral-500">₹10 lakh to lose on paper, and a journal that remembers it.</p>
               </div>
             </Link>
           </Reveal>
         </div>
       </section>
 
-      <section className="bg-neutral-950 py-24 text-white">
+      <section className="bg-[#f7f7f8] py-24 md:py-32">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <p className="text-sm font-medium uppercase tracking-wider text-emerald-400">TradingView</p>
-            <h2 className="mt-3 max-w-2xl text-4xl font-medium tracking-tight md:text-5xl">Indicators for the session you already trade.</h2>
-            <p className="mt-4 max-w-xl text-white/60">One-time purchase. Built for NIFTY, BANKNIFTY, stocks, and MCX. The complete bundle is ₹3,999 instead of ₹5,496.</p>
+            <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-emerald-600">TradingView</p>
+            <h2 className="mt-4 max-w-2xl text-4xl font-medium leading-[1] tracking-[-0.03em] md:text-5xl">Indicators for the session you already trade.</h2>
+            <p className="mt-4 max-w-xl text-[17px] leading-7 text-neutral-500">One-time purchase. Built for NIFTY, BANKNIFTY, stocks, and MCX. The complete bundle is ₹3,999 instead of ₹5,496.</p>
           </Reveal>
           <div className="mt-12 grid gap-4 md:grid-cols-2">
             {INDICATORS.map((item) => (
-              <Link key={item.name} href="/indicators" className="rounded-3xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
+              <Link key={item.name} href="/indicators" className="rounded-3xl border border-neutral-200/90 bg-white p-6 shadow-[0_1px_1px_rgba(0,0,0,0.03)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-24px_rgba(0,0,0,0.22)]">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-emerald-400">{item.badge}</p>
+                    <p className="text-xs uppercase tracking-wider text-emerald-600">{item.badge}</p>
                     <h3 className="mt-2 text-2xl font-medium">{item.name}</h3>
                   </div>
                   <p className="text-2xl font-medium">{item.price}</p>
                 </div>
-                <p className="mt-4 text-sm leading-6 text-white/60">{item.detail}</p>
+                <p className="mt-4 text-sm leading-6 text-neutral-500">{item.detail}</p>
               </Link>
             ))}
           </div>
-          <Link href="/indicators" className="mt-8 inline-block text-sm font-medium underline underline-offset-4">See indicator details</Link>
+          <Link href="/indicators" className="mt-8 inline-block text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-950 hover:decoration-neutral-900">See indicator details</Link>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 py-24">
+      <section className="mx-auto max-w-6xl px-6 py-24 md:py-32">
         <Reveal>
-          <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">Free tools</p>
-          <h2 className="mt-3 text-4xl font-medium tracking-tight md:text-5xl">Open a calculator. No account.</h2>
-          <p className="mt-4 max-w-xl text-neutral-500">Pricing, size, brokerage, margin, max pain, and PCR. Use them before the paper trade, or instead of one.</p>
+          <p className="text-[13px] font-medium uppercase tracking-[0.16em] text-emerald-600">Free tools</p>
+          <h2 className="mt-4 text-4xl font-medium leading-[1] tracking-[-0.03em] md:text-5xl">Open a calculator. No account.</h2>
+          <p className="mt-4 max-w-xl text-[17px] leading-7 text-neutral-500">Pricing, size, brokerage, margin, max pain, and PCR. Use them before the paper trade, or instead of one.</p>
         </Reveal>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {TOOLS.map((tool) => (
-            <Link key={tool.href} href={tool.href} className="rounded-3xl border border-neutral-200 p-6 transition-colors hover:border-neutral-400">
-              <h3 className="text-xl font-medium">{tool.name}</h3>
+            <Link key={tool.href} href={tool.href} className="rounded-3xl border border-neutral-200/90 p-6 transition duration-200 hover:-translate-y-0.5 hover:border-neutral-300 hover:shadow-[0_16px_40px_-24px_rgba(0,0,0,0.2)]">
+              <h3 className="text-xl font-medium tracking-[-0.02em]">{tool.name}</h3>
               <p className="mt-3 text-sm leading-6 text-neutral-500">{tool.detail}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      <section className="border-t border-neutral-100 bg-neutral-50 py-24">
+      <section className="bg-[#f7f7f8] py-24 md:py-32">
         <div className="mx-auto max-w-6xl px-6">
           <Reveal>
-            <h2 className="text-4xl font-medium tracking-tight md:text-5xl">Start in a few minutes.</h2>
-            <p className="mt-3 text-neutral-500">No documents. No KYC. No broker account.</p>
+            <h2 className="text-4xl font-medium leading-[1] tracking-[-0.03em] md:text-5xl">Start in a few minutes.</h2>
+            <p className="mt-4 text-[17px] leading-7 text-neutral-500">No documents. No KYC. No broker account.</p>
           </Reveal>
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {STEPS.map((item, i) => (
               <Reveal key={item.step} delay={i * 0.06}>
-                <div className="h-full rounded-3xl border border-neutral-200 bg-white p-6">
-                  <p className="text-sm font-medium text-emerald-600">{item.step}</p>
-                  <h3 className="mt-3 text-2xl font-medium tracking-tight">{item.title}</h3>
+                <div className="h-full rounded-3xl border border-neutral-200/90 bg-white p-7 shadow-[0_1px_1px_rgba(0,0,0,0.03)]">
+                  <p className="text-[13px] font-medium tracking-[0.14em] text-emerald-600">{item.step}</p>
+                  <h3 className="mt-4 text-2xl font-medium leading-none tracking-[-0.03em]">{item.title}</h3>
                   <p className="mt-3 text-sm leading-6 text-neutral-500">{item.desc}</p>
                 </div>
               </Reveal>
@@ -597,19 +576,21 @@ export default function PaperPeHome() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-3xl px-6 py-24">
-        <h2 className="text-4xl font-medium tracking-tight">Questions</h2>
+      <section className="mx-auto max-w-3xl px-6 py-24 md:py-32">
+        <h2 className="text-4xl font-medium leading-[1] tracking-[-0.03em]">Questions</h2>
         <div className="mt-8">
           <FaqList />
         </div>
       </section>
 
-      <section className="mx-auto max-w-4xl px-6 pb-28 text-center">
-        <h2 className="text-4xl font-medium tracking-tight md:text-6xl">Learn the market before it charges you for the lesson.</h2>
-        <p className="mx-auto mt-5 max-w-xl text-lg text-neutral-500">Practice first. Fund a real account when the paper journal is the reason, not the hope.</p>
-        <div className="mt-8 flex items-center justify-center gap-5">
-          <Link href="/signup" className="rounded-full bg-black px-8 py-3.5 text-sm font-medium text-white">Start paper trading</Link>
-          <Link href="/learn" className="text-sm font-medium underline underline-offset-4">Read the lessons</Link>
+      <section className="bg-[#f7f7f8] px-6 py-24 text-center md:py-32">
+        <div className="mx-auto max-w-4xl">
+        <h2 className="text-4xl font-medium leading-[0.98] tracking-[-0.035em] md:text-6xl">Learn the market before it charges you for the lesson.</h2>
+        <p className="mx-auto mt-5 max-w-xl text-[17px] leading-7 text-neutral-500">Practice first. Fund a real account when the paper journal is the reason, not the hope.</p>
+        <div className="mt-9 flex items-center justify-center gap-6">
+          <Link href="/signup" className="inline-flex items-center rounded-full bg-neutral-950 px-8 py-3.5 text-sm font-medium tracking-tight text-white shadow-[0_10px_24px_-12px_rgba(0,0,0,0.6)] transition duration-200 hover:-translate-y-0.5 hover:bg-neutral-800">Start paper trading</Link>
+          <Link href="/learn" className="text-sm font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-4 transition-colors hover:text-neutral-950 hover:decoration-neutral-900">Read the lessons</Link>
+        </div>
         </div>
       </section>
     </main>

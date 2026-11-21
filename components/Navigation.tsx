@@ -52,26 +52,26 @@ export default function Navigation() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0a0e17]/95 backdrop-blur border-b border-white/5">
+    <header className="sticky top-0 z-50 border-b border-neutral-200 bg-white/95 backdrop-blur">
       <div className="max-w-7xl mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link href="/" className="text-xl font-bold text-white">PaperPe</Link>
+            <Link href="/" className="text-xl font-bold text-neutral-900">PaperPe</Link>
             
             <nav className="hidden lg:flex items-center gap-1">
               {navGroups.map((group) => (
                 <div key={group.label} className="relative" onMouseEnter={() => setActiveDropdown(group.label)} onMouseLeave={() => setActiveDropdown(null)}>
-                  <button className="px-3 py-2 text-sm text-slate-300 hover:text-white flex items-center gap-1 rounded-lg hover:bg-white/5">
+                  <button className="px-3 py-2 text-sm text-neutral-600 hover:text-neutral-900 flex items-center gap-1 rounded-lg hover:bg-neutral-50">
                     {group.label}
                     <ChevronDown className="w-3 h-3" />
                   </button>
                   {activeDropdown === group.label && (
-                    <div className="absolute top-full left-0 mt-1 w-64 bg-[#141820] border border-white/10 rounded-xl shadow-xl p-2">
+                    <div className="absolute top-full left-0 mt-1 w-64 border border-neutral-200 bg-white rounded-xl shadow-xl p-2">
                       {group.items.map((item) => (
-                        <Link key={item.href} href={item.href} className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 group">
+                        <Link key={item.href} href={item.href} className="flex items-start gap-3 p-3 rounded-lg hover:bg-neutral-50 group">
                           <item.icon className="w-5 h-5 text-slate-400 group-hover:text-orange-500 mt-0.5" />
                           <div>
-                            <div className="text-white text-sm font-medium flex items-center gap-2">
+                            <div className="text-neutral-900 text-sm font-medium flex items-center gap-2">
                               {item.name}
                               {item.pro && <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">PRO</span>}
                             </div>
@@ -87,19 +87,19 @@ export default function Navigation() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link href="/login" className="hidden sm:flex items-center gap-1 px-3 py-2 text-sm text-slate-300 hover:text-white"><LogIn className="w-4 h-4" />Login</Link>
-            <Link href="/signup" className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg">Sign Up Free</Link>
+            <Link href="/login" className="hidden sm:flex items-center gap-1 px-3 py-2 text-sm text-neutral-600 hover:text-neutral-900"><LogIn className="w-4 h-4" />Login</Link>
+            <Link href="/signup" className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-neutral-900 text-sm font-semibold rounded-lg">Sign Up Free</Link>
             <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 text-slate-400">{mobileOpen ? <X /> : <Menu />}</button>
           </div>
         </div>
 
         {mobileOpen && (
-          <nav className="lg:hidden mt-4 pb-4 border-t border-white/5 pt-4">
+          <nav className="lg:hidden mt-4 pb-4 border-t border-neutral-200 pt-4">
             {navGroups.map((group) => (
               <div key={group.label} className="mb-4">
                 <div className="text-xs text-slate-500 uppercase tracking-wider mb-2 px-3">{group.label}</div>
                 {group.items.map((item) => (
-                  <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-slate-300 hover:text-white hover:bg-white/5 rounded-lg">
+                  <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="flex items-center gap-3 px-3 py-2 text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg">
                     <item.icon className="w-5 h-5" />
                     {item.name}
                     {item.pro && <span className="text-[10px] px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">PRO</span>}

@@ -4,7 +4,7 @@
 
 @layer base {
   * {
-    @apply border-slate-700;
+    @apply border-neutral-200;
   }
   html {
     scroll-behavior: smooth;
@@ -16,10 +16,10 @@
 
 @layer utilities {
   .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
+    @apply bg-white/80 backdrop-blur-xl border border-neutral-200;
   }
   .glass-strong {
-    @apply bg-white/10 backdrop-blur-xl border border-white/20;
+    @apply bg-white backdrop-blur-xl border border-neutral-200;
   }
 }
 
@@ -73,7 +73,7 @@
 
 /* ── Soul Cards ── */
 .soul-card {
-  @apply bg-[#161B22] border border-[#21262D] rounded-2xl transition-all duration-300;
+  @apply bg-white border border-neutral-200 rounded-3xl transition-all duration-300;
 }
 .soul-card:hover {
   @apply border-[#00C076]/30;
@@ -83,13 +83,11 @@
 
 /* Glow button */
 .btn-glow {
-  @apply bg-[#00C076] text-[#0D1117] font-bold rounded-xl transition-all duration-300;
-  box-shadow: 0 0 20px rgba(0,192,118,0.25);
+  @apply bg-neutral-900 text-white font-medium rounded-full transition-all duration-300;
 }
 .btn-glow:hover {
-  @apply bg-[#00a865];
-  transform: translateY(-2px);
-  box-shadow: 0 0 40px rgba(0,192,118,0.4), 0 8px 24px rgba(0,192,118,0.2);
+  @apply bg-black;
+  transform: translateY(-1px);
 }
 
 /* Gradient text */
@@ -133,7 +131,7 @@
 
 /* Dot pattern */
 .bg-dots {
-  background-image: radial-gradient(circle, #21262D 1px, transparent 1px);
+  background-image: radial-gradient(circle, #e5e5e5 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -149,12 +147,12 @@
 
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0D1117; }
-::-webkit-scrollbar-thumb { background: #21262D; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #30363D; }
+::-webkit-scrollbar-track { background: #fafafa; }
+::-webkit-scrollbar-thumb { background: #d4d4d4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
 
 /* Selection color */
-::selection { background: rgba(0,192,118,0.3); color: white; }
+::selection { background: rgba(0,192,118,0.28); color: #171717; }
 
 /* ══════════════════════════════════════════════════
    HOMEPAGE responsive overrides
@@ -163,7 +161,7 @@
    ══════════════════════════════════════════════════ */
 
 /* Homepage component styles */
-.hp-card { background:#161B22; border:1px solid #21262D; border-radius:16px; transition:all 0.2s; }
+.hp-card { background:#fff; border:1px solid #e5e5e5; border-radius:16px; transition:all 0.2s; }
 .hp-card:hover { border-color:rgba(0,192,118,0.3); transform:translateY(-2px); }
 .hp-section-label { font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#00C076; }
 
@@ -176,7 +174,7 @@
   .tools-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
   .comparison-grid { grid-template-columns: 1fr !important; }
   .comparison-row { grid-template-columns: 1fr !important; text-align: left !important; }
-  .comparison-row > div { padding: 10px 16px !important; border-left: none !important; border-right: none !important; border-bottom: 1px solid #21262D; }
+  .comparison-row > div { padding: 10px 16px !important; border-left: none !important; border-right: none !important; border-bottom: 1px solid #e5e5e5; }
   .pricing-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   .footer-grid { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center; }
   .features-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
@@ -188,13 +186,6 @@
   .faq-grid { grid-template-columns: 1fr !important; }
   .popup-box { width: 90vw !important; right: 16px !important; bottom: 16px !important; }
 
-  /* Font scaling */
-  h1, .hp-h1 { font-size: 28px !important; line-height: 1.2 !important; }
-  h2, .hp-h2 { font-size: 24px !important; }
-
-  /* Section padding */
-  section { padding-left: 16px !important; padding-right: 16px !important; }
-
   /* Stats numbers */
   .stats-grid div > div:first-child { font-size: 28px !important; }
 
@@ -204,7 +195,6 @@
 }
 
 @media (max-width: 480px) {
-  h1, .hp-h1 { font-size: 24px !important; }
   .stats-grid { grid-template-columns: 1fr 1fr !important; }
   .features-grid { grid-template-columns: 1fr !important; }
   .trust-grid { grid-template-columns: 1fr 1fr !important; }

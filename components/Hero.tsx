@@ -226,7 +226,7 @@ export default function Hero() {
       <FloatingParticles />
 
       {/* Gradient overlay — bottom fade */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#0D1117]" />
+      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-white" />
 
       <div className="max-w-6xl mx-auto w-full relative z-10">
 

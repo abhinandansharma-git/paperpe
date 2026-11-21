@@ -5,15 +5,15 @@ export const metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-[#0D1117] text-gray-100">
+    <div className="min-h-screen bg-white text-neutral-800">
       <div className="max-w-4xl mx-auto px-4 md:px-6 py-10 md:py-16">
-        <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Privacy Policy</h1>
-        <p className="text-gray-400 mb-10">Last updated: March 2025</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 mb-2">Privacy Policy</h1>
+        <p className="text-neutral-500 mb-10">Last updated: March 2025</p>
 
-        <div className="space-y-8 text-gray-300 leading-relaxed">
+        <div className="space-y-8 text-neutral-600 leading-relaxed">
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">1. Information We Collect</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">1. Information We Collect</h2>
             <p>When you use PaperPe, we collect the following information:</p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
               <li><strong>Account Information:</strong> Name, email address (via Google OAuth)</li>
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">2. How We Use Your Information</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">2. How We Use Your Information</h2>
             <ul className="list-disc list-inside space-y-1 ml-4">
               <li>To provide and maintain our services</li>
               <li>To process payments and deliver purchased products</li>
@@ -35,12 +35,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">3. Data Storage and Security</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">3. Data Storage and Security</h2>
             <p>Your data is stored securely on Supabase (hosted in the EU). We implement industry-standard security measures including encryption in transit (HTTPS) and at rest. We do not store payment card information — all payment processing is handled by Razorpay, a PCI-DSS compliant payment gateway.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">4. Third-Party Services</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">4. Third-Party Services</h2>
             <p>We use the following third-party services:</p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
               <li><strong>Google OAuth</strong> — for authentication</li>
@@ -53,12 +53,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">5. Cookies</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">5. Cookies</h2>
             <p>We use essential cookies for authentication sessions. We do not use advertising or tracking cookies. You can control cookie settings through your browser.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">6. Your Rights</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">6. Your Rights</h2>
             <p>You have the right to:</p>
             <ul className="list-disc list-inside mt-2 space-y-1 ml-4">
               <li>Access the personal data we hold about you</li>
@@ -70,17 +70,17 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">7. Data Retention</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">7. Data Retention</h2>
             <p>We retain your account data for as long as your account is active. Purchase records are retained for 7 years as required by Indian tax law. You may request account deletion at any time.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">8. Children's Privacy</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">8. Children's Privacy</h2>
             <p>PaperPe is not intended for users under 18 years of age. We do not knowingly collect personal information from minors.</p>
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-white mb-3">9. Contact</h2>
+            <h2 className="text-xl font-semibold text-neutral-900 mb-3">9. Contact</h2>
             <p>For privacy-related queries: <a href="mailto:hello@paperpe.in" className="text-[#00C076] hover:underline">hello@paperpe.in</a></p>
           </section>
 

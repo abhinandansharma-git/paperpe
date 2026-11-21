@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Calculator, TrendingUp, TrendingDown, Info, ChevronDown } from 'lucide-react';
+import { Calculator, TrendingUp, TrendingDown, Info, ChevronDown } from 'lucide-react';
 
 function normalCDF(x: number): number {
   const a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741, a4 = -1.453152027, a5 = 1.061405429, p = 0.3275911;
@@ -54,11 +54,11 @@ function Tooltip({ text }: { text: string }) {
   const [show, setShow] = useState(false);
   return (
     <div className="relative inline-block">
-      <button onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-gray-400 hover:text-[#00C076] transition-colors ml-1">
+      <button onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)} className="text-neutral-500 hover:text-[#00C076] transition-colors ml-1">
         <Info className="w-3.5 h-3.5" />
       </button>
       {show && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-[#0D1117] text-white text-xs p-3 rounded-lg shadow-xl shadow-black/30 z-10 leading-relaxed">
+        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-white text-neutral-900 text-xs p-3 rounded-lg shadow-xl shadow-black/30 z-10 leading-relaxed">
           {text}
           <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
         </div>
@@ -70,7 +70,7 @@ function Tooltip({ text }: { text: string }) {
 function InputField({ label, value, onChange, step = 1, tooltip }: { label: string; value: number; onChange: (v: number) => void; step?: number; tooltip?: string }) {
   return (
     <div>
-      <label className="flex items-center text-sm font-medium text-gray-300 mb-1.5">
+      <label className="flex items-center text-sm font-medium text-neutral-600 mb-1.5">
         {label} {tooltip && <Tooltip text={tooltip} />}
       </label>
       <input
@@ -78,7 +78,7 @@ function InputField({ label, value, onChange, step = 1, tooltip }: { label: stri
         value={value}
         step={step}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full px-4 py-2.5 border border-[#21262D] rounded-xl text-white focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/10 transition-all text-sm"
+        className="w-full px-4 py-2.5 border border-neutral-200 rounded-xl text-neutral-900 focus:outline-none focus:border-[#00C076] focus:border-[#00C076] focus:outline-none/10 transition-all text-sm"
       />
     </div>
   );
@@ -122,44 +122,20 @@ export default function CalculatorPage() {
   const maxPnl = Math.max(...scenarios.map(s => Math.abs(s.pnl)));
 
   return (
-    <div className="min-h-screen bg-[#161B22]">
+    <div className="min-h-screen bg-neutral-50">
       {/* Nav */}
-      <header className="bg-[#0D1117] border-b border-[#21262D] sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-[#00C076] rounded-xl flex items-center justify-center font-bold text-white shadow-md shadow-black/20 shadow-blue-500/20">P</div>
-              <span className="font-semibold text-lg text-white hidden sm:block">PaperPe</span>
-            </Link>
-            <span className="text-gray-300">|</span>
-            <div className="flex items-center gap-1.5 text-gray-400 text-sm font-medium">
-              <Calculator className="w-4 h-4 text-[#00C076]" />
-              Option Calculator
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Link href="/tools" className="text-gray-500 hover:text-gray-300 text-sm hidden sm:flex items-center gap-1">
-              <ArrowLeft className="w-4 h-4" /> All Tools
-            </Link>
-            <Link href="/" className="bg-[#00C076] hover:bg-[#00a865] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Start Trading Free
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
         {/* Page header */}
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Free Option Calculator</h1>
-          <p className="text-gray-500 text-sm">Black-Scholes model · NIFTY, BANKNIFTY & MCX options · Greeks + P&L scenarios</p>
+          <h1 className="text-2xl font-bold text-neutral-900 mb-1">Free Option Calculator</h1>
+          <p className="text-neutral-500 text-sm">Black-Scholes model · NIFTY, BANKNIFTY & MCX options · Greeks + P&L scenarios</p>
         </div>
 
         {/* Preset buttons */}
         <div className="flex flex-wrap gap-2 mb-6">
           {PRESETS.map(p => (
             <button key={p.name} onClick={() => applyPreset(p)}
-              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-[#00C076] text-white border-[#00C076] shadow-md shadow-black/20 shadow-blue-500/20' : 'bg-[#0D1117] text-gray-400 border-[#21262D] hover:border-[#00C076]/30'}`}>
+              className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${activePreset === p.name ? 'bg-[#00C076] text-white border-[#00C076] shadow-md shadow-black/20 shadow-blue-500/20' : 'bg-white text-neutral-500 border-[#e5e5e5] hover:border-[#00C076]/30'}`}>
               {p.name}
             </button>
           ))}
@@ -168,13 +144,13 @@ export default function CalculatorPage() {
         <div className="grid xl:grid-cols-12 gap-5">
           {/* LEFT: Inputs */}
           <div className="xl:col-span-3">
-            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm sticky top-24">
+            <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm sticky top-24">
               {/* CE/PE toggle */}
-              <div className="flex rounded-xl overflow-hidden border border-[#21262D] mb-5">
-                <button onClick={() => setType('CE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'CE' ? 'bg-[#00C076]/100 text-white' : 'bg-[#0D1117] text-gray-500 hover:bg-[#161B22]'}`}>
+              <div className="flex rounded-xl overflow-hidden border border-neutral-200 mb-5">
+                <button onClick={() => setType('CE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'CE' ? 'bg-[#00C076]/100 text-white' : 'bg-white text-neutral-500 hover:bg-neutral-100'}`}>
                   CALL (CE)
                 </button>
-                <button onClick={() => setType('PE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'PE' ? 'bg-red-500/100 text-white' : 'bg-[#0D1117] text-gray-500 hover:bg-[#161B22]'}`}>
+                <button onClick={() => setType('PE')} className={`flex-1 py-3 text-sm font-bold transition-colors ${type === 'PE' ? 'bg-red-500/100 text-white' : 'bg-white text-neutral-500 hover:bg-neutral-100'}`}>
                   PUT (PE)
                 </button>
               </div>
@@ -186,8 +162,8 @@ export default function CalculatorPage() {
                 <InputField label="IV (%)" value={iv} onChange={setIv} step={0.5} tooltip="Implied Volatility. Check NSE India VIX or option chain for current IV." />
                 <InputField label="Risk-Free Rate (%)" value={rfr} onChange={setRfr} step={0.1} tooltip="RBI repo rate (~6.5%). Rarely needs to change." />
 
-                <div className="border-t border-[#21262D] pt-4">
-                  <p className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">P&L Settings</p>
+                <div className="border-t border-neutral-200 pt-4">
+                  <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-3">P&L Settings</p>
                   <div className="space-y-3">
                     <InputField label="Premium Paid (₹)" value={premium} onChange={setPremium} tooltip="The price you paid / received for the option" />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -203,36 +179,36 @@ export default function CalculatorPage() {
           {/* MIDDLE: Results */}
           <div className="xl:col-span-5 space-y-4">
             {/* Premium card */}
-            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm">
+            <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-white">Theoretical Premium</h2>
+                <h2 className="font-bold text-neutral-900">Theoretical Premium</h2>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full border ${moneynessColor}`}>{moneyness}</span>
               </div>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-black text-white">₹{results.price.toFixed(2)}</span>
-                <span className="text-gray-400 text-sm">/ unit</span>
+                <span className="text-5xl font-black text-neutral-900">₹{results.price.toFixed(2)}</span>
+                <span className="text-neutral-500 text-sm">/ unit</span>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
-                <div className="bg-[#161B22] rounded-xl p-3">
-                  <div className="text-xs text-gray-500 mb-1">Intrinsic</div>
-                  <div className="font-bold text-white">₹{intrinsic.toFixed(2)}</div>
+                <div className="bg-neutral-50 rounded-xl p-3">
+                  <div className="text-xs text-neutral-500 mb-1">Intrinsic</div>
+                  <div className="font-bold text-neutral-900">₹{intrinsic.toFixed(2)}</div>
                 </div>
-                <div className="bg-[#161B22] rounded-xl p-3">
-                  <div className="text-xs text-gray-500 mb-1">Time Value</div>
+                <div className="bg-neutral-50 rounded-xl p-3">
+                  <div className="text-xs text-neutral-500 mb-1">Time Value</div>
                   <div className="font-bold text-[#00C076]">₹{timeValue.toFixed(2)}</div>
                 </div>
-                <div className="bg-[#161B22] rounded-xl p-3">
-                  <div className="text-xs text-gray-500 mb-1">Total Cost</div>
-                  <div className="font-bold text-white">₹{(results.price * lotSize * qty).toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
+                <div className="bg-neutral-50 rounded-xl p-3">
+                  <div className="text-xs text-neutral-500 mb-1">Total Cost</div>
+                  <div className="font-bold text-neutral-900">₹{(results.price * lotSize * qty).toLocaleString('en-IN', {maximumFractionDigits: 0})}</div>
                 </div>
               </div>
             </div>
 
             {/* Greeks */}
-            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm overflow-hidden">
               <button onClick={() => setShowGreeks(!showGreeks)} className="w-full flex items-center justify-between p-5 text-left">
-                <h2 className="font-bold text-white">Option Greeks</h2>
-                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showGreeks ? 'rotate-180' : ''}`} />
+                <h2 className="font-bold text-neutral-900">Option Greeks</h2>
+                <ChevronDown className={`w-5 h-5 text-neutral-500 transition-transform ${showGreeks ? 'rotate-180' : ''}`} />
               </button>
               {showGreeks && (
                 <div className="px-5 pb-5 grid grid-cols-2 gap-3">
@@ -243,7 +219,7 @@ export default function CalculatorPage() {
                     { name: 'Vega', value: results.vega.toFixed(4), color: 'text-purple-600', bg: 'bg-purple-500/10' },
                   ].map(g => (
                     <div key={g.name} className={`${g.bg} rounded-xl p-4`}>
-                      <div className="flex items-center text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">
+                      <div className="flex items-center text-xs font-semibold text-neutral-500 mb-2 uppercase tracking-wide">
                         {g.name} <Tooltip text={GREEKS_INFO[g.name]} />
                       </div>
                       <div className={`text-2xl font-black ${g.color}`}>{g.value}</div>
@@ -254,8 +230,8 @@ export default function CalculatorPage() {
             </div>
 
             {/* Breakeven */}
-            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm">
-              <h2 className="font-bold text-white mb-4">Breakeven & Risk</h2>
+            <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm">
+              <h2 className="font-bold text-neutral-900 mb-4">Breakeven & Risk</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div className="text-center bg-[#00C076]/10 rounded-xl p-4">
                   <div className="text-xs text-[#00C076] font-semibold mb-1 uppercase tracking-wide">Breakeven</div>
@@ -268,7 +244,7 @@ export default function CalculatorPage() {
                   <div className="text-xs text-red-500 mt-1">{qty} lot{qty > 1 ? 's' : ''} × {lotSize}</div>
                 </div>
               </div>
-              <p className="text-xs text-gray-500 bg-[#161B22] rounded-lg p-3 leading-relaxed">
+              <p className="text-xs text-neutral-500 bg-neutral-50 rounded-lg p-3 leading-relaxed">
                 {type === 'CE'
                   ? `${activePreset} must close above ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot > breakeven ? '✅ profitable' : '❌ not profitable'}.`
                   : `${activePreset} must close below ₹${breakeven.toFixed(0)} at expiry to profit. Currently ${spot < breakeven ? '✅ profitable' : '❌ not profitable'}.`}
@@ -278,10 +254,10 @@ export default function CalculatorPage() {
 
           {/* RIGHT: P&L scenarios */}
           <div className="xl:col-span-4">
-            <div className="bg-[#0D1117] border border-[#21262D] rounded-2xl p-5 shadow-sm h-full">
+            <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm h-full">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-bold text-white">P&L Scenarios</h2>
-                <span className="text-xs text-gray-400">Tomorrow, same IV</span>
+                <h2 className="font-bold text-neutral-900">P&L Scenarios</h2>
+                <span className="text-xs text-neutral-500">Tomorrow, same IV</span>
               </div>
               <div className="space-y-1.5">
                 {scenarios.map((s, i) => {
@@ -295,13 +271,13 @@ export default function CalculatorPage() {
                           <span className={`text-sm font-bold ${s.pct > 0 ? 'text-green-700' : s.pct < 0 ? 'text-red-700' : 'text-gray-300'}`}>
                             {s.pct === 0 ? 'Flat' : `${s.pct > 0 ? '+' : ''}${s.pct}%`}
                           </span>
-                          <span className="text-xs text-gray-400 hidden sm:block">{s.newSpot.toLocaleString('en-IN')}</span>
+                          <span className="text-xs text-neutral-500 hidden sm:block">{s.newSpot.toLocaleString('en-IN')}</span>
                         </div>
                         <div className="text-right shrink-0 ml-2">
                           <div className={`text-sm font-black ${s.pnl >= 0 ? 'text-green-700' : 'text-red-700'}`}>
                             {s.pnl >= 0 ? '+' : ''}₹{Math.abs(Math.round(s.pnl)).toLocaleString('en-IN')}
                           </div>
-                          <div className="text-xs text-gray-400">₹{s.premium.toFixed(1)}</div>
+                          <div className="text-xs text-neutral-500">₹{s.premium.toFixed(1)}</div>
                         </div>
                       </div>
                       {/* Bar indicator */}
@@ -310,29 +286,29 @@ export default function CalculatorPage() {
                   );
                 })}
               </div>
-              <p className="text-xs text-gray-400 mt-3 text-center">Based on ₹{premium} premium · {qty} lot{qty > 1 ? 's' : ''} · {lotSize} qty/lot</p>
+              <p className="text-xs text-neutral-500 mt-3 text-center">Based on ₹{premium} premium · {qty} lot{qty > 1 ? 's' : ''} · {lotSize} qty/lot</p>
             </div>
           </div>
         </div>
 
         {/* How to use */}
-        <div className="mt-8 bg-[#0D1117] border border-[#21262D] rounded-2xl p-6 shadow-sm">
-          <h2 className="text-lg font-bold text-white mb-4">How to Use This Calculator</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-gray-400">
+        <div className="mt-8 bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-lg font-bold text-neutral-900 mb-4">How to Use This Calculator</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm text-neutral-500">
             <div>
-              <div className="font-semibold text-gray-100 mb-2">1. Select Instrument</div>
+              <div className="font-semibold text-neutral-800 mb-2">1. Select Instrument</div>
               <p>Click NIFTY, BANKNIFTY, etc. to load default lot sizes. Adjust spot & strike to your target levels.</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-100 mb-2">2. Enter IV</div>
+              <div className="font-semibold text-neutral-800 mb-2">2. Enter IV</div>
               <p>Get current IV from NSE option chain or check India VIX. Higher IV = more expensive options.</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-100 mb-2">3. Check Greeks</div>
+              <div className="font-semibold text-neutral-800 mb-2">3. Check Greeks</div>
               <p>Delta tells position sensitivity. Theta shows daily decay cost. Don't ignore Theta on long options!</p>
             </div>
             <div>
-              <div className="font-semibold text-gray-100 mb-2">4. Analyze P&L</div>
+              <div className="font-semibold text-neutral-800 mb-2">4. Analyze P&L</div>
               <p>Enter your actual premium paid to see real P&L at different price levels tomorrow.</p>
             </div>
           </div>
@@ -342,7 +318,7 @@ export default function CalculatorPage() {
         <div className="mt-6 bg-gradient-to-r from-[#00C076] to-[#00a865] rounded-2xl p-6 text-white text-center">
           <h3 className="text-lg font-bold mb-2">Practice options trading without risk</h3>
           <p className="text-[#00C076]/40 text-sm mb-4">Get ₹10 Lakh virtual capital. Trade NIFTY & BANKNIFTY options risk-free.</p>
-          <Link href="/" className="inline-block bg-[#0D1117] text-[#00C076] font-bold px-8 py-3 rounded-xl hover:bg-[#161B22] transition-colors shadow-lg shadow-black/20">
+          <Link href="/" className="inline-block bg-white text-[#00C076] font-bold px-8 py-3 rounded-xl hover:bg-neutral-100 transition-colors shadow-lg shadow-black/20">
             Join Waitlist — It's Free
           </Link>
         </div>
